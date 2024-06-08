@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
 
-import { WebRtcVideo } from '@/components/WebRtcVideo'
+import PlaceInterface from './PlaceInterface'
 
 export const metadata: Metadata = {
   title: 'Place | PnP << 83',
@@ -10,11 +10,7 @@ export const metadata: Metadata = {
 export default function Place() {
   return (
 
-    <>
-
-      <WebRtcVideo url='http://localhost:8889/facetime/whep' />
-
-    </>
+    <PlaceInterface />
 
   )
 }
