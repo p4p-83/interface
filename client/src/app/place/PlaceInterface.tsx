@@ -46,12 +46,12 @@ function PlaceOverlay({ videoRef, circleSize }: PlaceOverlayProps) {
         // Black bars on the top/bottom
         : scalingFactors.width
 
-      console.log('Updated overlay!')
-
       setOverlaySize({
         width: limitingScalarFactor * videoElement.videoWidth,
         height: limitingScalarFactor * videoElement.videoHeight,
       })
+
+      console.log(`Updated overlay to ${limitingScalarFactor * videoElement.videoWidth}x${limitingScalarFactor * videoElement.videoHeight}`)
     }
 
     window.addEventListener('resize', updateVideoBounds)
@@ -62,7 +62,7 @@ function PlaceOverlay({ videoRef, circleSize }: PlaceOverlayProps) {
       videoElement.removeEventListener('loadedmetadata', updateVideoBounds)
     }
 
-  }, [videoRef, overlaySize])
+  }, [videoRef])
 
   const [clickPosition, setClickPosition] = useState<Position | null>(null)
 
@@ -70,12 +70,19 @@ function PlaceOverlay({ videoRef, circleSize }: PlaceOverlayProps) {
     if (!overlayRef?.current) return
 
     const handleClick = (event: MouseEvent) => {
-      console.info(`Clicked at (${event.clientX}, ${event.clientY})`)
+      if (!overlaySize) return
 
       setClickPosition({
         top: event.clientY,
         left: event.clientX,
       })
+
+      const normalisedClick = {
+        x: event.offsetX - (overlaySize.width / 2),
+        y: event.offsetY - (overlaySize.height / 2),
+      }
+
+      console.info(`Clicked at (${event.offsetX}, ${event.offsetY}) -> (${normalisedClick.x}, ${normalisedClick.y})`)
     }
 
     // Added to the overlay, so the user cannot click out of bounds!
@@ -86,7 +93,7 @@ function PlaceOverlay({ videoRef, circleSize }: PlaceOverlayProps) {
       overlayElement.removeEventListener('click', handleClick)
     }
 
-  }, [overlayRef])
+  }, [overlayRef, overlaySize])
 
   return (
 
