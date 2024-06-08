@@ -5,9 +5,6 @@ const CONSTANTS = {
 	CIRCLE_SIZE: 10,
 };
 
-/** @type {Document} */
-let document;
-
 document.addEventListener('DOMContentLoaded', async () => {
 	const video = document.querySelector('video');
 	const player = new WebRTCPlayer({
