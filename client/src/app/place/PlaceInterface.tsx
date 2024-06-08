@@ -25,18 +25,19 @@ function PlaceOverlay({ videoRef, circleSize }: PlaceOverlayProps) {
   const [overlaySize, setOverlaySize] = useState<Size | null>(null)
 
   useEffect(() => {
+    if (!videoRef?.current) return
+
+    const videoElement = videoRef.current
 
     const updateVideoBounds = () => {
-      if (!videoRef?.current) return
-
-      if (videoRef.current.videoWidth === 0 || videoRef.current.videoHeight === 0) {
+      if (videoElement.videoWidth === 0 || videoElement.videoHeight === 0) {
         setOverlaySize(null)
         return
       }
 
       const scalingFactors = {
-        width: videoRef.current.clientWidth / videoRef.current.videoWidth,
-        height: videoRef.current.clientHeight / videoRef.current.videoHeight,
+        width: videoElement.clientWidth / videoElement.videoWidth,
+        height: videoElement.clientHeight / videoElement.videoHeight,
       }
 
       const limitingScalarFactor = (scalingFactors.width >= scalingFactors.height)
@@ -48,16 +49,17 @@ function PlaceOverlay({ videoRef, circleSize }: PlaceOverlayProps) {
       console.log('Updated overlay!')
 
       setOverlaySize({
-        width: limitingScalarFactor * videoRef.current.videoWidth,
-        height: limitingScalarFactor * videoRef.current.videoHeight,
+        width: limitingScalarFactor * videoElement.videoWidth,
+        height: limitingScalarFactor * videoElement.videoHeight,
       })
     }
 
     window.addEventListener('resize', updateVideoBounds)
-    videoRef.current?.addEventListener('loadedmetadata', updateVideoBounds)
+    videoElement.addEventListener('loadedmetadata', updateVideoBounds)
 
     return () => {
       window.removeEventListener('resize', updateVideoBounds)
+      videoElement.removeEventListener('loadedmetadata', updateVideoBounds)
     }
 
   }, [videoRef, overlaySize])
@@ -77,7 +79,12 @@ function PlaceOverlay({ videoRef, circleSize }: PlaceOverlayProps) {
     }
 
     // Added to the overlay, so the user cannot click out of bounds!
-    overlayRef.current.addEventListener('click', handleClick)
+    const overlayElement = overlayRef.current
+    overlayElement.addEventListener('click', handleClick)
+
+    return () => {
+      overlayElement.removeEventListener('click', handleClick)
+    }
 
   }, [overlayRef])
 
