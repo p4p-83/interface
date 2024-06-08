@@ -8,7 +8,7 @@ import { cn } from '@/lib/utils'
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
-  title: 'Placr | p4p-83',
+  title: 'PnP << 83',
   description: 'A pick-and-place for rapid prototyping',
 }
 

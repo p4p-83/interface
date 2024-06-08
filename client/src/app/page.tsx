@@ -1,15 +1,8 @@
-import type { Metadata } from 'next'
-
 import { Crosshair2Icon } from '@radix-ui/react-icons'
 
 import { Badge } from '@/components/ui/badge'
 import { LinkCard } from '@/components/LinkCard'
 import { ThemeToggle } from '@/components/ThemeToggle'
-
-export const metadata: Metadata = {
-  title: 'Placr | p4p-83',
-  description: 'A pick-and-place for rapid prototyping',
-}
 
 export default function Home() {
   return (
