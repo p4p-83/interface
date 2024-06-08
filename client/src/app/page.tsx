@@ -4,6 +4,7 @@ import { Crosshair2Icon } from '@radix-ui/react-icons'
 
 import { Badge } from '@/components/ui/badge'
 import { LinkCard } from '@/components/LinkCard'
+import { ThemeToggle } from '@/components/ThemeToggle'
 
 export const metadata: Metadata = {
   title: 'Placr | p4p-83',
@@ -14,6 +15,10 @@ export default function Home() {
   return (
 
     <>
+
+      <div className='absolute top-6 right-6'>
+        <ThemeToggle />
+      </div>
 
       <h1 className='mb-16 text-6xl text-center font-extrabold underline decoration-primary'>
         A pick-and-place<br />
@@ -30,7 +35,7 @@ export default function Home() {
         <LinkCard
           href='/place'
           title='Place'
-          description='Place components.'
+          description='Place your components.'
           icon={Crosshair2Icon}
           className='w-full md:col-span-2'
         />

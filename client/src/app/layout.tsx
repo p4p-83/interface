@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import './globals.css'
 
+import { ThemeProvider } from '@/components/ThemeProvider'
 import { cn } from '@/lib/utils'
 
 const inter = Inter({ subsets: ['latin'] })
@@ -17,12 +18,17 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className=''>
+    <html lang='en' suppressHydrationWarning>
       <body className={cn(inter.className, 'flex min-h-screen flex-col items-center justify-center')}>
 
-        {/* <main className='flex min-h-screen flex-col items-center justify-center has-[h1:first-child]:justify-start py-36 pb-24 px-5'> */}
-        {children}
-        {/* </main> */}
+        <ThemeProvider
+          attribute='class'
+          defaultTheme='system'
+          enableSystem
+          disableTransitionOnChange
+        >
+          {children}
+        </ThemeProvider>
 
       </body>
     </html>
