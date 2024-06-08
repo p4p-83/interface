@@ -1,6 +1,6 @@
 'use client'
 
-import { useRef, useEffect, useState } from 'react'
+import { useRef, useEffect, useState, RefObject } from 'react'
 
 import { WebRtcVideo } from '@/components/WebRtcVideo'
 
@@ -9,10 +9,13 @@ type Size = {
   height: number;
 }
 
-export default function PlaceInterface() {
-  const videoRef = useRef<HTMLVideoElement>(null)
+type PlaceOverlayProps = {
+  videoRef: RefObject<HTMLVideoElement | null>;
+}
 
+function PlaceOverlay({ videoRef }: PlaceOverlayProps) {
   const [overlaySize, setOverlaySize] = useState<Size | null>(null)
+
   useEffect(() => {
 
     const updateVideoBounds = () => {
@@ -34,7 +37,7 @@ export default function PlaceInterface() {
         // Black bars on the top/bottom
         : scalingFactors.width
 
-      console.log('updated!')
+      console.log('Updated overlay!')
 
       setOverlaySize({
         width: limitingScalarFactor * videoRef.current.videoWidth,
@@ -49,7 +52,20 @@ export default function PlaceInterface() {
       window.removeEventListener('resize', updateVideoBounds)
     }
 
-  }, [overlaySize])
+  }, [videoRef, overlaySize])
+
+  return (
+    <div className='absolute cursor-crosshair' style={
+      {
+        width: (overlaySize) ? `${overlaySize.width}px` : '0',
+        height: (overlaySize) ? `${overlaySize.height}px` : '0',
+      }
+    }></div>
+  )
+}
+
+export default function PlaceInterface() {
+  const videoRef = useRef<HTMLVideoElement>(null)
 
   return (
 
@@ -59,12 +75,7 @@ export default function PlaceInterface() {
         <WebRtcVideo ref={videoRef} url='http://localhost:8889/facetime/whep' />
       </div>
 
-      <div className='absolute cursor-crosshair' style={
-        {
-          width: (overlaySize) ? `${overlaySize.width}px` : '0',
-          height: (overlaySize) ? `${overlaySize.height}px` : '0',
-        }
-      }></div>
+      <PlaceOverlay videoRef={videoRef} />
 
     </>
 
