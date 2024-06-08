@@ -9,11 +9,19 @@ type Size = {
   height: number;
 }
 
-type PlaceOverlayProps = {
-  videoRef: RefObject<HTMLVideoElement | null>;
+type Position = {
+  top: number;
+  left: number;
 }
 
-function PlaceOverlay({ videoRef }: PlaceOverlayProps) {
+type PlaceOverlayProps = {
+  videoRef: RefObject<HTMLVideoElement | null>;
+  circleSize: number
+}
+
+function PlaceOverlay({ videoRef, circleSize }: PlaceOverlayProps) {
+  const overlayRef = useRef<HTMLDivElement>(null)
+
   const [overlaySize, setOverlaySize] = useState<Size | null>(null)
 
   useEffect(() => {
@@ -54,13 +62,52 @@ function PlaceOverlay({ videoRef }: PlaceOverlayProps) {
 
   }, [videoRef, overlaySize])
 
+  const [clickPosition, setClickPosition] = useState<Position | null>(null)
+
+  useEffect(() => {
+    if (!overlayRef?.current) return
+
+    const handleClick = (event: MouseEvent) => {
+      console.info(`Clicked at (${event.clientX}, ${event.clientY})`)
+
+      setClickPosition({
+        top: event.clientY,
+        left: event.clientX,
+      })
+    }
+
+    // Added to the overlay, so the user cannot click out of bounds!
+    overlayRef.current.addEventListener('click', handleClick)
+
+  }, [overlayRef])
+
   return (
-    <div className='absolute cursor-crosshair' style={
-      {
-        width: (overlaySize) ? `${overlaySize.width}px` : '0',
-        height: (overlaySize) ? `${overlaySize.height}px` : '0',
+
+    <>
+
+      {/* Click circle */}
+      <div className='absolute bg-primary rounded-full pointer-events-none cursor-crosshair hidden' style={
+        {
+          width: `${circleSize}px`,
+          height: `${circleSize}px`,
+          top: (clickPosition) ? `${clickPosition.top - (circleSize / 2)}px` : '0',
+          left: (clickPosition) ? `${clickPosition.left - (circleSize / 2)}px` : '0',
+          display: (clickPosition) ? 'block' : 'none',
+        }
       }
-    }></div>
+      />
+
+      {/* Overlay */}
+      <div ref={overlayRef} className='absolute cursor-crosshair' style={
+        {
+          width: (overlaySize) ? `${overlaySize.width}px` : '0',
+          height: (overlaySize) ? `${overlaySize.height}px` : '0',
+        }
+      }
+      />
+
+    </>
+
   )
 }
 
@@ -75,7 +122,7 @@ export default function PlaceInterface() {
         <WebRtcVideo ref={videoRef} url='http://localhost:8889/facetime/whep' />
       </div>
 
-      <PlaceOverlay videoRef={videoRef} />
+      <PlaceOverlay videoRef={videoRef} circleSize={10} />
 
     </>
 
