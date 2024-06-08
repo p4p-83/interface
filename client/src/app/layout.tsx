@@ -19,7 +19,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang='en' suppressHydrationWarning>
-      <body className={cn(inter.className, 'flex min-h-screen flex-col items-center justify-center')}>
+      <body className={cn(inter.className, 'flex min-h-screen flex-col items-center justify-center px-5')}>
 
         <ThemeProvider
           attribute='class'
