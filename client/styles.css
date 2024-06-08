@@ -1,0 +1,51 @@
+body,
+html {
+	margin: 0;
+	padding: 0;
+	width: 100%;
+	height: 100%;
+	overflow: hidden;
+	font-family: Arial, sans-serif;
+}
+
+.video-container {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	pointer-events: none;
+}
+
+iframe {
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+}
+
+.circle {
+	position: absolute;
+	width: 50px;
+	height: 50px;
+	background-color: rgba(255, 0, 0, 0.5);
+	border-radius: 50%;
+	pointer-events: none;
+	display: none;
+}
+
+#follow-circle {
+	display: block;
+}
+
+#submit-button {
+	position: absolute;
+	bottom: 20px;
+	left: 20px;
+	padding: 10px 20px;
+	background-color: #fff;
+	border: 1px solid #000;
+	cursor: pointer;
+}
