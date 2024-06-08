@@ -1,0 +1,26 @@
+{
+  "name": "client",
+  "version": "1.0.0",
+  "description": "The user interface for our pick-and-place machine.",
+  "main": "script.js",
+  "scripts": {
+    "build": "esbuild script.js --bundle --outfile=dist/out.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/p4p-83/interface.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/p4p-83/interface/issues"
+  },
+  "homepage": "https://github.com/p4p-83/interface#readme",
+  "dependencies": {
+    "@eyevinn/webrtc-player": "^0.13.0"
+  },
+  "devDependencies": {
+    "esbuild": "0.21.4"
+  }
+}

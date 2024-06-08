@@ -1,8 +1,37 @@
+const { WebRTCPlayer } = require('@eyevinn/webrtc-player');
+
 const CONSTANTS = {
+	WHEP_URL: 'http://localhost:8889/facetime/whep',
 	CIRCLE_SIZE: 10,
 };
 
-document.addEventListener('DOMContentLoaded', () => {
+/** @type {Document} */
+let document;
+
+document.addEventListener('DOMContentLoaded', async () => {
+	const video = document.querySelector('video');
+	const player = new WebRTCPlayer({
+		video: video,
+		type: 'whep',
+		statsTypeFilter: '^candidate-*|^inbound-rtp',
+	});
+	await player.load(new URL(CONSTANTS.WHEP_URL));
+	player.unmute();
+
+	player.on('no-media', () => {
+		console.log('media timeout occured');
+	});
+	player.on('media-recovered', () => {
+		console.log('media recovered');
+	});
+
+	// Subscribe for RTC stats: `stats:${RTCStatsType}`
+	player.on('stats:inbound-rtp', (report) => {
+		if (report.kind === 'video') {
+			console.log(report);
+		}
+	});
+
 	const clickCircle = document.getElementById('click-circle');
 	const followCircle = document.getElementById('follow-circle');
 	const submitButton = document.getElementById('submit-button');
