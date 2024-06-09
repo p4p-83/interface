@@ -88,7 +88,7 @@ export function PlaceOverlay({ videoRef, circleSize }: PlaceOverlayProps) {
     <>
 
       {/* Click circle */}
-      <div className='absolute bg-primary rounded-full pointer-events-none cursor-crosshair hidden' style={
+      <div className='absolute opacity-75 bg-ring outline outline-1 outline-primary-foreground rounded-full pointer-events-none cursor-crosshair hidden' style={
         {
           width: `${circleSize}px`,
           height: `${circleSize}px`,
