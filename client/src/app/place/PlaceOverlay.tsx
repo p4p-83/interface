@@ -179,10 +179,10 @@ export function PlaceOverlay({ videoRef, socketUrl, circleSize }: PlaceOverlayPr
 
     // Added to the overlay, so the user cannot click out of bounds!
     const overlayElement = overlayRef.current
-    overlayElement.addEventListener('click', handleClick)
+    overlayElement.addEventListener('mousedown', handleClick)
 
     return () => {
-      overlayElement.removeEventListener('click', handleClick)
+      overlayElement.removeEventListener('mousedown', handleClick)
     }
 
   }, [overlayRef, overlaySize, socket])
@@ -200,8 +200,7 @@ export function PlaceOverlay({ videoRef, socketUrl, circleSize }: PlaceOverlayPr
           left: (clickPosition) ? `${clickPosition.left - (circleSize / 2)}px` : '0',
           display: (clickPosition) ? 'block' : 'none',
         }
-      }
-      />
+      }/>
 
       {/* Overlay */}
       <div ref={overlayRef} className='absolute cursor-crosshair' style={
@@ -209,8 +208,20 @@ export function PlaceOverlay({ videoRef, socketUrl, circleSize }: PlaceOverlayPr
           width: (overlaySize) ? `${overlaySize.width}px` : '0',
           height: (overlaySize) ? `${overlaySize.height}px` : '0',
         }
-      }
-      />
+      }>
+
+        {/* Centre circle */}
+        <div className='relative opacity-50 bg-secondary outline outline-1 outline-secondary-foreground rounded-full pointer-events-none cursor-crosshair hidden' style={
+          {
+            width: `${circleSize}px`,
+            height: `${circleSize}px`,
+            top: (overlaySize) ? `${(overlaySize.height / 2) - (circleSize / 2)}px` : '0',
+            left: (overlaySize) ? `${(overlaySize.width / 2) - (circleSize / 2)}px` : '0',
+            display: (overlaySize) ? 'block' : 'none',
+          }
+        }/>
+
+      </div>
 
     </>
 
