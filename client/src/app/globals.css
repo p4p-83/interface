@@ -48,6 +48,11 @@
     --input: 0 0% 14.9%;
     --ring: 0 72.2% 50.6%;
   }
+
+  ::selection {
+    background-color: hsl(var(--primary));
+    color: hsl(var(--primary-foreground));
+  }
 }
 
 
