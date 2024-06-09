@@ -22,6 +22,10 @@ const WebRtcVideo = forwardRef<HTMLVideoElement, WebRtcVideoProps>(
         video: ref.current,
         type: 'whep',
         statsTypeFilter: '^candidate-*|^inbound-rtp',
+        timeoutThreshold: 5000,
+        mediaConstraints: {
+          videoOnly: true,
+        },
       })
 
       setLoadProgress(2)
