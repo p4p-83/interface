@@ -161,6 +161,10 @@ export function PlaceOverlay({ videoRef, socketUrl, circleSize }: PlaceOverlayPr
   const [clickPosition, setClickPosition] = useState<Position | null>(null)
   useEffect(() => {
     if (!overlayRef?.current) return
+    if (!videoRef?.current) return
+
+    const overlayElement = overlayRef.current
+    const videoElement = videoRef.current
 
     const handleClick = (event: MouseEvent) => {
       if (!overlaySize) return
@@ -169,9 +173,6 @@ export function PlaceOverlay({ videoRef, socketUrl, circleSize }: PlaceOverlayPr
         top: event.clientY,
         left: event.clientX,
       })
-
-      if (!videoRef?.current) return
-      const videoElement = videoRef.current
 
       const scalingFactor = videoElement.videoWidth / overlaySize.width
       const normalisedClick = {
@@ -183,11 +184,7 @@ export function PlaceOverlay({ videoRef, socketUrl, circleSize }: PlaceOverlayPr
       socket.sendMessage(`${normalisedClick.x},${normalisedClick.y}`)
     }
 
-    // TODO: click position responsive to resize too?
-    // or just assume that no resize while gantry is moving?
-
     // Added to the overlay, so the user cannot click out of bounds!
-    const overlayElement = overlayRef.current
     overlayElement.addEventListener('mousedown', handleClick)
 
     return () => {
@@ -195,6 +192,23 @@ export function PlaceOverlay({ videoRef, socketUrl, circleSize }: PlaceOverlayPr
     }
 
   }, [overlayRef, overlaySize, videoRef, socket])
+
+  // Clear clicks on resize
+  useEffect(() => {
+    if (!videoRef?.current) return
+    const videoElement = videoRef.current
+
+    const clearClickPosition = () => setClickPosition(null)
+
+    window.addEventListener('resize', clearClickPosition)
+    videoElement.addEventListener('loadedmetadata', clearClickPosition)
+
+    return () => {
+      window.removeEventListener('resize', clearClickPosition)
+      videoElement.removeEventListener('loadedmetadata', clearClickPosition)
+    }
+
+  }, [videoRef])
 
   return (
 
