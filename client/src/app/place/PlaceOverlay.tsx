@@ -13,11 +13,19 @@ type PlaceOverlayProps = {
 export function PlaceOverlay({ videoRef, socketUrl, circleSize }: PlaceOverlayProps) {
   const overlayRef = useRef<HTMLDivElement>(null)
 
+  const TOAST_IDS = {
+    STATUS: 0,
+    MESSAGE: 1,
+    ERROR: 2,
+  } as const
+
   // Unmount
   const didUnmount = useRef(false)
   useEffect(() => {
+    console.log('Mounted')
     didUnmount.current = false
     return () => {
+      console.log('Unmounted')
       didUnmount.current = true
     }
   }, [])
@@ -26,6 +34,7 @@ export function PlaceOverlay({ videoRef, socketUrl, circleSize }: PlaceOverlayPr
     onOpen: (event) => {
       console.log(event)
       toast.success('Socket opened!', {
+        id: TOAST_IDS.STATUS,
         cancel: {
           label: 'Dismiss',
           onClick: () => null,
@@ -36,6 +45,7 @@ export function PlaceOverlay({ videoRef, socketUrl, circleSize }: PlaceOverlayPr
     onClose: (event) => {
       console.log(event)
       toast.info('Socket closed.', {
+        id: TOAST_IDS.STATUS,
         cancel: {
           label: 'Dismiss',
           onClick: () => null,
@@ -46,6 +56,7 @@ export function PlaceOverlay({ videoRef, socketUrl, circleSize }: PlaceOverlayPr
     onMessage: (message) => {
       console.log(message)
       toast.message('Message received:', {
+        id: TOAST_IDS.MESSAGE,
         description: (
           <pre className='mt-2 w-[320px] rounded-md bg-secondary text-secondary-foreground p-4'>
             <code className='text-secondary-foreground'>{
@@ -53,37 +64,49 @@ export function PlaceOverlay({ videoRef, socketUrl, circleSize }: PlaceOverlayPr
             }</code>
           </pre>
         ),
-        duration: 750,
+        duration: 1000,
       })
     },
     onError: (error) => {
       console.error(error),
       toast.error('Socket error!', {
+        id: TOAST_IDS.ERROR,
         cancel: {
           label: 'Dismiss',
           onClick: () => null,
         },
+        duration: Infinity,
       })
     },
     retryOnError: true,
-    heartbeat: true,
     shouldReconnect: (event) => {
       if (didUnmount.current) return false
 
       console.log('Reconnecting', event)
-      // TODO: dismiss
       toast.loading('Attempting to reconnect...', {
+        id: TOAST_IDS.STATUS,
         cancel: {
           label: 'Dismiss',
           onClick: () => null,
         },
-        duration: 750,
-        dismissible: true,
+        duration: Infinity,
+        important: true,
       })
 
       return true
     },
     reconnectAttempts: 5,
+    onReconnectStop: () => {
+      toast.error('Failed to connect to socket!', {
+        id: TOAST_IDS.STATUS,
+        cancel: {
+          label: 'Dismiss',
+          onClick: () => null,
+        },
+        duration: Infinity,
+      })
+    },
+    heartbeat: true,
   })
 
   // Resize overlay
