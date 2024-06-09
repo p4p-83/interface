@@ -5,10 +5,9 @@ export type Size = {
   height: number;
 }
 
-// TODO:
 export type Position = {
-  top: number;
-  left: number;
+  x: number;
+  y: number;
 }
 
 const URLS = {

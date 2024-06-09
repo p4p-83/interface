@@ -61,7 +61,7 @@ export function PlaceOverlay({ videoRef, socketUrl, circleSize }: PlaceOverlayPr
       console.log(message)
 
       const data = (message.data instanceof Blob)
-        ? new Uint16Array(await message.data.arrayBuffer())
+        ? new Int16Array(await message.data.arrayBuffer())
         : message.data
 
       // if (data === 'ok') {
@@ -145,14 +145,14 @@ export function PlaceOverlay({ videoRef, socketUrl, circleSize }: PlaceOverlayPr
        * In other words, the burden is left to the controller to map the Int16 delta into real camera pixels
       */
       const normalisedDelta = {
-        x: Math.floor((eventPosition.left - (overlaySize.width / 2)) * (INT16_CONSTANTS.RANGE / overlaySize.width)),
-        y: Math.floor((eventPosition.top - (overlaySize.height / 2)) * (INT16_CONSTANTS.RANGE / overlaySize.height)),
+        x: Math.floor((eventPosition.y - (overlaySize.width / 2)) * (INT16_CONSTANTS.RANGE / overlaySize.width)),
+        y: Math.floor((eventPosition.x - (overlaySize.height / 2)) * (INT16_CONSTANTS.RANGE / overlaySize.height)),
       }
 
       normalisedDelta.x = Math.max(INT16_CONSTANTS.MINIMUM, Math.min(INT16_CONSTANTS.MAXIMUM, normalisedDelta.x))
       normalisedDelta.y = Math.max(INT16_CONSTANTS.MINIMUM, Math.min(INT16_CONSTANTS.MAXIMUM, normalisedDelta.y))
 
-      console.info(`Clicked at (${eventPosition.left}, ${eventPosition.top}) -> (${normalisedDelta.x}, ${normalisedDelta.y})`)
+      console.info(`Clicked at (${eventPosition.y}, ${eventPosition.x}) -> (${normalisedDelta.x}, ${normalisedDelta.y})`)
       socket.sendMessage(new Int16Array([normalisedDelta.x, normalisedDelta.y]))
     },
     [socket, overlaySize]
@@ -207,13 +207,13 @@ export function PlaceOverlay({ videoRef, socketUrl, circleSize }: PlaceOverlayPr
 
     const handleClick = (event: MouseEvent) => {
       setClickPosition({
-        top: event.clientY,
-        left: event.clientX,
+        x: event.clientY,
+        y: event.clientX,
       })
 
       sendClickDelta({
-        top: event.offsetY,
-        left: event.offsetX,
+        x: event.offsetY,
+        y: event.offsetX,
       })
     }
 
@@ -252,8 +252,8 @@ export function PlaceOverlay({ videoRef, socketUrl, circleSize }: PlaceOverlayPr
         {
           width: `${circleSize}px`,
           height: `${circleSize}px`,
-          top: (clickPosition) ? `${clickPosition.top - (circleSize / 2)}px` : '0',
-          left: (clickPosition) ? `${clickPosition.left - (circleSize / 2)}px` : '0',
+          top: (clickPosition) ? `${clickPosition.x - (circleSize / 2)}px` : '0',
+          left: (clickPosition) ? `${clickPosition.y - (circleSize / 2)}px` : '0',
           display: (clickPosition) ? 'block' : 'none',
         }
       }/>
