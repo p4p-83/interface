@@ -1,17 +1,44 @@
 import { useRef, useEffect, useState, RefObject } from 'react'
+import useWebSocket, { ReadyState } from 'react-use-websocket'
 
 import { Size, Position } from './PlaceInterface'
 
+const SOCKET_STATUS_MAP = {
+  [ReadyState.CONNECTING]: 'Connecting',
+  [ReadyState.OPEN]: 'Open',
+  [ReadyState.CLOSING]: 'Closing',
+  [ReadyState.CLOSED]: 'Closed',
+  [ReadyState.UNINSTANTIATED]: 'Uninstantiated',
+} as const
+
 type PlaceOverlayProps = {
   videoRef: RefObject<HTMLVideoElement | null>;
-  circleSize: number
+  socketUrl: string;
+  circleSize: number;
 }
 
-export function PlaceOverlay({ videoRef, circleSize }: PlaceOverlayProps) {
+export function PlaceOverlay({ videoRef, socketUrl, circleSize }: PlaceOverlayProps) {
   const overlayRef = useRef<HTMLDivElement>(null)
 
-  const [overlaySize, setOverlaySize] = useState<Size | null>(null)
+  const socket = useWebSocket(socketUrl,
+    {
+      onOpen: () => console.log('opened'),
+      onClose: () => console.log('closed'),
+      onMessage: (message) => console.log(message),
+      onError: (error) => console.log(error),
+      retryOnError: true,
+      heartbeat: true,
+      // Will attempt to reconnect on all close events, such as server shutting down
+      shouldReconnect: (event) => {
+        console.log(event)
+        return true
+      },
+      reconnectAttempts: 5,
+    }
+  )
 
+  const [overlaySize, setOverlaySize] = useState<Size | null>(null)
+  // Resize overlay
   useEffect(() => {
     if (!videoRef?.current) return
 
@@ -53,7 +80,7 @@ export function PlaceOverlay({ videoRef, circleSize }: PlaceOverlayProps) {
   }, [videoRef])
 
   const [clickPosition, setClickPosition] = useState<Position | null>(null)
-
+  // Handle clicks
   useEffect(() => {
     if (!overlayRef?.current) return
 
@@ -71,7 +98,13 @@ export function PlaceOverlay({ videoRef, circleSize }: PlaceOverlayProps) {
       }
 
       console.info(`Clicked at (${event.offsetX}, ${event.offsetY}) -> (${normalisedClick.x}, ${normalisedClick.y})`)
+      console.info(SOCKET_STATUS_MAP[socket.readyState])
+      socket.sendMessage(`${normalisedClick.x},${normalisedClick.y}`)
     }
+
+    // TODO: click position responsive to resize too?
+    // or just assume that no resize while gantry is moving?
+    // also—same video feed will give different coordinates depending on client size...
 
     // Added to the overlay, so the user cannot click out of bounds!
     const overlayElement = overlayRef.current
@@ -81,7 +114,7 @@ export function PlaceOverlay({ videoRef, circleSize }: PlaceOverlayProps) {
       overlayElement.removeEventListener('click', handleClick)
     }
 
-  }, [overlayRef, overlaySize])
+  }, [overlayRef, overlaySize, socket])
 
   return (
 
