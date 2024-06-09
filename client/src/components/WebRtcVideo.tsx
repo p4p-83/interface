@@ -1,7 +1,10 @@
 'use client'
 
-import { useEffect, forwardRef } from 'react'
+import { useEffect, useState, forwardRef } from 'react'
 import { WebRTCPlayer } from '@eyevinn/webrtc-player'
+
+import { Progress } from '@/components/ui/progress'
+import { cn } from '@/lib/utils'
 
 type WebRtcVideoProps = {
   url: string;
@@ -9,6 +12,7 @@ type WebRtcVideoProps = {
 
 const WebRtcVideo = forwardRef<HTMLVideoElement, WebRtcVideoProps>(
   function WebRtcVideo({ url }, ref) {
+    const [loadProgress, setLoadProgress] = useState(0)
 
     useEffect(() => {
       // This is nasty, but oh well. https://stackoverflow.com/a/65877297
@@ -20,8 +24,10 @@ const WebRtcVideo = forwardRef<HTMLVideoElement, WebRtcVideoProps>(
         statsTypeFilter: '^candidate-*|^inbound-rtp',
       })
 
+      setLoadProgress(2)
+
       player.load(new URL(url)).then(() => {
-        player.unmute()
+        setLoadProgress(60)
       })
 
       player.on('no-media', () => {
@@ -46,8 +52,43 @@ const WebRtcVideo = forwardRef<HTMLVideoElement, WebRtcVideoProps>(
 
     }, [ref, url])
 
+    useEffect(() => {
+      // This is nasty, but oh well. https://stackoverflow.com/a/65877297
+      if (typeof ref === 'function' || !ref?.current) return
+
+      const generateUpdateProgressHandler = (value: number) => {
+        return () => {
+          console.log(value)
+          setLoadProgress(value)
+        }
+      }
+
+      const startHandler = generateUpdateProgressHandler(97)
+      const metadataHandler = generateUpdateProgressHandler(99)
+      const dataHandler = generateUpdateProgressHandler(100)
+
+      const videoElement = ref.current
+      videoElement.addEventListener('loadstart', startHandler)
+      videoElement.addEventListener('loadedmetadata', metadataHandler)
+      videoElement.addEventListener('loadeddata', dataHandler)
+
+      return () => {
+        videoElement.removeEventListener('loadstart', startHandler)
+        videoElement.removeEventListener('loadedmetadata', metadataHandler)
+        videoElement.removeEventListener('loadeddata', dataHandler)
+      }
+    }, [ref])
+
     return (
-      <video ref={ref} autoPlay muted playsInline className='object-contain object-center h-full w-full pointer-events-none' />
+      <>
+        <Progress value={loadProgress} className={cn(
+          'absolute max-w-[50%]',
+          (loadProgress === 100) ? 'hidden' : '',
+        )}
+        />
+
+        <video ref={ref} autoPlay muted playsInline className='object-contain object-center h-full w-full pointer-events-none' />
+      </>
     )
 
   }

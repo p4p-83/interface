@@ -132,7 +132,7 @@ export default function PlaceInterface() {
 
     <>
 
-      <div className='flex justify-center items-center w-screen h-screen'>
+      <div className='relative flex justify-center items-center w-screen h-screen'>
         <WebRtcVideo ref={videoRef} url='http://localhost:8889/facetime/whep' />
       </div>
 
