@@ -2,6 +2,7 @@
 
 import { useEffect, useState, forwardRef } from 'react'
 import { WebRTCPlayer } from '@eyevinn/webrtc-player'
+import { toast } from 'sonner'
 
 import { Progress } from '@/components/ui/progress'
 import { cn } from '@/lib/utils'
@@ -50,12 +51,24 @@ const WebRtcVideo = forwardRef<HTMLVideoElement, WebRtcVideoProps>(
         setLoadProgress(PROGRESS_BAR.PLAYER_LOADED)
       })
 
-      // player.on('no-media', () => {
-      //   console.log('media timeout occurred')
-      // })
-      // player.on('media-recovered', () => {
-      //   console.log('media recovered')
-      // })
+      player.on('no-media', () => {
+        console.log('Media timeout occurred')
+        toast.warning('Stream timed out!', {
+          cancel: {
+            label: 'Dismiss',
+            onClick: () => null,
+          },
+        })
+      })
+      player.on('media-recovered', () => {
+        console.log('Media recovered')
+        toast.success('Stream recovered!', {
+          cancel: {
+            label: 'Dismiss',
+            onClick: () => null,
+          },
+        })
+      })
 
       return () => {
         player.unload()

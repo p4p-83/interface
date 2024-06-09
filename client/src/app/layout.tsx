@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import './globals.css'
 
+import { Toaster } from '@/components/ui/sonner'
 import { ThemeProvider } from '@/components/ThemeProvider'
 import { cn } from '@/lib/utils'
 
@@ -27,7 +28,11 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
+
           {children}
+
+          <Toaster richColors />
+
         </ThemeProvider>
 
       </body>
