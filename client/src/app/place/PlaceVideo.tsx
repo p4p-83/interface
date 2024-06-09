@@ -18,6 +18,7 @@ export function PlaceVideo({ className, videoUrl, socketUrl }: PlaceVideoProps) 
   return (
     <div className={cn('flex justify-center items-center', className)}>
 
+      {/* TODO: progress should really be in this parent */}
       <div className='relative flex justify-center items-center w-full h-full'>
         <WebRtcVideo ref={videoRef} url={videoUrl} />
       </div>

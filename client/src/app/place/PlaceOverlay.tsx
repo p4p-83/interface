@@ -13,74 +13,81 @@ type PlaceOverlayProps = {
 export function PlaceOverlay({ videoRef, socketUrl, circleSize }: PlaceOverlayProps) {
   const overlayRef = useRef<HTMLDivElement>(null)
 
-  const socket = useWebSocket(socketUrl,
-    {
-      onOpen: (event) => {
-        console.log(event)
-        toast.success('Socket opened!', {
-          cancel: {
-            label: 'Dismiss',
-            onClick: () => null,
-          },
-          duration: 1000,
-        })
-      },
-      onClose: (event) => {
-        console.log(event)
-        toast.info('Socket closed.', {
-          cancel: {
-            label: 'Dismiss',
-            onClick: () => null,
-          },
-          duration: 1000,
-        })
-      },
-      onMessage: (message) => {
-        console.log(message)
-        toast.message('Message received:', {
-          description: (
-            <pre className='mt-2 w-[320px] rounded-md bg-secondary text-secondary-foreground p-4'>
-              <code className='text-secondary-foreground'>{
-                JSON.stringify(message.data, null, 2)
-              }</code>
-            </pre>
-          ),
-          duration: 750,
-        })
-      },
-      onError: (error) => {
-        console.error(error),
-        toast.error('Socket error!', {
-          cancel: {
-            label: 'Dismiss',
-            onClick: () => null,
-          },
-        })
-      },
-      retryOnError: true,
-      heartbeat: true,
-      shouldReconnect: (event) => {
-        // TODO: dismount
-        if (event.code === 1000) return false
-
-        console.log('Reconnecting', event)
-        // TODO: dismiss
-        toast.loading('Attempting to reconnect...', {
-          cancel: {
-            label: 'Dismiss',
-            onClick: () => null,
-          },
-          duration: 750,
-        })
-
-        return true
-      },
-      reconnectAttempts: 5,
+  // Unmount
+  const didUnmount = useRef(false)
+  useEffect(() => {
+    didUnmount.current = false
+    return () => {
+      didUnmount.current = true
     }
-  )
+  }, [])
 
-  const [overlaySize, setOverlaySize] = useState<Size | null>(null)
+  const socket = useWebSocket(socketUrl, {
+    onOpen: (event) => {
+      console.log(event)
+      toast.success('Socket opened!', {
+        cancel: {
+          label: 'Dismiss',
+          onClick: () => null,
+        },
+        duration: 1000,
+      })
+    },
+    onClose: (event) => {
+      console.log(event)
+      toast.info('Socket closed.', {
+        cancel: {
+          label: 'Dismiss',
+          onClick: () => null,
+        },
+        duration: 1000,
+      })
+    },
+    onMessage: (message) => {
+      console.log(message)
+      toast.message('Message received:', {
+        description: (
+          <pre className='mt-2 w-[320px] rounded-md bg-secondary text-secondary-foreground p-4'>
+            <code className='text-secondary-foreground'>{
+              JSON.stringify(message.data, null, 2)
+            }</code>
+          </pre>
+        ),
+        duration: 750,
+      })
+    },
+    onError: (error) => {
+      console.error(error),
+      toast.error('Socket error!', {
+        cancel: {
+          label: 'Dismiss',
+          onClick: () => null,
+        },
+      })
+    },
+    retryOnError: true,
+    heartbeat: true,
+    shouldReconnect: (event) => {
+      if (didUnmount.current) return false
+
+      console.log('Reconnecting', event)
+      // TODO: dismiss
+      toast.loading('Attempting to reconnect...', {
+        cancel: {
+          label: 'Dismiss',
+          onClick: () => null,
+        },
+        duration: 750,
+        dismissible: true,
+      })
+
+      return true
+    },
+    reconnectAttempts: 5,
+  })
+
   // Resize overlay
+  const [overlaySize, setOverlaySize] = useState<Size | null>(null)
   useEffect(() => {
     if (!videoRef?.current) return
 
@@ -121,8 +128,8 @@ export function PlaceOverlay({ videoRef, socketUrl, circleSize }: PlaceOverlayPr
 
   }, [videoRef])
 
-  const [clickPosition, setClickPosition] = useState<Position | null>(null)
   // Handle clicks
+  const [clickPosition, setClickPosition] = useState<Position | null>(null)
   useEffect(() => {
     if (!overlayRef?.current) return
 
