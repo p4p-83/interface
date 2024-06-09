@@ -55,6 +55,11 @@ export function PlaceOverlay({ videoRef, socketUrl, circleSize }: PlaceOverlayPr
     },
     onMessage: (message) => {
       console.log(message)
+
+      if (message.data === 'ok') {
+        setClickPosition(null)
+      }
+
       toast.message('Message received:', {
         id: TOAST_IDS.MESSAGE,
         description: (
@@ -104,6 +109,7 @@ export function PlaceOverlay({ videoRef, socketUrl, circleSize }: PlaceOverlayPr
           onClick: () => null,
         },
         duration: Infinity,
+        important: true,
       })
     },
     heartbeat: true,
@@ -164,9 +170,13 @@ export function PlaceOverlay({ videoRef, socketUrl, circleSize }: PlaceOverlayPr
         left: event.clientX,
       })
 
+      if (!videoRef?.current) return
+      const videoElement = videoRef.current
+
+      const scalingFactor = videoElement.videoWidth / overlaySize.width
       const normalisedClick = {
-        x: event.offsetX - (overlaySize.width / 2),
-        y: event.offsetY - (overlaySize.height / 2),
+        x: (event.offsetX - (overlaySize.width / 2)) * scalingFactor,
+        y: (event.offsetY - (overlaySize.height / 2)) * scalingFactor,
       }
 
       console.info(`Clicked at (${event.offsetX}, ${event.offsetY}) -> (${normalisedClick.x}, ${normalisedClick.y})`)
@@ -175,7 +185,6 @@ export function PlaceOverlay({ videoRef, socketUrl, circleSize }: PlaceOverlayPr
 
     // TODO: click position responsive to resize too?
     // or just assume that no resize while gantry is moving?
-    // also—same video feed will give different coordinates depending on client size...
 
     // Added to the overlay, so the user cannot click out of bounds!
     const overlayElement = overlayRef.current
@@ -185,7 +194,7 @@ export function PlaceOverlay({ videoRef, socketUrl, circleSize }: PlaceOverlayPr
       overlayElement.removeEventListener('mousedown', handleClick)
     }
 
-  }, [overlayRef, overlaySize, socket])
+  }, [overlayRef, overlaySize, videoRef, socket])
 
   return (
 
