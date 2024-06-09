@@ -1,4 +1,4 @@
-import { useRef, useEffect, useState, RefObject } from 'react'
+import { useRef, useEffect, useState, useCallback, RefObject } from 'react'
 import useWebSocket from 'react-use-websocket'
 import { toast } from 'sonner'
 
@@ -12,6 +12,10 @@ type PlaceOverlayProps = {
 
 export function PlaceOverlay({ videoRef, socketUrl, circleSize }: PlaceOverlayProps) {
   const overlayRef = useRef<HTMLDivElement>(null)
+  const didUnmount = useRef(false)
+
+  const [overlaySize, setOverlaySize] = useState<Size | null>(null)
+  const [clickPosition, setClickPosition] = useState<Position | null>(null)
 
   const TOAST_IDS = {
     STATUS: 0,
@@ -20,7 +24,6 @@ export function PlaceOverlay({ videoRef, socketUrl, circleSize }: PlaceOverlayPr
   } as const
 
   // Unmount
-  const didUnmount = useRef(false)
   useEffect(() => {
     console.log('Mounted')
     didUnmount.current = false
@@ -30,6 +33,7 @@ export function PlaceOverlay({ videoRef, socketUrl, circleSize }: PlaceOverlayPr
     }
   }, [])
 
+  // Socket
   const socket = useWebSocket(socketUrl, {
     onOpen: (event) => {
       console.log(event)
@@ -53,19 +57,23 @@ export function PlaceOverlay({ videoRef, socketUrl, circleSize }: PlaceOverlayPr
         duration: 1000,
       })
     },
-    onMessage: (message) => {
+    onMessage: async (message) => {
       console.log(message)
 
-      if (message.data === 'ok') {
-        setClickPosition(null)
-      }
+      const data = (message.data instanceof Blob)
+        ? new Uint16Array(await message.data.arrayBuffer())
+        : message.data
+
+      // if (data === 'ok') {
+      //   setClickPosition(null)
+      // }
 
       toast.message('Message received:', {
         id: TOAST_IDS.MESSAGE,
         description: (
           <pre className='mt-2 w-[320px] rounded-md bg-secondary text-secondary-foreground p-4'>
             <code className='text-secondary-foreground'>{
-              JSON.stringify(message.data, null, 2)
+              JSON.stringify(data, null, 2)
             }</code>
           </pre>
         ),
@@ -115,8 +123,42 @@ export function PlaceOverlay({ videoRef, socketUrl, circleSize }: PlaceOverlayPr
     heartbeat: true,
   })
 
+  // Click delta messaging
+  const sendClickDelta = useCallback(
+    (eventPosition: Position) => {
+      if (!overlaySize) return
+
+      const INT16_CONSTANTS = {
+        RANGE: 65535,
+        MINIMUM: -32768,
+        MAXIMUM: 32767,
+      }
+
+      /*
+       * This normalises the delta -> the clicked target to be on a Int16 coordinate space that is
+       * - Centred at (0, 0), which should reflect the present position of the head
+       * - Maximally negative at -32,768
+       * - Maximally positive at 32,767
+       *
+       * This is done to ensure that the delta information passed back to the controller via
+       * the WebSocket is agnostic of both the client viewport and the streamed video size
+       * In other words, the burden is left to the controller to map the Int16 delta into real camera pixels
+      */
+      const normalisedDelta = {
+        x: Math.floor((eventPosition.left - (overlaySize.width / 2)) * (INT16_CONSTANTS.RANGE / overlaySize.width)),
+        y: Math.floor((eventPosition.top - (overlaySize.height / 2)) * (INT16_CONSTANTS.RANGE / overlaySize.height)),
+      }
+
+      normalisedDelta.x = Math.max(INT16_CONSTANTS.MINIMUM, Math.min(INT16_CONSTANTS.MAXIMUM, normalisedDelta.x))
+      normalisedDelta.y = Math.max(INT16_CONSTANTS.MINIMUM, Math.min(INT16_CONSTANTS.MAXIMUM, normalisedDelta.y))
+
+      console.info(`Clicked at (${eventPosition.left}, ${eventPosition.top}) -> (${normalisedDelta.x}, ${normalisedDelta.y})`)
+      socket.sendMessage(new Int16Array([normalisedDelta.x, normalisedDelta.y]))
+    },
+    [socket, overlaySize]
+  )
+
   // Resize overlay
-  const [overlaySize, setOverlaySize] = useState<Size | null>(null)
   useEffect(() => {
     if (!videoRef?.current) return
 
@@ -158,30 +200,21 @@ export function PlaceOverlay({ videoRef, socketUrl, circleSize }: PlaceOverlayPr
   }, [videoRef])
 
   // Handle clicks
-  const [clickPosition, setClickPosition] = useState<Position | null>(null)
   useEffect(() => {
     if (!overlayRef?.current) return
-    if (!videoRef?.current) return
 
     const overlayElement = overlayRef.current
-    const videoElement = videoRef.current
 
     const handleClick = (event: MouseEvent) => {
-      if (!overlaySize) return
-
       setClickPosition({
         top: event.clientY,
         left: event.clientX,
       })
 
-      const scalingFactor = videoElement.videoWidth / overlaySize.width
-      const normalisedClick = {
-        x: (event.offsetX - (overlaySize.width / 2)) * scalingFactor,
-        y: (event.offsetY - (overlaySize.height / 2)) * scalingFactor,
-      }
-
-      console.info(`Clicked at (${event.offsetX}, ${event.offsetY}) -> (${normalisedClick.x}, ${normalisedClick.y})`)
-      socket.sendMessage(`${normalisedClick.x},${normalisedClick.y}`)
+      sendClickDelta({
+        top: event.offsetY,
+        left: event.offsetX,
+      })
     }
 
     // Added to the overlay, so the user cannot click out of bounds!
@@ -191,7 +224,7 @@ export function PlaceOverlay({ videoRef, socketUrl, circleSize }: PlaceOverlayPr
       overlayElement.removeEventListener('mousedown', handleClick)
     }
 
-  }, [overlayRef, overlaySize, videoRef, socket])
+  }, [overlayRef, sendClickDelta])
 
   // Clear clicks on resize
   useEffect(() => {

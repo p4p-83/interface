@@ -5,6 +5,7 @@ export type Size = {
   height: number;
 }
 
+// TODO:
 export type Position = {
   top: number;
   left: number;
