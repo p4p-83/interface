@@ -15,7 +15,11 @@ const WHEP_URL = 'http://localhost:8889/facetime/whep'
 export default function PlaceInterface() {
   return (
 
-    <PlaceVideo url={WHEP_URL} />
+    <>
+
+      <PlaceVideo className='w-screen h-screen' url={WHEP_URL} />
+
+    </>
 
   )
 }
