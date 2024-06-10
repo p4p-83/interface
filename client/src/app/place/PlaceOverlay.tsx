@@ -62,25 +62,21 @@ export function PlaceOverlay({ videoRef, socketUrl, circleSize }: PlaceOverlayPr
       onMessage: async (message) => {
         console.log(message)
 
-        const data = (message.data instanceof Blob)
-          ? new Uint8Array(await message.data.arrayBuffer())
-          : message.data
+        const action = await socket.processMessage(message.data)
+        console.log({ action })
 
-        // if (data === 'ok') {
-        //   setClickPosition(null)
-        // }
-
-        toast.message('Message received:', {
+        toast.message(`Message received (${action.type}):`, {
           id: TOAST_IDS.MESSAGE,
           description: (
             <pre className='mt-2 w-[320px] rounded-md bg-secondary text-secondary-foreground p-4'>
               <code className='text-secondary-foreground'>
-                {JSON.stringify(data, null, 2)}
+                {String(action.rawPayload)}
               </code>
             </pre>
           ),
           duration: 1000,
         })
+
       },
 
       onError: (error) => {

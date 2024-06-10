@@ -16,22 +16,64 @@ const INT16_CONSTANTS = {
  * - A following stream of payload bytes defined by the tag
  */
 
-const MESSAGE_TAGS = {
-  ['HEARTBEAT']: 0x00,
-  ['TARGET_DELTAS']: 0x01,
-} as const
+// TODO: type payload
+enum MessageType {
+  HEARTBEAT = 0x00,
+  TARGET_DELTAS = 0x01,
+}
 
-type MessageType = keyof (typeof MESSAGE_TAGS)
-type MessageTag = (typeof MESSAGE_TAGS)[MessageType]
+export enum ActionType {
+  NO_OPERATION,
+  MOVE_HEAD,
+}
+export type ActionPayloads = {
+  [ActionType.NO_OPERATION]: null,
+  [ActionType.MOVE_HEAD]: Int8Array,
+}
+// TODO: silent
+export type Action = {
+  [K in ActionType]: ActionPayloads[K] extends null
+    ? {
+      type: K;
+      rawPayload: string | Uint8Array;
+    }
+    : {
+      type: K;
+      payload: ActionPayloads[K];
+      rawPayload: string | Uint8Array;
+    };
+}[ActionType];
 
-export function processMessage() { null }
+export async function processMessage(data: unknown): Promise<Action> {
+  if (!(data instanceof Blob)) {
+    console.warn('Non-Blob data received: ', data)
+    return {
+      type: ActionType.NO_OPERATION,
+      rawPayload: String(data),
+    }
+  }
+
+  const byteArray = new Uint8Array(await data.arrayBuffer())
+  switch (byteArray[0]) {
+
+  case MessageType.HEARTBEAT:
+  case MessageType.TARGET_DELTAS:
+  default:
+    return {
+      type: ActionType.NO_OPERATION,
+      rawPayload: byteArray,
+    }
+
+  }
+
+}
 
 function sendMessage(webSocket: WebSocketHook, type: MessageType, payload: ArrayBufferView) {
   if (webSocket.readyState !== ReadyState.OPEN) return
 
   const message = new Uint8Array(payload.byteLength + 1)
   // Set the message tag
-  message[0] = MESSAGE_TAGS[type]
+  message[0] = type
   // Set the message payload
   message.set(new Uint8Array(payload.buffer), 1)
 
@@ -40,7 +82,7 @@ function sendMessage(webSocket: WebSocketHook, type: MessageType, payload: Array
 }
 
 export function getHeartbeatMessage() {
-  return new Uint8Array([MESSAGE_TAGS['HEARTBEAT']])
+  return new Uint8Array([MessageType.HEARTBEAT])
 }
 
 /**
@@ -73,5 +115,5 @@ export function sendTargetDeltas(webSocket: WebSocketHook, rawTargetPosition: Po
   normalisedDelta.y = Math.max(INT16_CONSTANTS.MINIMUM, Math.min(INT16_CONSTANTS.MAXIMUM, normalisedDelta.y))
   console.info(`Delta normalised to (${normalisedDelta.x}, ${normalisedDelta.y})`)
 
-  sendMessage(webSocket, 'TARGET_DELTAS', new Int16Array([normalisedDelta.x, normalisedDelta.y]))
+  sendMessage(webSocket, MessageType.TARGET_DELTAS, new Int16Array([normalisedDelta.x, normalisedDelta.y]))
 }
