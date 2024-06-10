@@ -63,7 +63,7 @@ export function PlaceOverlay({ videoRef, socketUrl, circleSize }: PlaceOverlayPr
         console.log(message)
 
         const data = (message.data instanceof Blob)
-          ? new Int16Array(await message.data.arrayBuffer())
+          ? new Uint8Array(await message.data.arrayBuffer())
           : message.data
 
         // if (data === 'ok') {
@@ -119,7 +119,16 @@ export function PlaceOverlay({ videoRef, socketUrl, circleSize }: PlaceOverlayPr
         })
       },
 
-      heartbeat: true,
+      heartbeat: {
+        /*
+         * This is _somewhat_ nasty.
+         * This is necessary because HeartbeatOptions is typed to only accept strings,
+         * although the implementation is written to completely support binary types too.
+         ! The caveat is that returnMessage won't work.
+         ! That checks by reference, which won't work for my Uint8Array.
+         */
+        message: socket.getHeartbeatMessage() as unknown as string,
+      },
 
     }
   )

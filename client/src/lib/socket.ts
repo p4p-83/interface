@@ -17,7 +17,7 @@ const INT16_CONSTANTS = {
  */
 
 const MESSAGE_TAGS = {
-  ['PING']: 0x00,
+  ['HEARTBEAT']: 0x00,
   ['TARGET_DELTAS']: 0x01,
 } as const
 
@@ -37,6 +37,10 @@ function sendMessage(webSocket: WebSocketHook, type: MessageType, payload: Array
 
   console.info({ payload, message })
   webSocket.sendMessage(message)
+}
+
+export function getHeartbeatMessage() {
+  return new Uint8Array([MESSAGE_TAGS['HEARTBEAT']])
 }
 
 /**
