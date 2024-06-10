@@ -70,10 +70,18 @@ export function PlaceOverlay({ videoRef, socketUrl, circleSize }: PlaceOverlayPr
         toast.message(`Message received (${action.messageType}):`, {
           id: TOAST_IDS.MESSAGE,
           description: (
-            <pre className='mt-2 w-[320px] rounded-md bg-secondary text-secondary-foreground p-4'>
-              <code className='text-secondary-foreground'>
+            <pre className='mt-2'>
+              <code className='w-[320px] block rounded-md p-4 bg-secondary text-secondary-foreground'>
                 {String(action.rawPayload)}
               </code>
+              {
+                ('payload' in action)
+                  ? (
+                    <code className='w-[320px] mt-2 block rounded-md p-4 bg-secondary text-secondary-foreground'>
+                      {String(action.payload)}
+                    </code>
+                  ) : null
+              }
             </pre>
           ),
           duration: 1000,

@@ -31,7 +31,7 @@ type MessageTag = (typeof MESSAGE_TAGS)[MessageType]
 
 export type ActionPayloads = {
   ['NO_OPERATION']: null,
-  ['MOVE_HEAD']: Int8Array,
+  ['MOVE_HEAD']: Int16Array,
 }
 type ActionType = keyof ActionPayloads
 
@@ -55,22 +55,35 @@ export async function processMessage(data: unknown): Promise<Action> {
     }
   }
 
-  const byteArray = new Uint8Array(await data.arrayBuffer())
+  const rawPayload = new Uint8Array(await data.arrayBuffer())
   const messageType = (Object.entries(MESSAGE_TAGS) as [MessageType, MessageTag][])
     .find(
-      (value) => byteArray[0] === value[1]
+      (value) => rawPayload[0] === value[1]
     )?.[0] ?? 'INVALID'
 
   switch (messageType) {
 
   case 'HEARTBEAT':
-  case 'TARGET_DELTAS':
-  case 'INVALID':
-  default:
     return {
       actionType: 'NO_OPERATION',
       messageType,
-      rawPayload: byteArray,
+      rawPayload,
+      silent: true,
+    }
+
+  case 'TARGET_DELTAS':
+    return {
+      actionType: 'MOVE_HEAD',
+      messageType,
+      rawPayload,
+      payload: new Int16Array(rawPayload.slice(1).buffer),
+    }
+
+  case 'INVALID':
+    return {
+      actionType: 'NO_OPERATION',
+      messageType,
+      rawPayload,
     }
 
   }
