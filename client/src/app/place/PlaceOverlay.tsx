@@ -1,4 +1,4 @@
-import { useRef, useEffect, useState, useCallback, RefObject } from 'react'
+import { useRef, useEffect, useState, useCallback, type RefObject } from 'react'
 import useWebSocket from 'react-use-websocket'
 import { toast } from 'sonner'
 
@@ -35,7 +35,7 @@ export function PlaceOverlay({ videoRef, socketUrl, circleSize }: PlaceOverlayPr
     }
   }, [])
 
-  // Socket
+  // WebSocket
   const socket = useWebSocket(socketUrl,
     {
 
@@ -72,9 +72,9 @@ export function PlaceOverlay({ videoRef, socketUrl, circleSize }: PlaceOverlayPr
           id: TOAST_IDS.MESSAGE,
           description: (
             <pre className='mt-2 w-[320px] rounded-md bg-secondary text-secondary-foreground p-4'>
-              <code className='text-secondary-foreground'>{
-                JSON.stringify(data, null, 2)
-              }</code>
+              <code className='text-secondary-foreground'>
+                {JSON.stringify(data, null, 2)}
+              </code>
             </pre>
           ),
           duration: 1000,
@@ -82,7 +82,7 @@ export function PlaceOverlay({ videoRef, socketUrl, circleSize }: PlaceOverlayPr
       },
 
       onError: (error) => {
-        console.error(error),
+        console.error(error)
         toast.error('Socket error!', {
           id: TOAST_IDS.ERROR,
           cancel: dismissButton,
@@ -123,17 +123,16 @@ export function PlaceOverlay({ videoRef, socketUrl, circleSize }: PlaceOverlayPr
   )
 
   // Click delta messaging
-  const sendClickDelta = useCallback(
-    (eventPosition: Position) => {
-      if (!overlaySize) return
+  const sendClickDelta = useCallback((eventPosition: Position) => {
+    if (!overlaySize) return
 
-      const INT16_CONSTANTS = {
-        RANGE: 65535,
-        MINIMUM: -32768,
-        MAXIMUM: 32767,
-      }
+    const INT16_CONSTANTS = {
+      RANGE: 65535,
+      MINIMUM: -32768,
+      MAXIMUM: 32767,
+    }
 
-      /*
+    /*
        * This normalises the delta -> the clicked target to be on a Int16 coordinate space that is
        * - Centred at (0, 0), which should reflect the present position of the head
        * - Maximally negative at -32,768
@@ -143,19 +142,17 @@ export function PlaceOverlay({ videoRef, socketUrl, circleSize }: PlaceOverlayPr
        * the WebSocket is agnostic of both the client viewport and the streamed video size
        * In other words, the burden is left to the controller to map the Int16 delta into real camera pixels
       */
-      const normalisedDelta = {
-        x: Math.floor((eventPosition.y - (overlaySize.width / 2)) * (INT16_CONSTANTS.RANGE / overlaySize.width)),
-        y: Math.floor((eventPosition.x - (overlaySize.height / 2)) * (INT16_CONSTANTS.RANGE / overlaySize.height)),
-      }
+    const normalisedDelta = {
+      x: Math.floor((eventPosition.y - (overlaySize.width / 2)) * (INT16_CONSTANTS.RANGE / overlaySize.width)),
+      y: Math.floor((eventPosition.x - (overlaySize.height / 2)) * (INT16_CONSTANTS.RANGE / overlaySize.height)),
+    }
 
-      normalisedDelta.x = Math.max(INT16_CONSTANTS.MINIMUM, Math.min(INT16_CONSTANTS.MAXIMUM, normalisedDelta.x))
-      normalisedDelta.y = Math.max(INT16_CONSTANTS.MINIMUM, Math.min(INT16_CONSTANTS.MAXIMUM, normalisedDelta.y))
+    normalisedDelta.x = Math.max(INT16_CONSTANTS.MINIMUM, Math.min(INT16_CONSTANTS.MAXIMUM, normalisedDelta.x))
+    normalisedDelta.y = Math.max(INT16_CONSTANTS.MINIMUM, Math.min(INT16_CONSTANTS.MAXIMUM, normalisedDelta.y))
 
-      console.info(`Clicked at (${eventPosition.y}, ${eventPosition.x}) -> (${normalisedDelta.x}, ${normalisedDelta.y})`)
-      socket.sendMessage(new Int16Array([normalisedDelta.x, normalisedDelta.y]))
-    },
-    [socket, overlaySize]
-  )
+    console.info(`Clicked at (${eventPosition.y}, ${eventPosition.x}) -> (${normalisedDelta.x}, ${normalisedDelta.y})`)
+    socket.sendMessage(new Int16Array([normalisedDelta.x, normalisedDelta.y]))
+  }, [socket, overlaySize])
 
   // Resize overlay
   useEffect(() => {
@@ -247,38 +244,29 @@ export function PlaceOverlay({ videoRef, socketUrl, circleSize }: PlaceOverlayPr
     <>
 
       {/* Click circle */}
-      <div className='absolute opacity-75 bg-ring outline outline-1 outline-primary-foreground rounded-full pointer-events-none cursor-crosshair hidden' style={
-        {
-          width: `${circleSize}px`,
-          height: `${circleSize}px`,
-          top: (clickPosition) ? `${clickPosition.x - (circleSize / 2)}px` : '0',
-          left: (clickPosition) ? `${clickPosition.y - (circleSize / 2)}px` : '0',
-          display: (clickPosition) ? 'block' : 'none',
-        }
-      }/>
+      <div className='absolute opacity-75 bg-ring outline outline-1 outline-primary-foreground rounded-full pointer-events-none cursor-crosshair hidden' style={{
+        width: `${circleSize}px`,
+        height: `${circleSize}px`,
+        top: (clickPosition) ? `${clickPosition.x - (circleSize / 2)}px` : '0',
+        left: (clickPosition) ? `${clickPosition.y - (circleSize / 2)}px` : '0',
+        display: (clickPosition) ? 'block' : 'none',
+      }} />
 
       {/* Overlay */}
-      <div ref={overlayRef} className='absolute cursor-crosshair' style={
-        {
-          width: (overlaySize) ? `${overlaySize.width}px` : '0',
-          height: (overlaySize) ? `${overlaySize.height}px` : '0',
-        }
-      }>
-
+      <div ref={overlayRef} className='absolute cursor-crosshair' style={{
+        width: (overlaySize) ? `${overlaySize.width}px` : '0',
+        height: (overlaySize) ? `${overlaySize.height}px` : '0',
+      }}>
         {/* Centre circle */}
-        <div className='relative opacity-50 bg-secondary outline outline-1 outline-secondary-foreground rounded-full pointer-events-none cursor-crosshair hidden' style={
-          {
-            width: `${circleSize}px`,
-            height: `${circleSize}px`,
-            top: (overlaySize) ? `${(overlaySize.height / 2) - (circleSize / 2)}px` : '0',
-            left: (overlaySize) ? `${(overlaySize.width / 2) - (circleSize / 2)}px` : '0',
-            display: (overlaySize) ? 'block' : 'none',
-          }
-        }/>
-
+        <div className='relative opacity-50 bg-secondary outline outline-1 outline-secondary-foreground rounded-full pointer-events-none cursor-crosshair hidden' style={{
+          width: `${circleSize}px`,
+          height: `${circleSize}px`,
+          top: (overlaySize) ? `${(overlaySize.height / 2) - (circleSize / 2)}px` : '0',
+          left: (overlaySize) ? `${(overlaySize.width / 2) - (circleSize / 2)}px` : '0',
+          display: (overlaySize) ? 'block' : 'none',
+        }} />
       </div>
 
     </>
-
   )
 }

@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState, forwardRef } from 'react'
+import { useEffect, useState, useRef, forwardRef } from 'react'
 import { WebRTCPlayer } from '@eyevinn/webrtc-player'
 import { toast } from 'sonner'
 
@@ -30,6 +30,7 @@ type WebRtcVideoProps = {
 const WebRtcVideo = forwardRef<HTMLVideoElement, WebRtcVideoProps>(
   function WebRtcVideo({ url }, ref) {
     const [loadProgress, setLoadProgress] = useState<number>(PROGRESS_BAR.INITIAL)
+    const intervalRef = useRef<number | null>(null)
 
     // WebRTCPlayer
     useEffect(() => {
@@ -77,13 +78,9 @@ const WebRtcVideo = forwardRef<HTMLVideoElement, WebRtcVideoProps>(
       // This is nasty, but oh well. https://stackoverflow.com/a/65877297
       if (typeof ref === 'function' || !ref?.current) return
 
-      const generateUpdateProgressHandler = (value: number) => {
-        return () => setLoadProgress(value)
-      }
-
-      const startHandler = generateUpdateProgressHandler(PROGRESS_BAR.VIDEO_LOAD_START)
-      const metadataHandler = generateUpdateProgressHandler(PROGRESS_BAR.VIDEO_LOADED_METADATA)
-      const dataHandler = generateUpdateProgressHandler(PROGRESS_BAR.VIDEO_LOADED_DATA)
+      const startHandler = () => setLoadProgress(PROGRESS_BAR.VIDEO_LOAD_START)
+      const metadataHandler = () => setLoadProgress(PROGRESS_BAR.VIDEO_LOADED_METADATA)
+      const dataHandler = () => setLoadProgress(PROGRESS_BAR.VIDEO_LOADED_DATA)
 
       const videoElement = ref.current
       videoElement.addEventListener('loadstart', startHandler)
@@ -99,23 +96,20 @@ const WebRtcVideo = forwardRef<HTMLVideoElement, WebRtcVideoProps>(
 
     // Growing progress bar
     useEffect(() => {
-      const interval = setInterval(
-        () => setLoadProgress(
-          (previousProgress) => {
-
-            const incremented = previousProgress + PROGRESS_BAR.INCREMENT
-            if (incremented <= PROGRESS_BAR.INCREMENT_FINAL) {
-              return incremented
-            }
-
-            clearInterval(interval)
-            return previousProgress
-
+      intervalRef.current = window.setInterval(() => {
+        setLoadProgress((previousProgress) => {
+          const incremented = (previousProgress + PROGRESS_BAR.INCREMENT)
+          if (incremented <= PROGRESS_BAR.INCREMENT_FINAL) {
+            return incremented
           }
-        ), PROGRESS_BAR.INCREMENT_INTERVAL_MS)
+
+          if (intervalRef.current) clearInterval(intervalRef.current)
+          return previousProgress
+        })
+      }, PROGRESS_BAR.INCREMENT_INTERVAL_MS)
 
       return () => {
-        clearInterval(interval)
+        if (intervalRef.current) clearInterval(intervalRef.current)
       }
     }, [])
 
