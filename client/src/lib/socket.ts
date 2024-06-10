@@ -16,22 +16,24 @@ const INT16_CONSTANTS = {
  * - A following stream of payload bytes defined by the tag
  */
 
-enum MessageType {
-  HEARTBEAT = 0x00,
-  TARGET_DELTAS = 0x01,
-}
+const MESSAGE_TAGS = {
+  HEARTBEAT: 0x00,
+  TARGET_DELTAS: 0x01,
+} as const
+type MessageType = keyof (typeof MESSAGE_TAGS)
 type MessagePayloads = {
-  [MessageType.HEARTBEAT]: null,
-  [MessageType.TARGET_DELTAS]: Int16Array,
+  HEARTBEAT: null,
+  TARGET_DELTAS: Int16Array,
 }
 
-export enum ActionType {
-  NO_OPERATION,
-  MOVE_HEAD,
-}
+export const ACTION_TYPES = [
+  'NO_OPERATION',
+  'MOVE_HEAD',
+] as const
+type ActionType = (typeof ACTION_TYPES)[number]
 export type ActionPayloads = {
-  [ActionType.NO_OPERATION]: null,
-  [ActionType.MOVE_HEAD]: Int8Array,
+  ['NO_OPERATION']: null,
+  ['MOVE_HEAD']: Int8Array,
 }
 export type Action = {
   [K in ActionType]: {
@@ -45,7 +47,7 @@ export async function processMessage(data: unknown): Promise<Action> {
   if (!(data instanceof Blob)) {
     console.warn('Non-Blob data received: ', data)
     return {
-      type: ActionType.NO_OPERATION,
+      type: 'NO_OPERATION',
       rawPayload: String(data),
     }
   }
@@ -53,11 +55,11 @@ export async function processMessage(data: unknown): Promise<Action> {
   const byteArray = new Uint8Array(await data.arrayBuffer())
   switch (byteArray[0]) {
 
-  case MessageType.HEARTBEAT:
-  case MessageType.TARGET_DELTAS:
+  case MESSAGE_TAGS['HEARTBEAT']:
+  case MESSAGE_TAGS['TARGET_DELTAS']:
   default:
     return {
-      type: ActionType.NO_OPERATION,
+      type: 'NO_OPERATION',
       rawPayload: byteArray,
     }
 
@@ -71,12 +73,12 @@ function sendMessage<T extends MessageType>(webSocket: WebSocketHook, type: T, p
   let message: Uint8Array
 
   if (!payload) {
-    message = new Uint8Array([type])
+    message = new Uint8Array([MESSAGE_TAGS[type]])
   }
   else {
     message = new Uint8Array(payload.byteLength + 1)
     // Set the message tag
-    message[0] = type
+    message[0] = MESSAGE_TAGS[type]
     // Set the message payload
     message.set(new Uint8Array(payload.buffer), 1)
   }
@@ -86,7 +88,7 @@ function sendMessage<T extends MessageType>(webSocket: WebSocketHook, type: T, p
 }
 
 export function getHeartbeatMessage(): Uint8Array {
-  return new Uint8Array([MessageType.HEARTBEAT])
+  return new Uint8Array([MESSAGE_TAGS['HEARTBEAT']])
 }
 
 /**
@@ -119,5 +121,5 @@ export function sendTargetDeltas(webSocket: WebSocketHook, rawTargetPosition: Po
   normalisedDelta.y = Math.max(INT16_CONSTANTS.MINIMUM, Math.min(INT16_CONSTANTS.MAXIMUM, normalisedDelta.y))
   console.info(`Delta normalised to (${normalisedDelta.x}, ${normalisedDelta.y})`)
 
-  sendMessage(webSocket, MessageType.TARGET_DELTAS, new Int16Array([normalisedDelta.x, normalisedDelta.y]))
+  sendMessage(webSocket, 'TARGET_DELTAS', new Int16Array([normalisedDelta.x, normalisedDelta.y]))
 }
