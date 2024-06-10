@@ -1,5 +1,4 @@
 import { type WebSocketHook } from 'react-use-websocket/dist/lib/types'
-import { ReadyState } from 'react-use-websocket'
 
 import { type Size, type Position } from '@/app/place/PlaceInterface'
 
@@ -91,8 +90,6 @@ export async function processMessage(data: unknown): Promise<Action> {
 }
 
 function sendMessage<T extends MessageType>(webSocket: WebSocketHook, type: T, payload: MessagePayloads[T]) {
-  if (webSocket.readyState !== ReadyState.OPEN) return
-
   let message: Uint8Array
 
   if (!payload) {
@@ -112,6 +109,10 @@ function sendMessage<T extends MessageType>(webSocket: WebSocketHook, type: T, p
 
 export function getHeartbeatMessage(): Uint8Array {
   return new Uint8Array([MESSAGE_TAGS['HEARTBEAT']])
+}
+
+export function sendHeartbeat(webSocket: WebSocketHook) {
+  sendMessage(webSocket, 'HEARTBEAT', null)
 }
 
 /**

@@ -37,6 +37,9 @@ export function PlaceOverlay({ videoRef, socketUrl, circleSize }: PlaceOverlayPr
 
       onOpen: (event) => {
         console.log(event)
+
+        socket.sendHeartbeat(webSocket)
+
         toast.success('Socket opened!', {
           id: ToastIds.SOCKET_STATUS,
           cancel: DISMISS_BUTTON,
