@@ -1,11 +1,12 @@
 'use client'
 
+import { useRouter } from 'next/navigation'
 import { useEffect, useState, useRef, forwardRef } from 'react'
 import { WebRTCPlayer } from '@eyevinn/webrtc-player'
 import { toast } from 'sonner'
 
 import { Progress } from '@/components/ui/progress'
-import { dismissButton } from '@/components/ui/sonner'
+import { ToastIds, DISMISS_BUTTON } from '@/components/ui/sonner'
 import { cn } from '@/lib/utils'
 
 const PROGRESS_BAR = {
@@ -13,7 +14,7 @@ const PROGRESS_BAR = {
   FINAL: 100,
   // Fixed progresses
   PLAYER_CONSTRUCTED: 2,
-  PLAYER_LOADED: 25,
+  PLAYER_LOADED: 20,
   VIDEO_LOAD_START: 87,
   VIDEO_LOADED_METADATA: 99,
   VIDEO_LOADED_DATA: 100,
@@ -29,6 +30,7 @@ type WebRtcVideoProps = {
 
 const WebRtcVideo = forwardRef<HTMLVideoElement, WebRtcVideoProps>(
   function WebRtcVideo({ url }, ref) {
+    const router = useRouter()
     const [loadProgress, setLoadProgress] = useState<number>(PROGRESS_BAR.INITIAL)
     const intervalRef = useRef<number | null>(null)
 
@@ -42,6 +44,7 @@ const WebRtcVideo = forwardRef<HTMLVideoElement, WebRtcVideoProps>(
         type: 'whep',
         // statsTypeFilter: '^candidate-*|^inbound-rtp',
         timeoutThreshold: 5000,
+        detectTimeout: true,
         mediaConstraints: {
           videoOnly: true,
         },
@@ -49,29 +52,51 @@ const WebRtcVideo = forwardRef<HTMLVideoElement, WebRtcVideoProps>(
 
       setLoadProgress(PROGRESS_BAR.PLAYER_CONSTRUCTED)
 
-      player.load(new URL(url)).then(() => {
+      player.load(new URL(url))
+        .then(() => setLoadProgress(PROGRESS_BAR.PLAYER_LOADED))
+
+      function handleConnectError() {
         setLoadProgress(PROGRESS_BAR.PLAYER_LOADED)
-      })
+        if (intervalRef.current) clearInterval(intervalRef.current)
+
+        toast.error('Video stream error!', {
+          id: ToastIds.VIDEO_ERROR,
+          action: {
+            label: 'Go home',
+            onClick: () => router.push('/'),
+          },
+          classNames: {
+            'actionButton': 'group-[.toast]:!bg-destructive group-[.toast]:!text-destructive-foreground',
+          },
+          duration: Infinity,
+        })
+      }
+
+      player.on('initial-connection-failed', handleConnectError)
+      player.on('connect-error', handleConnectError)
 
       player.on('no-media', () => {
         console.log('Media timeout occurred')
         toast.warning('Stream timed out!', {
-          cancel: dismissButton,
+          id: ToastIds.VIDEO_STATUS,
+          cancel: DISMISS_BUTTON,
         })
       })
       player.on('media-recovered', () => {
         console.log('Media recovered')
         toast.success('Stream recovered!', {
-          cancel: dismissButton,
+          id: ToastIds.VIDEO_STATUS,
+          cancel: DISMISS_BUTTON,
         })
       })
 
       return () => {
+        setLoadProgress(PROGRESS_BAR.INITIAL)
         player.unload()
         player.destroy()
       }
 
-    }, [ref, url])
+    }, [router, ref, url])
 
     // Progress bar
     useEffect(() => {
@@ -88,6 +113,7 @@ const WebRtcVideo = forwardRef<HTMLVideoElement, WebRtcVideoProps>(
       videoElement.addEventListener('loadeddata', dataHandler)
 
       return () => {
+        setLoadProgress(PROGRESS_BAR.INITIAL)
         videoElement.removeEventListener('loadstart', startHandler)
         videoElement.removeEventListener('loadedmetadata', metadataHandler)
         videoElement.removeEventListener('loadeddata', dataHandler)
@@ -109,6 +135,7 @@ const WebRtcVideo = forwardRef<HTMLVideoElement, WebRtcVideoProps>(
       }, PROGRESS_BAR.INCREMENT_INTERVAL_MS)
 
       return () => {
+        setLoadProgress(PROGRESS_BAR.INITIAL)
         if (intervalRef.current) clearInterval(intervalRef.current)
       }
     }, [])

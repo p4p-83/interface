@@ -5,10 +5,18 @@ import { ExternalToast, Toaster as Sonner } from 'sonner'
 
 type ToasterProps = React.ComponentProps<typeof Sonner>
 
-const dismissButton: ExternalToast['cancel'] = {
+enum ToastIds {
+  VIDEO_STATUS,
+  VIDEO_ERROR,
+  SOCKET_STATUS,
+  SOCKET_ERROR,
+  MESSAGE,
+}
+
+const DISMISS_BUTTON: ExternalToast['cancel'] = {
   label: 'Dismiss',
   onClick: () => null,
-}
+} as const
 
 const Toaster = ({ ...props }: ToasterProps) => {
   const { theme = 'system' } = useTheme()
@@ -33,4 +41,4 @@ const Toaster = ({ ...props }: ToasterProps) => {
   )
 }
 
-export { Toaster, dismissButton }
+export { Toaster, ToastIds, DISMISS_BUTTON }

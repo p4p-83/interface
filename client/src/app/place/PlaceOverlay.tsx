@@ -4,7 +4,7 @@ import { toast } from 'sonner'
 
 import * as socket from '@/lib/socket'
 
-import { dismissButton } from '@/components/ui/sonner'
+import { ToastIds, DISMISS_BUTTON } from '@/components/ui/sonner'
 
 import { Size, Position } from './PlaceInterface'
 
@@ -20,12 +20,6 @@ export function PlaceOverlay({ videoRef, socketUrl, circleSize }: PlaceOverlayPr
 
   const [overlaySize, setOverlaySize] = useState<Size | null>(null)
   const [clickPosition, setClickPosition] = useState<Position | null>(null)
-
-  const TOAST_IDS = {
-    STATUS: 0,
-    MESSAGE: 1,
-    ERROR: 2,
-  } as const
 
   // Unmount
   useEffect(() => {
@@ -44,8 +38,8 @@ export function PlaceOverlay({ videoRef, socketUrl, circleSize }: PlaceOverlayPr
       onOpen: (event) => {
         console.log(event)
         toast.success('Socket opened!', {
-          id: TOAST_IDS.STATUS,
-          cancel: dismissButton,
+          id: ToastIds.SOCKET_STATUS,
+          cancel: DISMISS_BUTTON,
           duration: 1000,
         })
       },
@@ -53,8 +47,8 @@ export function PlaceOverlay({ videoRef, socketUrl, circleSize }: PlaceOverlayPr
       onClose: (event) => {
         console.log(event)
         toast.info('Socket closed.', {
-          id: TOAST_IDS.STATUS,
-          cancel: dismissButton,
+          id: ToastIds.SOCKET_STATUS,
+          cancel: DISMISS_BUTTON,
           duration: 1000,
         })
       },
@@ -68,7 +62,7 @@ export function PlaceOverlay({ videoRef, socketUrl, circleSize }: PlaceOverlayPr
         if (action.silent) return
 
         toast.message(`Message received (${action.messageType}):`, {
-          id: TOAST_IDS.MESSAGE,
+          id: ToastIds.MESSAGE,
           description: (
             <pre className='mt-2'>
               <code className='w-[320px] block rounded-md p-4 bg-secondary text-secondary-foreground'>
@@ -92,8 +86,8 @@ export function PlaceOverlay({ videoRef, socketUrl, circleSize }: PlaceOverlayPr
       onError: (error) => {
         console.error(error)
         toast.error('Socket error!', {
-          id: TOAST_IDS.ERROR,
-          cancel: dismissButton,
+          id: ToastIds.SOCKET_ERROR,
+          cancel: DISMISS_BUTTON,
           duration: Infinity,
         })
       },
@@ -105,8 +99,8 @@ export function PlaceOverlay({ videoRef, socketUrl, circleSize }: PlaceOverlayPr
 
         console.log('Reconnecting', event)
         toast.loading('Attempting to reconnect...', {
-          id: TOAST_IDS.STATUS,
-          cancel: dismissButton,
+          id: ToastIds.SOCKET_STATUS,
+          cancel: DISMISS_BUTTON,
           duration: Infinity,
           important: true,
         })
@@ -118,8 +112,8 @@ export function PlaceOverlay({ videoRef, socketUrl, circleSize }: PlaceOverlayPr
 
       onReconnectStop: () => {
         toast.error('Failed to connect to socket!', {
-          id: TOAST_IDS.STATUS,
-          cancel: dismissButton,
+          id: ToastIds.SOCKET_STATUS,
+          cancel: DISMISS_BUTTON,
           duration: Infinity,
           important: true,
         })
