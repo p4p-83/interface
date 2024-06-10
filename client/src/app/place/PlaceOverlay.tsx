@@ -19,8 +19,7 @@ export function PlaceOverlay({ videoRef, socketUrl, circleSize }: PlaceOverlayPr
   const didUnmount = useRef(false)
 
   const [overlaySize, setOverlaySize] = useState<Size | null>(null)
-  // TODO: targetPosition
-  const [clickPosition, setClickPosition] = useState<Position | null>(null)
+  const [overlayTargetPosition, setOverlayTargetPosition] = useState<Position | null>(null)
 
   // Unmount
   useEffect(() => {
@@ -68,7 +67,7 @@ export function PlaceOverlay({ videoRef, socketUrl, circleSize }: PlaceOverlayPr
         case 'MOVE_TARGET':
           if (!overlaySize) break
           const overlayDeltas = socket.denormaliseOverlayDeltas(action.payload, overlaySize)
-          setClickPosition((previousPosition) => {
+          setOverlayTargetPosition((previousPosition) => {
             if (!previousPosition) return null
             return {
               x: previousPosition.x - overlayDeltas.x,
@@ -201,7 +200,7 @@ export function PlaceOverlay({ videoRef, socketUrl, circleSize }: PlaceOverlayPr
     function handleClick(event: MouseEvent) {
       if (!overlaySize) return
 
-      setClickPosition({
+      setOverlayTargetPosition({
         x: event.clientX,
         y: event.clientY,
       })
@@ -228,14 +227,14 @@ export function PlaceOverlay({ videoRef, socketUrl, circleSize }: PlaceOverlayPr
     if (!videoRef?.current) return
     const videoElement = videoRef.current
 
-    const clearClickPosition = () => setClickPosition(null)
+    const clearOverlayTargetPosition = () => setOverlayTargetPosition(null)
 
-    window.addEventListener('resize', clearClickPosition)
-    videoElement.addEventListener('loadedmetadata', clearClickPosition)
+    window.addEventListener('resize', clearOverlayTargetPosition)
+    videoElement.addEventListener('loadedmetadata', clearOverlayTargetPosition)
 
     return () => {
-      window.removeEventListener('resize', clearClickPosition)
-      videoElement.removeEventListener('loadedmetadata', clearClickPosition)
+      window.removeEventListener('resize', clearOverlayTargetPosition)
+      videoElement.removeEventListener('loadedmetadata', clearOverlayTargetPosition)
     }
 
   }, [videoRef])
@@ -248,9 +247,9 @@ export function PlaceOverlay({ videoRef, socketUrl, circleSize }: PlaceOverlayPr
       <div className='absolute opacity-75 bg-ring outline outline-1 outline-primary-foreground rounded-full pointer-events-none cursor-crosshair hidden' style={{
         width: `${circleSize}px`,
         height: `${circleSize}px`,
-        top: (clickPosition) ? `${clickPosition.y - (circleSize / 2)}px` : '0',
-        left: (clickPosition) ? `${clickPosition.x - (circleSize / 2)}px` : '0',
-        display: (clickPosition) ? 'block' : 'none',
+        top: (overlayTargetPosition) ? `${overlayTargetPosition.y - (circleSize / 2)}px` : '0',
+        left: (overlayTargetPosition) ? `${overlayTargetPosition.x - (circleSize / 2)}px` : '0',
+        display: (overlayTargetPosition) ? 'block' : 'none',
       }} />
 
       {/* Overlay */}
