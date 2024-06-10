@@ -1,9 +1,14 @@
 'use client'
 
 import { useTheme } from 'next-themes'
-import { Toaster as Sonner } from 'sonner'
+import { ExternalToast, Toaster as Sonner } from 'sonner'
 
 type ToasterProps = React.ComponentProps<typeof Sonner>
+
+const dismissButton: ExternalToast['cancel'] = {
+  label: 'Dismiss',
+  onClick: () => null,
+}
 
 const Toaster = ({ ...props }: ToasterProps) => {
   const { theme = 'system' } = useTheme()
@@ -28,4 +33,4 @@ const Toaster = ({ ...props }: ToasterProps) => {
   )
 }
 
-export { Toaster }
+export { Toaster, dismissButton }

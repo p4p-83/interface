@@ -5,6 +5,7 @@ import { WebRTCPlayer } from '@eyevinn/webrtc-player'
 import { toast } from 'sonner'
 
 import { Progress } from '@/components/ui/progress'
+import { dismissButton } from '@/components/ui/sonner'
 import { cn } from '@/lib/utils'
 
 const PROGRESS_BAR = {
@@ -54,19 +55,13 @@ const WebRtcVideo = forwardRef<HTMLVideoElement, WebRtcVideoProps>(
       player.on('no-media', () => {
         console.log('Media timeout occurred')
         toast.warning('Stream timed out!', {
-          cancel: {
-            label: 'Dismiss',
-            onClick: () => null,
-          },
+          cancel: dismissButton,
         })
       })
       player.on('media-recovered', () => {
         console.log('Media recovered')
         toast.success('Stream recovered!', {
-          cancel: {
-            label: 'Dismiss',
-            onClick: () => null,
-          },
+          cancel: dismissButton,
         })
       })
 

@@ -2,6 +2,8 @@ import { useRef, useEffect, useState, useCallback, RefObject } from 'react'
 import useWebSocket from 'react-use-websocket'
 import { toast } from 'sonner'
 
+import { dismissButton } from '@/components/ui/sonner'
+
 import { Size, Position } from './PlaceInterface'
 
 type PlaceOverlayProps = {
@@ -34,94 +36,91 @@ export function PlaceOverlay({ videoRef, socketUrl, circleSize }: PlaceOverlayPr
   }, [])
 
   // Socket
-  const socket = useWebSocket(socketUrl, {
-    onOpen: (event) => {
-      console.log(event)
-      toast.success('Socket opened!', {
-        id: TOAST_IDS.STATUS,
-        cancel: {
-          label: 'Dismiss',
-          onClick: () => null,
-        },
-        duration: 1000,
-      })
-    },
-    onClose: (event) => {
-      console.log(event)
-      toast.info('Socket closed.', {
-        id: TOAST_IDS.STATUS,
-        cancel: {
-          label: 'Dismiss',
-          onClick: () => null,
-        },
-        duration: 1000,
-      })
-    },
-    onMessage: async (message) => {
-      console.log(message)
+  const socket = useWebSocket(socketUrl,
+    {
 
-      const data = (message.data instanceof Blob)
-        ? new Int16Array(await message.data.arrayBuffer())
-        : message.data
+      onOpen: (event) => {
+        console.log(event)
+        toast.success('Socket opened!', {
+          id: TOAST_IDS.STATUS,
+          cancel: dismissButton,
+          duration: 1000,
+        })
+      },
 
-      // if (data === 'ok') {
-      //   setClickPosition(null)
-      // }
+      onClose: (event) => {
+        console.log(event)
+        toast.info('Socket closed.', {
+          id: TOAST_IDS.STATUS,
+          cancel: dismissButton,
+          duration: 1000,
+        })
+      },
 
-      toast.message('Message received:', {
-        id: TOAST_IDS.MESSAGE,
-        description: (
-          <pre className='mt-2 w-[320px] rounded-md bg-secondary text-secondary-foreground p-4'>
-            <code className='text-secondary-foreground'>{
-              JSON.stringify(data, null, 2)
-            }</code>
-          </pre>
-        ),
-        duration: 1000,
-      })
-    },
-    onError: (error) => {
-      console.error(error),
-      toast.error('Socket error!', {
-        id: TOAST_IDS.ERROR,
-        cancel: {
-          label: 'Dismiss',
-          onClick: () => null,
-        },
-        duration: Infinity,
-      })
-    },
-    retryOnError: true,
-    shouldReconnect: (event) => {
-      if (didUnmount.current) return false
+      onMessage: async (message) => {
+        console.log(message)
 
-      console.log('Reconnecting', event)
-      toast.loading('Attempting to reconnect...', {
-        id: TOAST_IDS.STATUS,
-        cancel: {
-          label: 'Dismiss',
-          onClick: () => null,
-        },
-        duration: Infinity,
-        important: true,
-      })
+        const data = (message.data instanceof Blob)
+          ? new Int16Array(await message.data.arrayBuffer())
+          : message.data
 
-      return true
-    },
-    reconnectAttempts: 5,
-    onReconnectStop: () => {
-      toast.error('Failed to connect to socket!', {
-        id: TOAST_IDS.STATUS,
-        cancel: {
-          label: 'Dismiss',
-          onClick: () => null,
-        },
-        duration: Infinity,
-        important: true,
-      })
-    },
-    heartbeat: true,
-  })
+        // if (data === 'ok') {
+        //   setClickPosition(null)
+        // }
+
+        toast.message('Message received:', {
+          id: TOAST_IDS.MESSAGE,
+          description: (
+            <pre className='mt-2 w-[320px] rounded-md bg-secondary text-secondary-foreground p-4'>
+              <code className='text-secondary-foreground'>{
+                JSON.stringify(data, null, 2)
+              }</code>
+            </pre>
+          ),
+          duration: 1000,
+        })
+      },
+
+      onError: (error) => {
+        console.error(error),
+        toast.error('Socket error!', {
+          id: TOAST_IDS.ERROR,
+          cancel: dismissButton,
+          duration: Infinity,
+        })
+      },
+
+      retryOnError: true,
+
+      shouldReconnect: (event) => {
+        if (didUnmount.current) return false
+
+        console.log('Reconnecting', event)
+        toast.loading('Attempting to reconnect...', {
+          id: TOAST_IDS.STATUS,
+          cancel: dismissButton,
+          duration: Infinity,
+          important: true,
+        })
+
+        return true
+      },
+
+      reconnectAttempts: 5,
+
+      onReconnectStop: () => {
+        toast.error('Failed to connect to socket!', {
+          id: TOAST_IDS.STATUS,
+          cancel: dismissButton,
+          duration: Infinity,
+          important: true,
+        })
+      },
+
+      heartbeat: true,
+
+    }
+  )
 
   // Click delta messaging
   const sendClickDelta = useCallback(
