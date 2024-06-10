@@ -160,7 +160,7 @@ export function PlaceOverlay({ videoRef, socketUrl, circleSize }: PlaceOverlayPr
 
     const videoElement = videoRef.current
 
-    const updateVideoBounds = () => {
+    function updateVideoBounds() {
       if (videoElement.videoWidth === 0 || videoElement.videoHeight === 0) {
         setOverlaySize(null)
         return
@@ -201,7 +201,7 @@ export function PlaceOverlay({ videoRef, socketUrl, circleSize }: PlaceOverlayPr
 
     const overlayElement = overlayRef.current
 
-    const handleClick = (event: MouseEvent) => {
+    function handleClick(event: MouseEvent) {
       setClickPosition({
         x: event.clientY,
         y: event.clientX,

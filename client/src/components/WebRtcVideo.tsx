@@ -77,12 +77,12 @@ const WebRtcVideo = forwardRef<HTMLVideoElement, WebRtcVideoProps>(
     useEffect(() => {
       // This is nasty, but oh well. https://stackoverflow.com/a/65877297
       if (typeof ref === 'function' || !ref?.current) return
+      const videoElement = ref.current
 
       const startHandler = () => setLoadProgress(PROGRESS_BAR.VIDEO_LOAD_START)
       const metadataHandler = () => setLoadProgress(PROGRESS_BAR.VIDEO_LOADED_METADATA)
       const dataHandler = () => setLoadProgress(PROGRESS_BAR.VIDEO_LOADED_DATA)
 
-      const videoElement = ref.current
       videoElement.addEventListener('loadstart', startHandler)
       videoElement.addEventListener('loadedmetadata', metadataHandler)
       videoElement.addEventListener('loadeddata', dataHandler)

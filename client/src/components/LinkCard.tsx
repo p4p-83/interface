@@ -15,7 +15,7 @@ interface LinkCardProps extends React.HTMLAttributes<HTMLAnchorElement> {
   icon: typeof SymbolIcon;
 }
 
-export const LinkCard = ({ className, href, title, description, icon: Icon }: LinkCardProps) => {
+export function LinkCard({ className, href, title, description, icon: Icon }: LinkCardProps) {
   return (
     <Link href={href} className={className}>
       <Card className='group hover:border-primary transition-colors duration-150'>
