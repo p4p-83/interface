@@ -65,6 +65,8 @@ export function PlaceOverlay({ videoRef, socketUrl, circleSize }: PlaceOverlayPr
         const action = await socket.processMessage(message.data)
         console.log({ action })
 
+        if (action.silent) return
+
         toast.message(`Message received (${action.type}):`, {
           id: TOAST_IDS.MESSAGE,
           description: (

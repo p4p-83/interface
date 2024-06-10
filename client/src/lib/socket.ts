@@ -33,18 +33,12 @@ export type ActionPayloads = {
   [ActionType.NO_OPERATION]: null,
   [ActionType.MOVE_HEAD]: Int8Array,
 }
-// TODO: silent
 export type Action = {
-  [K in ActionType]: ActionPayloads[K] extends null
-    ? {
-      type: K;
-      rawPayload: string | Uint8Array;
-    }
-    : {
-      type: K;
-      payload: ActionPayloads[K];
-      rawPayload: string | Uint8Array;
-    };
+  [K in ActionType]: {
+    type: K;
+    rawPayload: string | Uint8Array;
+    silent?: boolean;
+  } & (ActionPayloads[K] extends null ? Record<never, never> : { payload: ActionPayloads[K] });
 }[ActionType]
 
 export async function processMessage(data: unknown): Promise<Action> {
