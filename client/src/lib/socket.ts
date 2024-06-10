@@ -13,53 +13,63 @@ const INT16_CONSTANTS = {
  * A message looks like:
  * - A `Uint8` byte stream
  * - A leading 'tag'/'type' byte
- * - A following stream of payload bytes defined by the tag
+ * - An optional following stream of payload bytes defined by the tag
  */
 
-const MESSAGE_TAGS = {
-  HEARTBEAT: 0x00,
-  TARGET_DELTAS: 0x01,
-} as const
-type MessageType = keyof (typeof MESSAGE_TAGS)
 type MessagePayloads = {
-  HEARTBEAT: null,
-  TARGET_DELTAS: Int16Array,
+  ['HEARTBEAT']: null,
+  ['TARGET_DELTAS']: Int16Array,
 }
+type MessageType = keyof MessagePayloads
+type MessageReceivedType = MessageType | 'INVALID'
 
-export const ACTION_TYPES = [
-  'NO_OPERATION',
-  'MOVE_HEAD',
-] as const
-type ActionType = (typeof ACTION_TYPES)[number]
+const MESSAGE_TAGS: Record<MessageType, number> = {
+  'HEARTBEAT': 0x00,
+  'TARGET_DELTAS': 0x01,
+} as const
+type MessageTag = (typeof MESSAGE_TAGS)[MessageType]
+
 export type ActionPayloads = {
   ['NO_OPERATION']: null,
   ['MOVE_HEAD']: Int8Array,
 }
+type ActionType = keyof ActionPayloads
+
 export type Action = {
   [K in ActionType]: {
-    type: K;
+    actionType: K;
+    messageType: MessageReceivedType;
     rawPayload: string | Uint8Array;
     silent?: boolean;
   } & (ActionPayloads[K] extends null ? Record<never, never> : { payload: ActionPayloads[K] });
 }[ActionType]
 
 export async function processMessage(data: unknown): Promise<Action> {
+
   if (!(data instanceof Blob)) {
     console.warn('Non-Blob data received: ', data)
     return {
-      type: 'NO_OPERATION',
+      actionType: 'NO_OPERATION',
+      messageType: 'INVALID',
       rawPayload: String(data),
     }
   }
 
   const byteArray = new Uint8Array(await data.arrayBuffer())
-  switch (byteArray[0]) {
+  const messageType = (Object.entries(MESSAGE_TAGS) as [MessageType, MessageTag][])
+    .find(
+      (value) => byteArray[0] === value[1]
+    )?.[0] ?? 'INVALID'
 
-  case MESSAGE_TAGS['HEARTBEAT']:
-  case MESSAGE_TAGS['TARGET_DELTAS']:
+  switch (messageType) {
+
+  case 'HEARTBEAT':
+  case 'TARGET_DELTAS':
+  case 'INVALID':
   default:
     return {
-      type: 'NO_OPERATION',
+      actionType: 'NO_OPERATION',
+      messageType,
       rawPayload: byteArray,
     }
 

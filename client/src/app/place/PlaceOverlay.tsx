@@ -67,7 +67,7 @@ export function PlaceOverlay({ videoRef, socketUrl, circleSize }: PlaceOverlayPr
 
         if (action.silent) return
 
-        toast.message(`Message received (${action.type}):`, {
+        toast.message(`Message received (${action.messageType}):`, {
           id: TOAST_IDS.MESSAGE,
           description: (
             <pre className='mt-2 w-[320px] rounded-md bg-secondary text-secondary-foreground p-4'>
