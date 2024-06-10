@@ -16,10 +16,13 @@ const INT16_CONSTANTS = {
  * - A following stream of payload bytes defined by the tag
  */
 
-// TODO: type payload
 enum MessageType {
   HEARTBEAT = 0x00,
   TARGET_DELTAS = 0x01,
+}
+type MessagePayloads = {
+  [MessageType.HEARTBEAT]: null,
+  [MessageType.TARGET_DELTAS]: Int16Array,
 }
 
 export enum ActionType {
@@ -42,7 +45,7 @@ export type Action = {
       payload: ActionPayloads[K];
       rawPayload: string | Uint8Array;
     };
-}[ActionType];
+}[ActionType]
 
 export async function processMessage(data: unknown): Promise<Action> {
   if (!(data instanceof Blob)) {
@@ -68,20 +71,27 @@ export async function processMessage(data: unknown): Promise<Action> {
 
 }
 
-function sendMessage(webSocket: WebSocketHook, type: MessageType, payload: ArrayBufferView) {
+function sendMessage<T extends MessageType>(webSocket: WebSocketHook, type: T, payload: MessagePayloads[T]) {
   if (webSocket.readyState !== ReadyState.OPEN) return
 
-  const message = new Uint8Array(payload.byteLength + 1)
-  // Set the message tag
-  message[0] = type
-  // Set the message payload
-  message.set(new Uint8Array(payload.buffer), 1)
+  let message: Uint8Array
+
+  if (!payload) {
+    message = new Uint8Array([type])
+  }
+  else {
+    message = new Uint8Array(payload.byteLength + 1)
+    // Set the message tag
+    message[0] = type
+    // Set the message payload
+    message.set(new Uint8Array(payload.buffer), 1)
+  }
 
   console.info({ payload, message })
   webSocket.sendMessage(message)
 }
 
-export function getHeartbeatMessage() {
+export function getHeartbeatMessage(): Uint8Array {
   return new Uint8Array([MessageType.HEARTBEAT])
 }
 
