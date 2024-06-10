@@ -2,6 +2,8 @@ import { useRef, useEffect, useState, useCallback, type RefObject } from 'react'
 import useWebSocket from 'react-use-websocket'
 import { toast } from 'sonner'
 
+import * as socket from '@/lib/socket'
+
 import { dismissButton } from '@/components/ui/sonner'
 
 import { Size, Position } from './PlaceInterface'
@@ -36,7 +38,7 @@ export function PlaceOverlay({ videoRef, socketUrl, circleSize }: PlaceOverlayPr
   }, [])
 
   // WebSocket
-  const socket = useWebSocket(socketUrl,
+  const webSocket = useWebSocket(socketUrl,
     {
 
       onOpen: (event) => {
@@ -122,38 +124,6 @@ export function PlaceOverlay({ videoRef, socketUrl, circleSize }: PlaceOverlayPr
     }
   )
 
-  // Click delta messaging
-  const sendClickDelta = useCallback((eventPosition: Position) => {
-    if (!overlaySize) return
-
-    const INT16_CONSTANTS = {
-      RANGE: 65535,
-      MINIMUM: -32768,
-      MAXIMUM: 32767,
-    }
-
-    /*
-       * This normalises the delta -> the clicked target to be on a Int16 coordinate space that is
-       * - Centred at (0, 0), which should reflect the present position of the head
-       * - Maximally negative at -32,768
-       * - Maximally positive at 32,767
-       *
-       * This is done to ensure that the delta information passed back to the controller via
-       * the WebSocket is agnostic of both the client viewport and the streamed video size
-       * In other words, the burden is left to the controller to map the Int16 delta into real camera pixels
-      */
-    const normalisedDelta = {
-      x: Math.floor((eventPosition.y - (overlaySize.width / 2)) * (INT16_CONSTANTS.RANGE / overlaySize.width)),
-      y: Math.floor((eventPosition.x - (overlaySize.height / 2)) * (INT16_CONSTANTS.RANGE / overlaySize.height)),
-    }
-
-    normalisedDelta.x = Math.max(INT16_CONSTANTS.MINIMUM, Math.min(INT16_CONSTANTS.MAXIMUM, normalisedDelta.x))
-    normalisedDelta.y = Math.max(INT16_CONSTANTS.MINIMUM, Math.min(INT16_CONSTANTS.MAXIMUM, normalisedDelta.y))
-
-    console.info(`Clicked at (${eventPosition.y}, ${eventPosition.x}) -> (${normalisedDelta.x}, ${normalisedDelta.y})`)
-    socket.sendMessage(new Int16Array([normalisedDelta.x, normalisedDelta.y]))
-  }, [socket, overlaySize])
-
   // Resize overlay
   useEffect(() => {
     if (!videoRef?.current) return
@@ -198,19 +168,22 @@ export function PlaceOverlay({ videoRef, socketUrl, circleSize }: PlaceOverlayPr
   // Handle clicks
   useEffect(() => {
     if (!overlayRef?.current) return
-
     const overlayElement = overlayRef.current
 
     function handleClick(event: MouseEvent) {
+      if (!overlaySize) return
+
       setClickPosition({
         x: event.clientY,
         y: event.clientX,
       })
 
-      sendClickDelta({
-        x: event.offsetY,
-        y: event.offsetX,
-      })
+      const targetPosition: Position = {
+        x: event.offsetX,
+        y: event.offsetY,
+      }
+      console.info(`Clicked at (${targetPosition.x}, ${targetPosition.y})`)
+      socket.sendTargetDeltas(webSocket, targetPosition, overlaySize)
     }
 
     // Added to the overlay, so the user cannot click out of bounds!
@@ -220,7 +193,7 @@ export function PlaceOverlay({ videoRef, socketUrl, circleSize }: PlaceOverlayPr
       overlayElement.removeEventListener('mousedown', handleClick)
     }
 
-  }, [overlayRef, sendClickDelta])
+  }, [overlayRef, overlaySize, webSocket])
 
   // Clear clicks on resize
   useEffect(() => {
