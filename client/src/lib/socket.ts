@@ -18,6 +18,7 @@ const INT16_CONSTANTS = {
 type MessagePayloads = {
   ['HEARTBEAT']: null,
   ['TARGET_DELTAS']: Int16Array,
+  ['MOVED_DELTAS']: Int16Array,
 }
 type MessageType = keyof MessagePayloads
 type MessageReceivedType = MessageType | 'INVALID'
@@ -25,12 +26,13 @@ type MessageReceivedType = MessageType | 'INVALID'
 const MESSAGE_TAGS: Record<MessageType, number> = {
   'HEARTBEAT': 0x00,
   'TARGET_DELTAS': 0x01,
+  'MOVED_DELTAS': 0x02,
 } as const
 type MessageTag = (typeof MESSAGE_TAGS)[MessageType]
 
 export type ActionPayloads = {
   ['NO_OPERATION']: null,
-  ['MOVE_HEAD']: Int16Array,
+  ['MOVE_TARGET']: Position,
 }
 type ActionType = keyof ActionPayloads
 
@@ -62,20 +64,25 @@ export async function processMessage(data: unknown): Promise<Action> {
 
   switch (messageType) {
 
+  case 'MOVED_DELTAS':
+    const deltas = new Int16Array(rawPayload.slice(1).buffer)
+    return {
+      actionType: 'MOVE_TARGET',
+      messageType,
+      rawPayload,
+      payload: {
+        x: deltas[0],
+        y: deltas[1],
+      },
+    }
+
   case 'HEARTBEAT':
+  case 'TARGET_DELTAS':
     return {
       actionType: 'NO_OPERATION',
       messageType,
       rawPayload,
       silent: true,
-    }
-
-  case 'TARGET_DELTAS':
-    return {
-      actionType: 'MOVE_HEAD',
-      messageType,
-      rawPayload,
-      payload: new Int16Array(rawPayload.slice(1).buffer),
     }
 
   case 'INVALID':
@@ -115,6 +122,20 @@ export function sendHeartbeat(webSocket: WebSocketHook) {
   sendMessage(webSocket, 'HEARTBEAT', null)
 }
 
+export function normaliseOverlayDeltas(overlayDeltas: Position, overlaySize: Size): Position {
+  return {
+    x: overlayDeltas.x * (INT16_CONSTANTS.RANGE / overlaySize.width),
+    y: overlayDeltas.y * (INT16_CONSTANTS.RANGE / overlaySize.height),
+  }
+}
+
+export function denormaliseOverlayDeltas(normalisedDeltas: Position, overlaySize: Size): Position {
+  return {
+    x: normalisedDeltas.x * (overlaySize.width / INT16_CONSTANTS.RANGE),
+    y: normalisedDeltas.y * (overlaySize.height / INT16_CONSTANTS.RANGE),
+  }
+}
+
 /**
  * Send the delta counts between the current position to the target position over the WebSocket.
  *
@@ -135,15 +156,17 @@ export function sendTargetDeltas(webSocket: WebSocketHook, rawTargetPosition: Po
    * the WebSocket is agnostic of both the client viewport and the streamed video size
    * In other words, the burden is left to the controller to map the Int16 delta into real camera pixels
    */
-  const normalisedDelta = {
-    // ( targetPosition[OverlayUnits] - overlayCentre[OverlayUnits] ) * ( [Int16Units] / [OverlayUnits] )
-    x: Math.floor((rawTargetPosition.x - (overlaySize.width / 2)) * (INT16_CONSTANTS.RANGE / overlaySize.width)),
-    y: Math.floor((rawTargetPosition.y - (overlaySize.height / 2)) * (INT16_CONSTANTS.RANGE / overlaySize.height)),
-  }
+  const normalisedDeltas = normaliseOverlayDeltas(
+    {
+      x: (rawTargetPosition.x - (overlaySize.width / 2)),
+      y: (rawTargetPosition.y - (overlaySize.height / 2)),
+    },
+    overlaySize
+  )
 
-  normalisedDelta.x = Math.max(INT16_CONSTANTS.MINIMUM, Math.min(INT16_CONSTANTS.MAXIMUM, normalisedDelta.x))
-  normalisedDelta.y = Math.max(INT16_CONSTANTS.MINIMUM, Math.min(INT16_CONSTANTS.MAXIMUM, normalisedDelta.y))
-  console.info(`Delta normalised to (${normalisedDelta.x}, ${normalisedDelta.y})`)
+  normalisedDeltas.x = Math.max(INT16_CONSTANTS.MINIMUM, Math.min(INT16_CONSTANTS.MAXIMUM, Math.floor(normalisedDeltas.x)))
+  normalisedDeltas.y = Math.max(INT16_CONSTANTS.MINIMUM, Math.min(INT16_CONSTANTS.MAXIMUM, Math.floor(normalisedDeltas.y)))
+  console.info(`Delta normalised to (${normalisedDeltas.x}, ${normalisedDeltas.y})`)
 
-  sendMessage(webSocket, 'TARGET_DELTAS', new Int16Array([normalisedDelta.x, normalisedDelta.y]))
+  sendMessage(webSocket, 'TARGET_DELTAS', new Int16Array([normalisedDeltas.x, normalisedDeltas.y]))
 }

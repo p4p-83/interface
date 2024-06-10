@@ -19,6 +19,7 @@ export function PlaceOverlay({ videoRef, socketUrl, circleSize }: PlaceOverlayPr
   const didUnmount = useRef(false)
 
   const [overlaySize, setOverlaySize] = useState<Size | null>(null)
+  // TODO: targetPosition
   const [clickPosition, setClickPosition] = useState<Position | null>(null)
 
   // Unmount
@@ -62,8 +63,23 @@ export function PlaceOverlay({ videoRef, socketUrl, circleSize }: PlaceOverlayPr
         const action = await socket.processMessage(message.data)
         console.log({ action })
 
-        if (action.silent) return
+        switch (action.actionType) {
 
+        case 'MOVE_TARGET':
+          if (!overlaySize) break
+          const overlayDeltas = socket.denormaliseOverlayDeltas(action.payload, overlaySize)
+          setClickPosition((previousPosition) => {
+            if (!previousPosition) return null
+            return {
+              x: previousPosition.x - overlayDeltas.x,
+              y: previousPosition.y - overlayDeltas.y,
+            }
+          })
+          break
+
+        }
+
+        if (action.silent) return
         toast.message(`Message received (${action.messageType}):`, {
           id: ToastIds.MESSAGE,
           description: (
@@ -75,7 +91,7 @@ export function PlaceOverlay({ videoRef, socketUrl, circleSize }: PlaceOverlayPr
                 ('payload' in action)
                   ? (
                     <code className='w-[320px] mt-2 block rounded-md p-4 bg-secondary text-secondary-foreground'>
-                      {String(action.payload)}
+                      {JSON.stringify(action.payload, null, 2)}
                     </code>
                   ) : null
               }
@@ -186,8 +202,8 @@ export function PlaceOverlay({ videoRef, socketUrl, circleSize }: PlaceOverlayPr
       if (!overlaySize) return
 
       setClickPosition({
-        x: event.clientY,
-        y: event.clientX,
+        x: event.clientX,
+        y: event.clientY,
       })
 
       const targetPosition: Position = {
@@ -232,8 +248,8 @@ export function PlaceOverlay({ videoRef, socketUrl, circleSize }: PlaceOverlayPr
       <div className='absolute opacity-75 bg-ring outline outline-1 outline-primary-foreground rounded-full pointer-events-none cursor-crosshair hidden' style={{
         width: `${circleSize}px`,
         height: `${circleSize}px`,
-        top: (clickPosition) ? `${clickPosition.x - (circleSize / 2)}px` : '0',
-        left: (clickPosition) ? `${clickPosition.y - (circleSize / 2)}px` : '0',
+        top: (clickPosition) ? `${clickPosition.y - (circleSize / 2)}px` : '0',
+        left: (clickPosition) ? `${clickPosition.x - (circleSize / 2)}px` : '0',
         display: (clickPosition) ? 'block' : 'none',
       }} />
 
