@@ -1,4 +1,4 @@
-import { useRef, useEffect, useState, useCallback, type RefObject } from 'react'
+import { useRef, useEffect, useState, type RefObject } from 'react'
 import useWebSocket from 'react-use-websocket'
 import { toast } from 'sonner'
 

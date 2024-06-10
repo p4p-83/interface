@@ -1,4 +1,5 @@
 import { type WebSocketHook } from 'react-use-websocket/dist/lib/types'
+import { ReadyState } from 'react-use-websocket'
 
 import { type Size, type Position } from '@/app/place/PlaceInterface'
 
@@ -8,7 +9,35 @@ const INT16_CONSTANTS = {
   MAXIMUM: 32767,
 } as const
 
+/*
+ * A message looks like:
+ * - A `Uint8` byte stream
+ * - A leading 'tag'/'type' byte
+ * - A following stream of payload bytes defined by the tag
+ */
+
+const MESSAGE_TAGS = {
+  ['PING']: 0x00,
+  ['TARGET_DELTAS']: 0x01,
+} as const
+
+type MessageType = keyof (typeof MESSAGE_TAGS)
+type MessageTag = (typeof MESSAGE_TAGS)[MessageType]
+
 export function processMessage() { null }
+
+function sendMessage(webSocket: WebSocketHook, type: MessageType, payload: ArrayBufferView) {
+  if (webSocket.readyState !== ReadyState.OPEN) return
+
+  const message = new Uint8Array(payload.byteLength + 1)
+  // Set the message tag
+  message[0] = MESSAGE_TAGS[type]
+  // Set the message payload
+  message.set(new Uint8Array(payload.buffer), 1)
+
+  console.info({ payload, message })
+  webSocket.sendMessage(message)
+}
 
 /**
  * Send the delta counts between the current position to the target position over the WebSocket.
@@ -40,5 +69,5 @@ export function sendTargetDeltas(webSocket: WebSocketHook, rawTargetPosition: Po
   normalisedDelta.y = Math.max(INT16_CONSTANTS.MINIMUM, Math.min(INT16_CONSTANTS.MAXIMUM, normalisedDelta.y))
   console.info(`Delta normalised to (${normalisedDelta.x}, ${normalisedDelta.y})`)
 
-  webSocket.sendMessage(new Int16Array([normalisedDelta.x, normalisedDelta.y]))
+  sendMessage(webSocket, 'TARGET_DELTAS', new Int16Array([normalisedDelta.x, normalisedDelta.y]))
 }
