@@ -46,7 +46,7 @@ export function WebRtcVideo({ url, setVideoSize, setIsVideoStreaming }: WebRtcVi
     const player = new WebRTCPlayer({
       video: videoRef.current,
       type: 'whep',
-      // statsTypeFilter: '^candidate-*|^inbound-rtp',
+      statsTypeFilter: '^inbound-rtp',
       timeoutThreshold: 5000,
       detectTimeout: true,
       mediaConstraints: {
@@ -95,6 +95,8 @@ export function WebRtcVideo({ url, setVideoSize, setIsVideoStreaming }: WebRtcVi
         cancel: DISMISS_BUTTON,
       })
     })
+
+    player.on('stats:inbound-rtp', console.log)
 
     return () => {
       player.unload()
