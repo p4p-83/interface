@@ -18,7 +18,7 @@ interface LinkCardProps extends React.HTMLAttributes<HTMLAnchorElement> {
 export function LinkCard({ className, href, title, description, icon: Icon }: LinkCardProps) {
   return (
     <Link href={href} className={className}>
-      <Card className='group hover:border-primary transition-colors duration-150'>
+      <Card className='group hover:border-primary-accent transition-colors duration-150'>
 
         <CardHeader className='pb-3'>
           <CardTitle className='flex flex-row gap-2 justify-start items-center text-primary transition-colors duration-150 text-2xl font-bold uppercase'>
@@ -28,7 +28,7 @@ export function LinkCard({ className, href, title, description, icon: Icon }: Li
         </CardHeader>
 
         <CardContent>
-          <p className='group-hover:text-primary transition-colors duration-150 text-lg leading-8'>{description}</p>
+          <p className='group-hover:text-primary-accent transition-colors duration-150 text-lg leading-8'>{description}</p>
         </CardContent>
 
       </Card>
