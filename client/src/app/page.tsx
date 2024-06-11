@@ -4,6 +4,14 @@ import { Badge } from '@/components/ui/badge'
 import { LinkCard } from '@/components/LinkCard'
 import { ThemeToggle } from '@/components/ThemeToggle'
 
+const SUBTITLES = [
+  '#define PART_IV_PROJECT "ECSE #83"',
+  '~ echo "ECSE Part IV Project #83"',
+  'char project[] = "ECSE Part IV Project #83";',
+  '~ [ "$number" -eq 83 ] && echo "ECSE Part IV Project #$number"',
+  'printf("ECSE Part IV Project #%d\\n", 83);',
+] as const
+
 export default function Home() {
   return (
 
@@ -20,7 +28,7 @@ export default function Home() {
 
       <Badge variant='secondary' className='mb-16 text-lg'>
         <code className='p-2'>
-          ECSE Part IV Project &lt;&lt; 83
+          {SUBTITLES[Math.floor(Math.random() * SUBTITLES.length)]}
         </code>
       </Badge>
 
