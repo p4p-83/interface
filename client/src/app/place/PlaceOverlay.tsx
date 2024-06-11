@@ -1,4 +1,4 @@
-import { useRef, useEffect, useState, type RefObject } from 'react'
+import { useRef, useEffect, useState } from 'react'
 import useWebSocket from 'react-use-websocket'
 import { toast } from 'sonner'
 
@@ -9,24 +9,22 @@ import { ToastIds, DISMISS_BUTTON } from '@/components/ui/sonner'
 import { Size, Position } from './PlaceInterface'
 
 type PlaceOverlayProps = {
-  videoRef: RefObject<HTMLVideoElement | null>;
   socketUrl: string;
+  overlaySize: Size | null;
   circleSize: number;
+  hideOverlay?: boolean;
 }
 
-export function PlaceOverlay({ videoRef, socketUrl, circleSize }: PlaceOverlayProps) {
+export function PlaceOverlay({ socketUrl, overlaySize, circleSize, hideOverlay = false }: PlaceOverlayProps) {
   const overlayRef = useRef<HTMLDivElement>(null)
   const didUnmount = useRef(false)
 
-  const [overlaySize, setOverlaySize] = useState<Size | null>(null)
   const [overlayTargetPosition, setOverlayTargetPosition] = useState<Position | null>(null)
 
   // Unmount
   useEffect(() => {
-    console.log('Mounted')
     didUnmount.current = false
     return () => {
-      console.log('Unmounted')
       didUnmount.current = true
     }
   }, [])
@@ -151,47 +149,6 @@ export function PlaceOverlay({ videoRef, socketUrl, circleSize }: PlaceOverlayPr
     }
   )
 
-  // Resize overlay
-  useEffect(() => {
-    if (!videoRef?.current) return
-
-    const videoElement = videoRef.current
-
-    function updateVideoBounds() {
-      if (videoElement.videoWidth === 0 || videoElement.videoHeight === 0) {
-        setOverlaySize(null)
-        return
-      }
-
-      const scalingFactors = {
-        width: videoElement.clientWidth / videoElement.videoWidth,
-        height: videoElement.clientHeight / videoElement.videoHeight,
-      }
-
-      const limitingScalarFactor = (scalingFactors.width >= scalingFactors.height)
-        // Black bars on the sides
-        ? scalingFactors.height
-        // Black bars on the top/bottom
-        : scalingFactors.width
-
-      setOverlaySize({
-        width: limitingScalarFactor * videoElement.videoWidth,
-        height: limitingScalarFactor * videoElement.videoHeight,
-      })
-
-      console.log(`Updated overlay to ${limitingScalarFactor * videoElement.videoWidth}x${limitingScalarFactor * videoElement.videoHeight}`)
-    }
-
-    window.addEventListener('resize', updateVideoBounds)
-    videoElement.addEventListener('loadedmetadata', updateVideoBounds)
-
-    return () => {
-      window.removeEventListener('resize', updateVideoBounds)
-      videoElement.removeEventListener('loadedmetadata', updateVideoBounds)
-    }
-
-  }, [videoRef])
-
   // Handle clicks
   useEffect(() => {
     if (!overlayRef?.current) return
@@ -219,51 +176,46 @@ export function PlaceOverlay({ videoRef, socketUrl, circleSize }: PlaceOverlayPr
     return () => {
       overlayElement.removeEventListener('mousedown', handleClick)
     }
-
   }, [overlayRef, overlaySize, webSocket])
 
   // Clear clicks on resize
   useEffect(() => {
-    if (!videoRef?.current) return
-    const videoElement = videoRef.current
-
     const clearOverlayTargetPosition = () => setOverlayTargetPosition(null)
 
     window.addEventListener('resize', clearOverlayTargetPosition)
-    videoElement.addEventListener('loadedmetadata', clearOverlayTargetPosition)
 
     return () => {
       window.removeEventListener('resize', clearOverlayTargetPosition)
-      videoElement.removeEventListener('loadedmetadata', clearOverlayTargetPosition)
     }
+  }, [overlaySize?.width, overlaySize?.height])
 
-  }, [videoRef])
+  if (hideOverlay || !overlaySize) return
 
   return (
 
     <>
 
       {/* Click circle */}
-      <div className='absolute opacity-75 bg-ring outline outline-1 outline-primary-foreground rounded-full pointer-events-none cursor-crosshair hidden' style={{
-        width: `${circleSize}px`,
-        height: `${circleSize}px`,
-        top: (overlayTargetPosition) ? `${overlayTargetPosition.y - (circleSize / 2)}px` : '0',
-        left: (overlayTargetPosition) ? `${overlayTargetPosition.x - (circleSize / 2)}px` : '0',
-        display: (overlayTargetPosition) ? 'block' : 'none',
-      }} />
+      {(overlayTargetPosition) && (
+        <div className='absolute opacity-75 bg-ring outline outline-1 outline-primary-foreground rounded-full pointer-events-none cursor-crosshair' style={{
+          width: circleSize,
+          height: circleSize,
+          top: overlayTargetPosition.y - (circleSize / 2),
+          left: overlayTargetPosition.x - (circleSize / 2),
+        }} />
+      )}
 
       {/* Overlay */}
       <div ref={overlayRef} className='absolute cursor-crosshair' style={{
-        width: (overlaySize) ? `${overlaySize.width}px` : '0',
-        height: (overlaySize) ? `${overlaySize.height}px` : '0',
+        width: overlaySize.width,
+        height: overlaySize.height,
       }}>
         {/* Centre circle */}
-        <div className='relative opacity-50 bg-secondary outline outline-1 outline-secondary-foreground rounded-full pointer-events-none cursor-crosshair hidden' style={{
-          width: `${circleSize}px`,
-          height: `${circleSize}px`,
-          top: (overlaySize) ? `${(overlaySize.height / 2) - (circleSize / 2)}px` : '0',
-          left: (overlaySize) ? `${(overlaySize.width / 2) - (circleSize / 2)}px` : '0',
-          display: (overlaySize) ? 'block' : 'none',
+        <div className='relative opacity-50 bg-secondary outline outline-1 outline-secondary-foreground rounded-full pointer-events-none cursor-crosshair' style={{
+          width: circleSize,
+          height: circleSize,
+          top: (overlaySize.height / 2) - (circleSize / 2),
+          left: (overlaySize.width / 2) - (circleSize / 2),
         }} />
       </div>
 

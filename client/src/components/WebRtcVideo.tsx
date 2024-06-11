@@ -1,13 +1,14 @@
 'use client'
 
 import { useRouter } from 'next/navigation'
-import { useEffect, useState, useRef, forwardRef } from 'react'
+import { useEffect, useState, useRef, type Dispatch, type SetStateAction } from 'react'
 import { WebRTCPlayer } from '@eyevinn/webrtc-player'
 import { toast } from 'sonner'
 
 import { Progress } from '@/components/ui/progress'
 import { ToastIds, DISMISS_BUTTON } from '@/components/ui/sonner'
-import { cn } from '@/lib/utils'
+
+import { Size } from '@/app/place/PlaceInterface'
 
 const PROGRESS_BAR = {
   INITIAL: 0,
@@ -26,133 +27,175 @@ const PROGRESS_BAR = {
 
 type WebRtcVideoProps = {
   url: string;
+  setVideoSize?: Dispatch<SetStateAction<Size | null>>;
+  setIsVideoStreaming?: Dispatch<SetStateAction<boolean>>;
 }
 
-const WebRtcVideo = forwardRef<HTMLVideoElement, WebRtcVideoProps>(
-  function WebRtcVideo({ url }, ref) {
-    const router = useRouter()
-    const [loadProgress, setLoadProgress] = useState<number>(PROGRESS_BAR.INITIAL)
-    const intervalRef = useRef<number | null>(null)
+export function WebRtcVideo({ url, setVideoSize, setIsVideoStreaming }: WebRtcVideoProps) {
+  const router = useRouter()
 
-    // WebRTCPlayer
-    useEffect(() => {
-      // This is nasty, but oh well. https://stackoverflow.com/a/65877297
-      if (typeof ref === 'function' || !ref?.current) return
+  const videoRef = useRef<HTMLVideoElement>(null)
+  const intervalRef = useRef<number | null>(null)
 
-      const player = new WebRTCPlayer({
-        video: ref.current,
-        type: 'whep',
-        // statsTypeFilter: '^candidate-*|^inbound-rtp',
-        timeoutThreshold: 5000,
-        detectTimeout: true,
-        mediaConstraints: {
-          videoOnly: true,
+  const [loadProgress, setLoadProgress] = useState<number>(PROGRESS_BAR.INITIAL)
+
+  // WebRTCPlayer
+  useEffect(() => {
+    if (!videoRef?.current) return
+
+    const player = new WebRTCPlayer({
+      video: videoRef.current,
+      type: 'whep',
+      // statsTypeFilter: '^candidate-*|^inbound-rtp',
+      timeoutThreshold: 5000,
+      detectTimeout: true,
+      mediaConstraints: {
+        videoOnly: true,
+      },
+    })
+
+    setLoadProgress(PROGRESS_BAR.PLAYER_CONSTRUCTED)
+
+    player.load(new URL(url))
+      .then(() => setLoadProgress(PROGRESS_BAR.PLAYER_LOADED))
+
+    function handleConnectError() {
+      setLoadProgress(PROGRESS_BAR.PLAYER_LOADED)
+      if (intervalRef.current) clearInterval(intervalRef.current)
+
+      setIsVideoStreaming?.(false)
+
+      toast.error('Video stream error!', {
+        id: ToastIds.VIDEO_ERROR,
+        action: {
+          label: 'Go home',
+          onClick: () => router.push('/'),
         },
+        classNames: {
+          'actionButton': 'group-[.toast]:!bg-destructive group-[.toast]:!text-destructive-foreground',
+        },
+        duration: Infinity,
+      })
+    }
+
+    player.on('initial-connection-failed', handleConnectError)
+    player.on('connect-error', handleConnectError)
+
+    player.on('no-media', () => {
+      console.log('Media timeout occurred')
+      toast.warning('Stream timed out!', {
+        id: ToastIds.VIDEO_STATUS,
+        cancel: DISMISS_BUTTON,
+      })
+    })
+    player.on('media-recovered', () => {
+      console.log('Media recovered')
+      toast.success('Stream recovered!', {
+        id: ToastIds.VIDEO_STATUS,
+        cancel: DISMISS_BUTTON,
+      })
+    })
+
+    return () => {
+      player.unload()
+      player.destroy()
+    }
+
+  }, [router, videoRef, setIsVideoStreaming, url])
+
+  // Video size
+  useEffect(() => {
+    if (!videoRef?.current) return
+    if (!setVideoSize) return
+
+    const videoElement = videoRef.current
+
+    function updateVideoBounds() {
+      if (videoElement.videoWidth === 0 || videoElement.videoHeight === 0) {
+        setVideoSize?.(null)
+        return
+      }
+
+      const scalingFactors = {
+        width: videoElement.clientWidth / videoElement.videoWidth,
+        height: videoElement.clientHeight / videoElement.videoHeight,
+      }
+
+      const limitingScalarFactor = (scalingFactors.width >= scalingFactors.height)
+        // Black bars on the sides
+        ? scalingFactors.height
+        // Black bars on the top/bottom
+        : scalingFactors.width
+
+      setVideoSize?.({
+        width: limitingScalarFactor * videoElement.videoWidth,
+        height: limitingScalarFactor * videoElement.videoHeight,
       })
 
-      setLoadProgress(PROGRESS_BAR.PLAYER_CONSTRUCTED)
+      console.log(`Updated video size to ${limitingScalarFactor * videoElement.videoWidth}x${limitingScalarFactor * videoElement.videoHeight}`)
+    }
 
-      player.load(new URL(url))
-        .then(() => setLoadProgress(PROGRESS_BAR.PLAYER_LOADED))
+    window.addEventListener('resize', updateVideoBounds)
+    videoElement.addEventListener('loadedmetadata', updateVideoBounds)
 
-      function handleConnectError() {
-        setLoadProgress(PROGRESS_BAR.PLAYER_LOADED)
+    return () => {
+      setVideoSize?.(null)
+      window.removeEventListener('resize', updateVideoBounds)
+      videoElement.removeEventListener('loadedmetadata', updateVideoBounds)
+    }
+  }, [videoRef, setVideoSize])
+
+  // Progress bar
+  useEffect(() => {
+    if (!videoRef?.current) return
+    const videoElement = videoRef.current
+
+    const startHandler = () => setLoadProgress(PROGRESS_BAR.VIDEO_LOAD_START)
+    const metadataHandler = () => setLoadProgress(PROGRESS_BAR.VIDEO_LOADED_METADATA)
+    const dataHandler = () => {
+      setLoadProgress(PROGRESS_BAR.VIDEO_LOADED_DATA)
+      setIsVideoStreaming?.(true)
+    }
+
+    videoElement.addEventListener('loadstart', startHandler)
+    videoElement.addEventListener('loadedmetadata', metadataHandler)
+    videoElement.addEventListener('loadeddata', dataHandler)
+
+    return () => {
+      setIsVideoStreaming?.(false)
+      videoElement.removeEventListener('loadstart', startHandler)
+      videoElement.removeEventListener('loadedmetadata', metadataHandler)
+      videoElement.removeEventListener('loadeddata', dataHandler)
+    }
+  }, [videoRef, setIsVideoStreaming])
+
+  // Growing progress bar
+  useEffect(() => {
+    intervalRef.current = window.setInterval(() => {
+      setLoadProgress((previousProgress) => {
+        const incremented = (previousProgress + PROGRESS_BAR.INCREMENT)
+        if (incremented <= PROGRESS_BAR.INCREMENT_FINAL) {
+          return incremented
+        }
+
         if (intervalRef.current) clearInterval(intervalRef.current)
-
-        toast.error('Video stream error!', {
-          id: ToastIds.VIDEO_ERROR,
-          action: {
-            label: 'Go home',
-            onClick: () => router.push('/'),
-          },
-          classNames: {
-            'actionButton': 'group-[.toast]:!bg-destructive group-[.toast]:!text-destructive-foreground',
-          },
-          duration: Infinity,
-        })
-      }
-
-      player.on('initial-connection-failed', handleConnectError)
-      player.on('connect-error', handleConnectError)
-
-      player.on('no-media', () => {
-        console.log('Media timeout occurred')
-        toast.warning('Stream timed out!', {
-          id: ToastIds.VIDEO_STATUS,
-          cancel: DISMISS_BUTTON,
-        })
+        return previousProgress
       })
-      player.on('media-recovered', () => {
-        console.log('Media recovered')
-        toast.success('Stream recovered!', {
-          id: ToastIds.VIDEO_STATUS,
-          cancel: DISMISS_BUTTON,
-        })
-      })
+    }, PROGRESS_BAR.INCREMENT_INTERVAL_MS)
 
-      return () => {
-        setLoadProgress(PROGRESS_BAR.INITIAL)
-        player.unload()
-        player.destroy()
-      }
+    return () => {
+      if (intervalRef.current) clearInterval(intervalRef.current)
+    }
+  }, [])
 
-    }, [router, ref, url])
+  return (
+    <>
+      {(loadProgress !== PROGRESS_BAR.FINAL) && (
+        <Progress value={loadProgress} className='absolute max-w-[50%]'/>
+      )}
 
-    // Progress bar
-    useEffect(() => {
-      // This is nasty, but oh well. https://stackoverflow.com/a/65877297
-      if (typeof ref === 'function' || !ref?.current) return
-      const videoElement = ref.current
+      <video ref={videoRef} autoPlay muted playsInline className='object-contain object-center h-full w-full pointer-events-none' />
+    </>
+  )
 
-      const startHandler = () => setLoadProgress(PROGRESS_BAR.VIDEO_LOAD_START)
-      const metadataHandler = () => setLoadProgress(PROGRESS_BAR.VIDEO_LOADED_METADATA)
-      const dataHandler = () => setLoadProgress(PROGRESS_BAR.VIDEO_LOADED_DATA)
-
-      videoElement.addEventListener('loadstart', startHandler)
-      videoElement.addEventListener('loadedmetadata', metadataHandler)
-      videoElement.addEventListener('loadeddata', dataHandler)
-
-      return () => {
-        setLoadProgress(PROGRESS_BAR.INITIAL)
-        videoElement.removeEventListener('loadstart', startHandler)
-        videoElement.removeEventListener('loadedmetadata', metadataHandler)
-        videoElement.removeEventListener('loadeddata', dataHandler)
-      }
-    }, [ref])
-
-    // Growing progress bar
-    useEffect(() => {
-      intervalRef.current = window.setInterval(() => {
-        setLoadProgress((previousProgress) => {
-          const incremented = (previousProgress + PROGRESS_BAR.INCREMENT)
-          if (incremented <= PROGRESS_BAR.INCREMENT_FINAL) {
-            return incremented
-          }
-
-          if (intervalRef.current) clearInterval(intervalRef.current)
-          return previousProgress
-        })
-      }, PROGRESS_BAR.INCREMENT_INTERVAL_MS)
-
-      return () => {
-        setLoadProgress(PROGRESS_BAR.INITIAL)
-        if (intervalRef.current) clearInterval(intervalRef.current)
-      }
-    }, [])
-
-    return (
-      <>
-        <Progress value={loadProgress} className={cn(
-          'absolute max-w-[50%]',
-          (loadProgress === PROGRESS_BAR.FINAL) ? 'hidden' : '',
-        )}
-        />
-
-        <video ref={ref} autoPlay muted playsInline className='object-contain object-center h-full w-full pointer-events-none' />
-      </>
-    )
-
-  }
-)
-
-export { WebRtcVideo }
+}
