@@ -193,26 +193,36 @@ export function PlaceOverlay({ socketUrl, overlaySize, circleSize, hideOverlay =
 
       {/* Click circle */}
       {(overlayTargetPosition) && (
-        <div className='absolute opacity-75 bg-ring outline outline-1 outline-primary-foreground rounded-full pointer-events-none cursor-crosshair' style={{
-          width: circleSize,
-          height: circleSize,
-          top: overlayTargetPosition.y - (circleSize / 2),
-          left: overlayTargetPosition.x - (circleSize / 2),
-        }} />
+        <div
+          className='absolute opacity-75 bg-ring outline outline-1 outline-primary-foreground rounded-full pointer-events-none cursor-crosshair'
+          style={{
+            width: circleSize,
+            height: circleSize,
+            top: overlayTargetPosition.y - (circleSize / 2),
+            left: overlayTargetPosition.x - (circleSize / 2),
+          }}
+        />
       )}
 
       {/* Overlay */}
-      <div ref={overlayRef} className='absolute cursor-crosshair' style={{
-        width: overlaySize.width,
-        height: overlaySize.height,
-      }}>
+      <div
+        ref={overlayRef}
+        className='absolute cursor-crosshair'
+        style={{
+          width: overlaySize.width,
+          height: overlaySize.height,
+        }}
+      >
         {/* Centre circle */}
-        <div className='relative opacity-50 bg-secondary outline outline-1 outline-secondary-foreground rounded-full pointer-events-none cursor-crosshair' style={{
-          width: circleSize,
-          height: circleSize,
-          top: (overlaySize.height / 2) - (circleSize / 2),
-          left: (overlaySize.width / 2) - (circleSize / 2),
-        }} />
+        <div
+          className='relative opacity-50 bg-secondary outline outline-1 outline-secondary-foreground rounded-full pointer-events-none cursor-crosshair'
+          style={{
+            width: circleSize,
+            height: circleSize,
+            top: (overlaySize.height / 2) - (circleSize / 2),
+            left: (overlaySize.width / 2) - (circleSize / 2),
+          }}
+        />
       </div>
 
     </>
