@@ -38,6 +38,7 @@ export function WebRtcVideo({ url, setVideoSize, setIsVideoStreaming }: WebRtcVi
   const intervalRef = useRef<number | null>(null)
 
   const [loadProgress, setLoadProgress] = useState<number>(PROGRESS_BAR.INITIAL)
+  const [loadProgressGrowthStop, setLoadProgressGrowthStop] = useState<number>(PROGRESS_BAR.INITIAL)
 
   // WebRTCPlayer
   useEffect(() => {
@@ -55,13 +56,15 @@ export function WebRtcVideo({ url, setVideoSize, setIsVideoStreaming }: WebRtcVi
     })
 
     setLoadProgress(PROGRESS_BAR.PLAYER_CONSTRUCTED)
+    setLoadProgressGrowthStop(PROGRESS_BAR.PLAYER_LOADED)
 
     player.load(new URL(url))
       .then(() => setLoadProgress(PROGRESS_BAR.PLAYER_LOADED))
 
     function handleConnectError() {
       setLoadProgress(PROGRESS_BAR.PLAYER_LOADED)
-      if (intervalRef.current) clearInterval(intervalRef.current)
+      setLoadProgressGrowthStop(PROGRESS_BAR.PLAYER_LOADED);
+      (intervalRef.current) && clearInterval(intervalRef.current)
 
       setIsVideoStreaming?.(false)
 
@@ -152,10 +155,17 @@ export function WebRtcVideo({ url, setVideoSize, setIsVideoStreaming }: WebRtcVi
     if (!videoRef?.current) return
     const videoElement = videoRef.current
 
-    const startHandler = () => setLoadProgress(PROGRESS_BAR.VIDEO_LOAD_START)
-    const metadataHandler = () => setLoadProgress(PROGRESS_BAR.VIDEO_LOADED_METADATA)
+    const startHandler = () => {
+      setLoadProgress(PROGRESS_BAR.VIDEO_LOAD_START)
+      setLoadProgressGrowthStop(PROGRESS_BAR.VIDEO_LOADED_METADATA)
+    }
+    const metadataHandler = () => {
+      setLoadProgress(PROGRESS_BAR.VIDEO_LOADED_METADATA)
+      setLoadProgressGrowthStop(PROGRESS_BAR.VIDEO_LOADED_DATA)
+    }
     const dataHandler = () => {
       setLoadProgress(PROGRESS_BAR.VIDEO_LOADED_DATA)
+      setLoadProgressGrowthStop(PROGRESS_BAR.VIDEO_LOADED_DATA)
       setIsVideoStreaming?.(true)
     }
 
@@ -176,19 +186,20 @@ export function WebRtcVideo({ url, setVideoSize, setIsVideoStreaming }: WebRtcVi
     intervalRef.current = window.setInterval(() => {
       setLoadProgress((previousProgress) => {
         const incremented = (previousProgress + PROGRESS_BAR.INCREMENT)
-        if (incremented <= PROGRESS_BAR.INCREMENT_FINAL) {
-          return incremented
+
+        if (incremented > loadProgressGrowthStop) {
+          (intervalRef.current) && clearInterval(intervalRef.current)
+          return previousProgress
         }
 
-        if (intervalRef.current) clearInterval(intervalRef.current)
-        return previousProgress
+        return incremented
       })
     }, PROGRESS_BAR.INCREMENT_INTERVAL_MS)
 
     return () => {
-      if (intervalRef.current) clearInterval(intervalRef.current)
+      (intervalRef.current) && clearInterval(intervalRef.current)
     }
-  }, [])
+  }, [loadProgressGrowthStop])
 
   return (
     <>
