@@ -3,6 +3,9 @@
 import { useTheme } from 'next-themes'
 import { ExternalToast, Toaster as Sonner } from 'sonner'
 
+import { encodeSans } from '@/styles/fonts'
+import { cn } from '@/lib/utils'
+
 type ToasterProps = React.ComponentProps<typeof Sonner>
 
 enum ToastIds {
@@ -28,7 +31,10 @@ const Toaster = ({ ...props }: ToasterProps) => {
       toastOptions={{
         classNames: {
           toast:
-            'group toast group-[.toaster]:bg-background group-[.toaster]:text-foreground group-[.toaster]:border-border group-[.toaster]:!shadow-lg',
+            cn(
+              encodeSans.className,
+              'group toast group-[.toaster]:bg-background group-[.toaster]:text-foreground group-[.toaster]:border-border group-[.toaster]:!shadow-lg',
+            ),
           description: 'group-[.toast]:!text-muted-foreground',
           actionButton:
             'group-[.toast]:!bg-primary group-[.toast]:!text-primary-foreground',

@@ -1,12 +1,10 @@
 import type { Metadata } from 'next'
-import { Encode_Sans } from 'next/font/google'
 import './globals.css'
 
+import { encodeSans } from '@/styles/fonts'
 import { Toaster } from '@/components/ui/sonner'
 import { ThemeProvider } from '@/components/ThemeProvider'
 import { cn } from '@/lib/utils'
-
-const encodeSans = Encode_Sans({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
   title: 'PnP << 83',
