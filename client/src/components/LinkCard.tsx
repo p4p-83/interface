@@ -22,7 +22,7 @@ export function LinkCard({ className, href, title, description, icon: Icon }: Li
 
         <CardHeader className='pb-3'>
           <CardTitle className='flex flex-row gap-2 justify-start items-center text-primary transition-colors duration-150 text-2xl font-bold uppercase'>
-            <Icon className='p-0 h-5 w-5 shrink-0' strokeWidth={0.5} stroke="currentColor" />
+            <Icon className='p-0 h-5 w-5 shrink-0' strokeWidth={0.5} stroke='currentColor' />
             {title}
           </CardTitle>
         </CardHeader>
