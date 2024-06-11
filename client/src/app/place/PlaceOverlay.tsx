@@ -178,16 +178,12 @@ export function PlaceOverlay({ socketUrl, overlaySize, circleSize, hideOverlay =
     }
   }, [overlayRef, overlaySize, webSocket])
 
-  // Clear clicks on resize
-  useEffect(() => {
-    const clearOverlayTargetPosition = () => setOverlayTargetPosition(null)
-
-    window.addEventListener('resize', clearOverlayTargetPosition)
-
-    return () => {
-      window.removeEventListener('resize', clearOverlayTargetPosition)
-    }
-  }, [overlaySize?.width, overlaySize?.height])
+  // Clear target on resize
+  const [lastOverlaySize, setLastOverlaySize] = useState(overlaySize)
+  if ((overlaySize?.width !== lastOverlaySize?.width) || (overlaySize?.height !== lastOverlaySize?.height)) {
+    setLastOverlaySize(overlaySize)
+    setOverlayTargetPosition(null)
+  }
 
   if (hideOverlay || !overlaySize) return
 
