@@ -79,6 +79,7 @@ export function PlaceOverlay({ socketUrl, overlaySize, circleSize, hideOverlay =
         if (action.silent) return
         toast.message(`Message received (${action.messageType}):`, {
           id: ToastIds.MESSAGE,
+          className: 'pointer-events-none',
           description: (
             <pre className='mt-2'>
               <code className='w-[320px] block rounded-md p-4 bg-secondary text-secondary-foreground'>
