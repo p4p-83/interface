@@ -12,6 +12,7 @@ export type Position = {
 
 const URLS = {
   WHEP_VIDEO_STREAM: 'http://localhost:8889/facetime/whep',
+  // WHEP_VIDEO_STREAM: 'http://172.23.119.200:8889/hq/whep',
   WEB_SOCKET: 'ws://0.0.0.0:8080',
 }
 

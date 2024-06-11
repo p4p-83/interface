@@ -23,7 +23,7 @@ export default function Home() {
 
       <h1 className='mb-16 text-6xl text-center font-black underline decoration-primary'>
         A pick-and-place,<br />
-        for <em className='italic'>rapid&#8239;</em> prototyping.
+        for <em className='italic'>rapid</em><span className='tracking-widest'> </span>prototyping.
       </h1>
 
       <Badge variant='secondary' className='mb-16 text-lg'>
