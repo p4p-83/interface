@@ -16,7 +16,7 @@ const PROGRESS_BAR = {
   // Fixed progresses
   PLAYER_CONSTRUCTED: 2,
   PLAYER_LOADED: 20,
-  VIDEO_LOAD_START: 87,
+  VIDEO_LOAD_START: 67,
   VIDEO_LOADED_METADATA: 99,
   VIDEO_LOADED_DATA: 100,
   // Interval increments
