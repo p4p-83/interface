@@ -37,7 +37,7 @@ export default function Home() {
         <LinkCard href='/place' title='Place' description='Position with precision.' icon={Crosshair2Icon} className='w-full md:col-span-2' />
 
         <LinkCard href='/' title='Calibrate' description='Measure twice, place once.' icon={MixerHorizontalIcon} className='w-full' />
-        {/* <LinkCard href='/' title='Configure' description='Set your stage.' icon={GearIcon} className='w-full' /> */}
+        {/* <LinkCard href='/' title='Configure' description='Set the stage.' icon={GearIcon} className='w-full' /> */}
         <LinkCard href='/' title='Learn' description='Meet your match.' icon={RocketIcon} className='w-full' />
 
       </div>
