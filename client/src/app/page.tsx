@@ -15,7 +15,7 @@ export default function Home() {
 
       <h1 className='mb-16 text-6xl text-center font-extrabold underline decoration-primary'>
         A pick-and-place,<br />
-        for <i>rapid</i> prototyping.
+        for <em className='italic'>rapid&#8239;</em> prototyping.
       </h1>
 
       <Badge variant='secondary' className='mb-16 text-lg'>
