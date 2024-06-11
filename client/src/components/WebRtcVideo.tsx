@@ -71,18 +71,17 @@ export function WebRtcVideo({ url, setVideoSize, setIsVideoStreaming }: WebRtcVi
           label: 'Go home',
           onClick: () => router.push('/'),
         },
-        classNames: {
-          'actionButton': 'group-[.toast]:!bg-destructive group-[.toast]:!text-destructive-foreground',
-        },
         duration: Infinity,
       })
     }
 
+    player.on('peer-connection-failed', handleConnectError)
     player.on('initial-connection-failed', handleConnectError)
     player.on('connect-error', handleConnectError)
 
     player.on('no-media', () => {
       console.log('Media timeout occurred')
+      setIsVideoStreaming?.(false)
       toast.warning('Stream timed out!', {
         id: ToastIds.VIDEO_STATUS,
         cancel: DISMISS_BUTTON,
@@ -90,6 +89,7 @@ export function WebRtcVideo({ url, setVideoSize, setIsVideoStreaming }: WebRtcVi
     })
     player.on('media-recovered', () => {
       console.log('Media recovered')
+      setIsVideoStreaming?.(true)
       toast.success('Stream recovered!', {
         id: ToastIds.VIDEO_STATUS,
         cancel: DISMISS_BUTTON,

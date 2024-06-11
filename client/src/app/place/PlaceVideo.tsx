@@ -24,7 +24,9 @@ export function PlaceVideo({ className, videoUrl, socketUrl }: PlaceVideoProps) 
         <WebRtcVideo url={videoUrl} setVideoSize={setVideoSize} setIsVideoStreaming={setIsVideoStreaming} />
       </div>
 
-      <PlaceOverlay socketUrl={socketUrl} overlaySize={videoSize} circleSize={10} hideOverlay={!isVideoStreaming} />
+      {(isVideoStreaming) && (
+        <PlaceOverlay socketUrl={socketUrl} overlaySize={videoSize} circleSize={10} />
+      )}
 
     </div>
   )
