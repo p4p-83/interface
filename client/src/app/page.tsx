@@ -1,4 +1,4 @@
-import { Crosshair2Icon } from '@radix-ui/react-icons'
+import { Crosshair2Icon, MixerHorizontalIcon, RocketIcon } from '@radix-ui/react-icons'
 
 import { Badge } from '@/components/ui/badge'
 import { LinkCard } from '@/components/LinkCard'
@@ -24,14 +24,14 @@ export default function Home() {
         </code>
       </Badge>
 
-      <div className='grid grid-cols-1 md:grid-cols-2 w-full max-w-3xl gap-6 md:gap-8 mt-2'>
-        <LinkCard
-          href='/place'
-          title='Place'
-          description='Place your components.'
-          icon={Crosshair2Icon}
-          className='w-full md:col-span-2'
-        />
+      <div className='grid grid-cols-1 md:grid-cols-2 w-full max-w-3xl gap-6 mt-2'>
+
+        <LinkCard href='/place' title='Place' description='Position with precision.' icon={Crosshair2Icon} className='w-full md:col-span-2' />
+
+        <LinkCard href='/' title='Calibrate' description='Measure twice, place once.' icon={MixerHorizontalIcon} className='w-full' />
+        {/* <LinkCard href='/' title='Configure' description='Set your stage.' icon={GearIcon} className='w-full' /> */}
+        <LinkCard href='/' title='Learn' description='Meet your match.' icon={RocketIcon} className='w-full' />
+
       </div>
 
     </>
