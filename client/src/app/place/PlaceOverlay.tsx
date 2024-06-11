@@ -185,6 +185,15 @@ export function PlaceOverlay({ socketUrl, overlaySize, circleSize, hideOverlay =
     setLastOverlaySize(overlaySize)
     setOverlayTargetPosition(null)
   }
+  useEffect(() => {
+    function clearOverlayTargetPosition() {
+      setOverlayTargetPosition(null)
+    }
+    window.addEventListener('resize', clearOverlayTargetPosition)
+    return () => {
+      window.removeEventListener('resize', clearOverlayTargetPosition)
+    }
+  }, [])
 
   if (hideOverlay || !overlaySize) return
 
