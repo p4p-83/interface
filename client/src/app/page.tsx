@@ -21,9 +21,9 @@ export default function Home() {
         <ThemeToggle />
       </div>
 
-      <h1 className='mb-16 text-6xl text-center font-bold underline decoration-primary'>
+      <h1 className='mb-16 text-6xl text-center font-extrabold underline decoration-primary'>
         A pick-and-place,<br />
-        for <em className='italic'>rapid</em><span className='tracking-widest'> </span>prototyping.
+        for <em className='italic'>rapid</em> prototyping.
       </h1>
 
       <Badge variant='secondary' className='mb-16 text-lg'>

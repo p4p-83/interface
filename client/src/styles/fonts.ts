@@ -1,8 +1,16 @@
-import { Ubuntu } from 'next/font/google'
+import localFont from 'next/font/local'
 
-const ubuntu = Ubuntu({
-  weight: ['300', '400', '500', '700'],
-  subsets: ['latin'],
+const ubuntu = localFont({
+  src: [
+    {
+      path: './UbuntuSans-Variable.woff2',
+      style: 'normal',
+    },
+    {
+      path: './UbuntuSans-Italic-Variable.woff2',
+      style: 'italic',
+    },
+  ],
 })
 
 export { ubuntu }
