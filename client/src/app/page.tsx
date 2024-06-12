@@ -21,7 +21,7 @@ export default function Home() {
         <ThemeToggle />
       </div>
 
-      <h1 className='mb-16 text-6xl text-center font-black underline decoration-primary'>
+      <h1 className='mb-16 text-6xl text-center font-bold underline decoration-primary'>
         A pick-and-place,<br />
         for <em className='italic'>rapid</em><span className='tracking-widest'> </span>prototyping.
       </h1>

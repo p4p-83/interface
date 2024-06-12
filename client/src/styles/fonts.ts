@@ -1,7 +1,8 @@
-import { Encode_Sans } from 'next/font/google'
+import { Ubuntu } from 'next/font/google'
 
-const encodeSans = Encode_Sans({
+const ubuntu = Ubuntu({
+  weight: ['300', '400', '500', '700'],
   subsets: ['latin'],
 })
 
-export { encodeSans }
+export { ubuntu }

@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 import './globals.css'
 
-import { encodeSans } from '@/styles/fonts'
+import { ubuntu } from '@/styles/fonts'
 import { Toaster } from '@/components/ui/sonner'
 import { ThemeProvider } from '@/components/ThemeProvider'
 import { cn } from '@/lib/utils'
@@ -18,7 +18,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang='en' suppressHydrationWarning>
-      <body className={cn(encodeSans.className, 'flex min-h-screen flex-col items-center justify-center px-5')}>
+      <body className={cn(ubuntu.className, 'flex min-h-screen flex-col items-center justify-center px-5')}>
 
         <ThemeProvider
           attribute='class'
