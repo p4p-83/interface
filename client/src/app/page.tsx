@@ -21,13 +21,13 @@ export default function Home() {
         <ThemeToggle />
       </div>
 
-      <h1 className='mb-16 text-6xl text-center font-extrabold underline decoration-primary'>
+      <h1 className='mb-16 text-6xl text-[4rem] text-center font-extrabold underline decoration-primary'>
         A pick-and-place,<br />
         for <em className='italic'>rapid</em> prototyping.
       </h1>
 
       <Badge variant='secondary' className='mb-16 text-lg'>
-        <code className='p-2'>
+        <code className='font-mono p-2'>
           {SUBTITLES[Math.floor(Math.random() * SUBTITLES.length)]}
         </code>
       </Badge>
