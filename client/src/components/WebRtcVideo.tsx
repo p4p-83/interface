@@ -1,6 +1,5 @@
 'use client'
 
-import { useRouter } from 'next/navigation'
 import { useEffect, useState, useRef, type Dispatch, type SetStateAction } from 'react'
 import { WebRTCPlayer } from '@eyevinn/webrtc-player'
 import { toast } from 'sonner'
@@ -29,11 +28,10 @@ type WebRtcVideoProps = {
   url: string;
   setVideoSize?: Dispatch<SetStateAction<Size | null>>;
   setIsVideoStreaming?: Dispatch<SetStateAction<boolean>>;
+  setHasVideoErrored?: Dispatch<SetStateAction<boolean>>;
 }
 
-export function WebRtcVideo({ url, setVideoSize, setIsVideoStreaming }: WebRtcVideoProps) {
-  const router = useRouter()
-
+export function WebRtcVideo({ url, setVideoSize, setIsVideoStreaming, setHasVideoErrored }: WebRtcVideoProps) {
   const videoRef = useRef<HTMLVideoElement>(null)
   const intervalRef = useRef<number | null>(null)
 
@@ -67,13 +65,11 @@ export function WebRtcVideo({ url, setVideoSize, setIsVideoStreaming }: WebRtcVi
       (intervalRef.current) && clearInterval(intervalRef.current)
 
       setIsVideoStreaming?.(false)
+      setHasVideoErrored?.(true)
 
       toast.error('Video stream error!', {
         id: ToastIds.VIDEO_ERROR,
-        action: {
-          label: 'Go home',
-          onClick: () => router.push('/'),
-        },
+        cancel: DISMISS_BUTTON,
         duration: Infinity,
       })
     }
@@ -106,7 +102,7 @@ export function WebRtcVideo({ url, setVideoSize, setIsVideoStreaming }: WebRtcVi
       player.destroy()
     }
 
-  }, [router, videoRef, setIsVideoStreaming, url])
+  }, [videoRef, setIsVideoStreaming, setHasVideoErrored, url])
 
   // Video size
   useEffect(() => {
