@@ -4,12 +4,12 @@ import { useRouter } from 'next/navigation'
 import { useState, type HTMLAttributes } from 'react'
 
 import { WebRtcVideo } from '@/components/WebRtcVideo'
-import { Button } from '@/components/ui/button'
+import { Error } from '@/components/Error'
+import { TypographyInlineCode } from '@/components/ui/typography'
 import { cn } from '@/lib/utils'
 
 import { Size } from './PlaceInterface'
 import { PlaceOverlay } from './PlaceOverlay'
-import { TypographyP, TypographyInlineCode, TypographyMuted, TypographyH2 } from '@/components/ui/typography'
 
 interface PlaceVideoProps extends HTMLAttributes<HTMLDivElement> {
 	videoUrl: string;
@@ -25,22 +25,9 @@ export function PlaceVideo({ className, videoUrl, socketUrl }: PlaceVideoProps) 
 
   if (hasVideoErrored) {
     return (
-      <div className={cn('flex flex-col justify-center items-center gap-8 max-w-fit max-h-fit', className)}>
-        <div>
-          <TypographyH2>Bugger!</TypographyH2>
-          <TypographyP>
-            <TypographyMuted>
-              Failed to stream video from <TypographyInlineCode>{videoUrl}</TypographyInlineCode>.
-            </TypographyMuted>
-          </TypographyP>
-        </div>
-
-        <div className='w-full'>
-          <Button className='w-full' onClick={() => router.push('/')}>
-            Go home
-          </Button>
-        </div>
-      </div>
+      <Error buttonLabel='Go home' buttonOnClick={() => router.push('/')} >
+        Failed to stream video from <TypographyInlineCode>{videoUrl}</TypographyInlineCode>.
+      </Error>
     )
   }
 

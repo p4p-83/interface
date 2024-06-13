@@ -1,3 +1,4 @@
+import { type HTMLAttributes } from 'react'
 import { SymbolIcon } from '@radix-ui/react-icons'
 import Link from 'next/link'
 
@@ -8,7 +9,7 @@ import {
   CardTitle,
 } from '@/components/ui/card'
 
-interface LinkCardProps extends React.HTMLAttributes<HTMLAnchorElement> {
+interface LinkCardProps extends HTMLAttributes<HTMLAnchorElement> {
   href: string;
   title: string;
   description: string;
