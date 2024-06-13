@@ -1,7 +1,7 @@
 import { type HTMLAttributes, type ReactNode } from 'react'
 
 import { Button } from '@/components/ui/button'
-import { TypographyP, TypographyMuted, TypographyH2 } from '@/components/ui/typography'
+import { TypographyP, TypographyH2 } from '@/components/ui/typography'
 import { cn } from '@/lib/utils'
 
 interface ErrorProps extends HTMLAttributes<HTMLDivElement>{
@@ -12,13 +12,11 @@ interface ErrorProps extends HTMLAttributes<HTMLDivElement>{
 
 export function Error({ className, children, buttonLabel, buttonOnClick }: ErrorProps) {
   return (
-    <div className={cn('flex flex-col justify-center items-center gap-8 max-w-fit md:max-w-2xl max-h-fit', className)}>
-      <div>
+    <div className={cn('flex flex-col justify-center items-center gap-8 w-full sm:w-fit md:max-w-2xl max-h-fit px-8', className)}>
+      <div className='w-full sm:w-auto sm:min-w-96'>
         <TypographyH2>Bugger!</TypographyH2>
         <TypographyP>
-          <TypographyMuted>
-		  	{children}
-          </TypographyMuted>
+          {children}
         </TypographyP>
       </div>
 

@@ -5,7 +5,7 @@ import { useState, type HTMLAttributes } from 'react'
 
 import { WebRtcVideo } from '@/components/WebRtcVideo'
 import { Error } from '@/components/Error'
-import { TypographyInlineCode } from '@/components/ui/typography'
+import { TypographyInlineCode, TypographyMuted } from '@/components/ui/typography'
 import { cn } from '@/lib/utils'
 
 import { Size } from './PlaceInterface'
@@ -26,7 +26,9 @@ export function PlaceVideo({ className, videoUrl, socketUrl }: PlaceVideoProps) 
   if (hasVideoErrored) {
     return (
       <Error buttonLabel='Go home' buttonOnClick={() => router.push('/')} >
-        Failed to stream video from <TypographyInlineCode>{videoUrl}</TypographyInlineCode>.
+        <TypographyMuted>
+          Failed to stream video from <TypographyInlineCode>{videoUrl}</TypographyInlineCode>.
+        </TypographyMuted>
       </Error>
     )
   }

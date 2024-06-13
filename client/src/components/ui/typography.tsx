@@ -84,9 +84,9 @@ export function TypographyLead({ children }: TypographyProps) {
 
 export function TypographyLarge({ children }: TypographyProps) {
   return (
-    <div className='text-lg font-semibold'>
+    <span className='text-lg font-semibold'>
       {children}
-    </div>
+    </span>
   )
 }
 
@@ -100,8 +100,8 @@ export function TypographySmall({ children }: TypographyProps) {
 
 export function TypographyMuted({ children }: TypographyProps) {
   return (
-    <p className='text-sm text-muted-foreground'>
+    <span className='text-sm text-muted-foreground'>
       {children}
-    </p>
+    </span>
   )
 }
