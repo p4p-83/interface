@@ -10,6 +10,7 @@ const SUBTITLES = [
   'char project[] = "ECSE Part IV Project #83";',
   '~ [ "$number" -eq 83 ] && echo "ECSE Part IV Project #$number"',
   'printf("ECSE Part IV Project #%d\\n", 83);',
+  'std::cout << "ECSE Part IV Project #83" << std::endl;',
 ] as const
 
 export default function Home() {
