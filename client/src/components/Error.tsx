@@ -1,3 +1,6 @@
+'use client'
+
+import { useRouter } from 'next/navigation'
 import { type HTMLAttributes, type ReactNode } from 'react'
 
 import { Button } from '@/components/ui/button'
@@ -6,11 +9,15 @@ import { cn } from '@/lib/utils'
 
 interface ErrorProps extends HTMLAttributes<HTMLDivElement>{
 	children: ReactNode;
-	buttonLabel: string;
-	buttonOnClick: () => unknown;
+	buttonLabel?: string;
+	buttonOnClick?: () => unknown;
 }
 
-export function Error({ className, children, buttonLabel, buttonOnClick }: ErrorProps) {
+export function Error({ className, children, buttonLabel = 'Go home', buttonOnClick }: ErrorProps) {
+  const router = useRouter()
+
+  buttonOnClick = buttonOnClick ?? (() => router.push('/'))
+
   return (
     <div className={cn('flex flex-col justify-center items-center gap-8 w-full sm:w-fit md:max-w-2xl max-h-fit px-8', className)}>
       <div className='w-full sm:w-auto sm:min-w-96'>

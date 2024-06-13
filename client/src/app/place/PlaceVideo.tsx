@@ -1,6 +1,5 @@
 'use client'
 
-import { useRouter } from 'next/navigation'
 import { useState, type HTMLAttributes } from 'react'
 
 import { WebRtcVideo } from '@/components/WebRtcVideo'
@@ -17,15 +16,13 @@ interface PlaceVideoProps extends HTMLAttributes<HTMLDivElement> {
 }
 
 export function PlaceVideo({ className, videoUrl, socketUrl }: PlaceVideoProps) {
-  const router = useRouter()
-
   const [videoSize, setVideoSize] = useState<Size | null>(null)
   const [isVideoStreaming, setIsVideoStreaming] = useState(false)
   const [hasVideoErrored, setHasVideoErrored] = useState(false)
 
   if (hasVideoErrored) {
     return (
-      <Error buttonLabel='Go home' buttonOnClick={() => router.push('/')} >
+      <Error>
         <TypographyMuted>
           Failed to stream video from <TypographyInlineCode>{videoUrl}</TypographyInlineCode>.
         </TypographyMuted>
