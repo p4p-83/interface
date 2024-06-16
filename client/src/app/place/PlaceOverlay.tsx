@@ -235,6 +235,11 @@ export function PlaceOverlay({ socketUrl, overlaySize, circleSize, hideOverlay =
           unclampedPosition.x = previousPosition.x + 50
           break
 
+        case 'KeyR':
+          unclampedPosition.x = centre.x
+          unclampedPosition.y = centre.y
+          break
+
         }
 
         const clampedPosition = {
