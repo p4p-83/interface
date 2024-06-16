@@ -304,7 +304,7 @@ export function PlaceOverlay({ socketUrl, overlaySize, circleSize, hideOverlay =
       <div
         ref={overlayRef}
         tabIndex={0}
-        className='absolute cursor-crosshair'
+        className='absolute cursor-crosshair focus:outline-none focus:ring-1 focus:ring-ring focus:ring-offset-1'
         style={{
           width: overlaySize.width,
           height: overlaySize.height,
