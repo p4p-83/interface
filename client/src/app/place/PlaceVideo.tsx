@@ -22,7 +22,7 @@ export function PlaceVideo({ className, videoUrl, socketUrl }: PlaceVideoProps) 
 
   if (hasVideoErrored) {
     return (
-      <Error>
+      <Error className={className}>
         <TypographyMuted>
           Failed to stream video from <TypographyInlineCode>{videoUrl}</TypographyInlineCode>.
         </TypographyMuted>
