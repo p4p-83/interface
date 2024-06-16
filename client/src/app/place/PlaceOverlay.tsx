@@ -188,11 +188,17 @@ export function PlaceOverlay({ socketUrl, overlaySize, circleSize, hideOverlay =
     overlayElement.focus()
 
     function handleKeydown(event: KeyboardEvent) {
+      if (!overlaySize) return
+
       console.info(`Keydown for ${event.code} (${event.key})`)
 
       setOverlayTargetPosition((previousPosition) => {
-        // TODO: displace from (0,0)
-        if (!previousPosition) return null
+        if (!previousPosition) {
+          previousPosition = {
+            x: (overlayElement.offsetLeft + overlayElement.clientLeft) + (overlaySize.width / 2),
+            y: (overlayElement.offsetTop + overlayElement.clientTop) + (overlaySize.height / 2),
+          }
+        }
 
         // TODO: make sure cannot exceed overlay bounds
         switch (event.code) {
@@ -238,7 +244,7 @@ export function PlaceOverlay({ socketUrl, overlaySize, circleSize, hideOverlay =
     return () => {
       overlayElement.removeEventListener('keydown', handleKeydown)
     }
-  }, [])
+  }, [overlaySize])
 
   // Clear target on resize
   const [lastOverlaySize, setLastOverlaySize] = useState(overlaySize)
