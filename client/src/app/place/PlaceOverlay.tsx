@@ -177,11 +177,15 @@ export function PlaceOverlay({ socketUrl, overlaySize, circleSize, hideOverlay =
     return () => {
       overlayElement.removeEventListener('mousedown', handleClick)
     }
-  }, [overlayRef, overlaySize, webSocket])
+  }, [overlaySize, webSocket])
 
   // Handle keyboard input
   useEffect(() => {
     // TODO: https://arc.net/l/quote/ruztcwya
+    if (!overlayRef?.current) return
+    const overlayElement = overlayRef.current
+
+    overlayElement.focus()
 
     function handleKeydown(event: KeyboardEvent) {
       console.info(`Keydown for ${event.code} (${event.key})`)
@@ -229,11 +233,10 @@ export function PlaceOverlay({ socketUrl, overlaySize, circleSize, hideOverlay =
       // socket.sendTargetDeltas(webSocket, targetPosition, overlaySize)
     }
 
-    // Added to the overlay, so the user cannot click out of bounds!
-    document.addEventListener('keydown', handleKeydown)
+    overlayElement.addEventListener('keydown', handleKeydown)
 
     return () => {
-      document.removeEventListener('keydown', handleKeydown)
+      overlayElement.removeEventListener('keydown', handleKeydown)
     }
   }, [])
 
@@ -275,6 +278,7 @@ export function PlaceOverlay({ socketUrl, overlaySize, circleSize, hideOverlay =
       {/* Overlay */}
       <div
         ref={overlayRef}
+        tabIndex={0}
         className='absolute cursor-crosshair'
         style={{
           width: overlaySize.width,
