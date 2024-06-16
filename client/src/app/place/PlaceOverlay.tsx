@@ -158,15 +158,12 @@ export function PlaceOverlay({ socketUrl, overlaySize, circleSize, hideOverlay =
     function handleClick(event: MouseEvent) {
       if (!overlaySize) return
 
-      setOverlayTargetPosition({
-        x: event.clientX,
-        y: event.clientY,
-      })
-
       const targetPosition: Position = {
         x: event.offsetX,
         y: event.offsetY,
       }
+      setOverlayTargetPosition(targetPosition)
+
       console.info(`Clicked at (${targetPosition.x}, ${targetPosition.y})`)
       socket.sendTargetDeltas(webSocket, targetPosition, overlaySize)
     }
@@ -187,24 +184,17 @@ export function PlaceOverlay({ socketUrl, overlaySize, circleSize, hideOverlay =
 
     overlayElement.focus()
 
-    const topLeft: Position = {
-      x: (overlayElement.offsetLeft + overlayElement.clientLeft),
-      y: (overlayElement.offsetTop + overlayElement.clientTop),
-    }
-    const centre: Position = {
-      x: topLeft.x + (overlaySize.width / 2),
-      y: topLeft.y + (overlaySize.height / 2),
-    }
-    const bottomRight: Position = {
-      x: topLeft.x + overlaySize.width,
-      y: topLeft.y + overlaySize.height,
-    }
     function handleKeydown(event: KeyboardEvent) {
+      if (!overlaySize) return
+
       console.info(`Keydown for ${event.code} (${event.key})`)
 
       setOverlayTargetPosition((previousPosition) => {
         if (!previousPosition) {
-          previousPosition = { ...centre }
+          previousPosition = {
+            x: (overlaySize.width / 2),
+            y: (overlaySize.height / 2),
+          }
         }
 
         const unclampedPosition = { ...previousPosition }
@@ -236,18 +226,18 @@ export function PlaceOverlay({ socketUrl, overlaySize, circleSize, hideOverlay =
           break
 
         case 'KeyR':
-          unclampedPosition.x = centre.x
-          unclampedPosition.y = centre.y
+          unclampedPosition.x = (overlaySize.width / 2)
+          unclampedPosition.y = (overlaySize.height / 2)
           break
 
         }
 
         const clampedPosition = {
-          x: Math.max(topLeft.x, Math.min(bottomRight.x, unclampedPosition.x)),
-          y: Math.max(topLeft.y, Math.min(bottomRight.y, unclampedPosition.y)),
+          x: Math.max(0, Math.min(overlaySize.width, unclampedPosition.x)),
+          y: Math.max(0, Math.min(overlaySize.height, unclampedPosition.y)),
         }
 
-        if ((clampedPosition.x === centre.x) && (clampedPosition.y === centre.y)) {
+        if ((clampedPosition.x === (overlaySize.width / 2)) && (clampedPosition.y === (overlaySize.height / 2))) {
           console.log('Returning null')
           return null
         }
@@ -287,19 +277,6 @@ export function PlaceOverlay({ socketUrl, overlaySize, circleSize, hideOverlay =
 
     <>
 
-      {/* Click circle */}
-      {(overlayTargetPosition) && (
-        <div
-          className='absolute opacity-75 bg-ring outline outline-1 outline-primary-foreground rounded-full pointer-events-none cursor-crosshair'
-          style={{
-            width: circleSize,
-            height: circleSize,
-            top: overlayTargetPosition.y - (circleSize / 2),
-            left: overlayTargetPosition.x - (circleSize / 2),
-          }}
-        />
-      )}
-
       {/* Overlay */}
       <div
         ref={overlayRef}
@@ -310,6 +287,19 @@ export function PlaceOverlay({ socketUrl, overlaySize, circleSize, hideOverlay =
           height: overlaySize.height,
         }}
       >
+        {/* Click circle */}
+        {(overlayTargetPosition) && (
+          <div
+            className='absolute opacity-75 bg-ring outline outline-1 outline-primary-foreground rounded-full pointer-events-none cursor-crosshair'
+            style={{
+              width: circleSize,
+              height: circleSize,
+              top: overlayTargetPosition.y - (circleSize / 2),
+              left: overlayTargetPosition.x - (circleSize / 2),
+            }}
+          />
+        )}
+
         {/* Centre circle */}
         <div
           className='relative opacity-50 bg-secondary outline outline-1 outline-secondary-foreground rounded-full pointer-events-none cursor-crosshair'
