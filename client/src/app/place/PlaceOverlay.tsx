@@ -179,6 +179,64 @@ export function PlaceOverlay({ socketUrl, overlaySize, circleSize, hideOverlay =
     }
   }, [overlayRef, overlaySize, webSocket])
 
+  // Handle keyboard input
+  useEffect(() => {
+    // TODO: https://arc.net/l/quote/ruztcwya
+
+    function handleKeydown(event: KeyboardEvent) {
+      console.info(`Keydown for ${event.code} (${event.key})`)
+
+      setOverlayTargetPosition((previousPosition) => {
+        // TODO: displace from (0,0)
+        if (!previousPosition) return null
+
+        // TODO: make sure cannot exceed overlay bounds
+        switch (event.code) {
+        case 'KeyS':
+        case 'ArrowDown':
+          return {
+            x: previousPosition.x,
+            // TODO: non-literal
+            y: previousPosition.y + 50,
+          }
+        case 'KeyW':
+        case 'ArrowUp':
+          return {
+            x: previousPosition.x,
+            y: previousPosition.y - 50,
+          }
+        case 'KeyA':
+        case 'ArrowLeft':
+          return {
+            x: previousPosition.x - 50,
+            y: previousPosition.y,
+          }
+        case 'KeyD':
+        case 'ArrowRight':
+          return {
+            x: previousPosition.x + 50,
+            y: previousPosition.y,
+          }
+
+        default:
+          return {
+            x: previousPosition.x,
+            y: previousPosition.y,
+          }
+        }
+      })
+
+      // socket.sendTargetDeltas(webSocket, targetPosition, overlaySize)
+    }
+
+    // Added to the overlay, so the user cannot click out of bounds!
+    document.addEventListener('keydown', handleKeydown)
+
+    return () => {
+      document.removeEventListener('keydown', handleKeydown)
+    }
+  }, [])
+
   // Clear target on resize
   const [lastOverlaySize, setLastOverlaySize] = useState(overlaySize)
   if ((overlaySize?.width !== lastOverlaySize?.width) || (overlaySize?.height !== lastOverlaySize?.height)) {
