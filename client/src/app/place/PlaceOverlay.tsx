@@ -212,22 +212,26 @@ export function PlaceOverlay({ socketUrl, overlaySize, circleSize, hideOverlay =
 
         case 'KeyS':
         case 'ArrowDown':
+        case 'KeyJ':
           // TODO: non-literal
           unclampedPosition.y = previousPosition.y + 50
           break
 
         case 'KeyW':
         case 'ArrowUp':
+        case 'KeyK':
           unclampedPosition.y = previousPosition.y - 50
           break
 
         case 'KeyA':
         case 'ArrowLeft':
+        case 'KeyH':
           unclampedPosition.x = previousPosition.x - 50
           break
 
         case 'KeyD':
         case 'ArrowRight':
+        case 'KeyL':
           unclampedPosition.x = previousPosition.x + 50
           break
 
