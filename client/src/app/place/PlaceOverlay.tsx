@@ -182,58 +182,68 @@ export function PlaceOverlay({ socketUrl, overlaySize, circleSize, hideOverlay =
   // Handle keyboard input
   useEffect(() => {
     // TODO: https://arc.net/l/quote/ruztcwya
-    if (!overlayRef?.current) return
+    if (!overlayRef?.current || !overlaySize) return
     const overlayElement = overlayRef.current
 
     overlayElement.focus()
 
+    const topLeft: Position = {
+      x: (overlayElement.offsetLeft + overlayElement.clientLeft),
+      y: (overlayElement.offsetTop + overlayElement.clientTop),
+    }
+    const centre: Position = {
+      x: topLeft.x + (overlaySize.width / 2),
+      y: topLeft.y + (overlaySize.height / 2),
+    }
+    const bottomRight: Position = {
+      x: topLeft.x + overlaySize.width,
+      y: topLeft.y + overlaySize.height,
+    }
     function handleKeydown(event: KeyboardEvent) {
-      if (!overlaySize) return
-
       console.info(`Keydown for ${event.code} (${event.key})`)
 
       setOverlayTargetPosition((previousPosition) => {
         if (!previousPosition) {
-          previousPosition = {
-            x: (overlayElement.offsetLeft + overlayElement.clientLeft) + (overlaySize.width / 2),
-            y: (overlayElement.offsetTop + overlayElement.clientTop) + (overlaySize.height / 2),
-          }
+          previousPosition = { ...centre }
         }
 
-        // TODO: make sure cannot exceed overlay bounds
+        const unclampedPosition = { ...previousPosition }
         switch (event.code) {
+
         case 'KeyS':
         case 'ArrowDown':
-          return {
-            x: previousPosition.x,
-            // TODO: non-literal
-            y: previousPosition.y + 50,
-          }
+          // TODO: non-literal
+          unclampedPosition.y = previousPosition.y + 50
+          break
+
         case 'KeyW':
         case 'ArrowUp':
-          return {
-            x: previousPosition.x,
-            y: previousPosition.y - 50,
-          }
+          unclampedPosition.y = previousPosition.y - 50
+          break
+
         case 'KeyA':
         case 'ArrowLeft':
-          return {
-            x: previousPosition.x - 50,
-            y: previousPosition.y,
-          }
+          unclampedPosition.x = previousPosition.x - 50
+          break
+
         case 'KeyD':
         case 'ArrowRight':
-          return {
-            x: previousPosition.x + 50,
-            y: previousPosition.y,
-          }
+          unclampedPosition.x = previousPosition.x + 50
+          break
 
-        default:
-          return {
-            x: previousPosition.x,
-            y: previousPosition.y,
-          }
         }
+
+        const clampedPosition = {
+          x: Math.max(topLeft.x, Math.min(bottomRight.x, unclampedPosition.x)),
+          y: Math.max(topLeft.y, Math.min(bottomRight.y, unclampedPosition.y)),
+        }
+
+        if ((clampedPosition.x === centre.x) && (clampedPosition.y === centre.y)) {
+          console.log('Returning null')
+          return null
+        }
+
+        return clampedPosition
       })
 
       // socket.sendTargetDeltas(webSocket, targetPosition, overlaySize)
