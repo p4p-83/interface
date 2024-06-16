@@ -18,7 +18,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang='en' suppressHydrationWarning>
-      <body className={cn(ubuntu.className, 'flex min-h-screen flex-col items-center justify-center px-5 py-24 md:py-0')}>
+      <body className={cn(ubuntu.className, 'flex min-h-screen flex-col items-center justify-center px-5')}>
 
         <ThemeProvider
           attribute='class'

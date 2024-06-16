@@ -21,15 +21,15 @@ export function LinkCard({ className, href, title, description, icon: Icon }: Li
     <Link href={href} className={className}>
       <Card className='group hover:border-primary-accent transition-colors duration-150'>
 
-        <CardHeader className='pb-3'>
-          <CardTitle className='flex flex-row gap-2 justify-start items-center text-primary transition-colors duration-150 text-2xl font-bold uppercase'>
-            <Icon className='p-0 h-5 w-5 shrink-0' strokeWidth={0.5} stroke='currentColor' />
+        <CardHeader className='pb-1 sm:pb-3'>
+          <CardTitle className='flex flex-row gap-2 justify-start items-center text-primary transition-colors duration-150 text-lg sm:text-2xl font-bold uppercase'>
+            <Icon className='p-0 h-4 md:h-5 w-4 md:w-5 shrink-0' strokeWidth={0.5} stroke='currentColor' />
             {title}
           </CardTitle>
         </CardHeader>
 
         <CardContent>
-          <p className='group-hover:text-primary-accent transition-colors duration-150 text-lg leading-8'>{description}</p>
+          <p className='group-hover:text-primary-accent transition-colors duration-150 text-sm md:text-lg leading-8'>{description}</p>
         </CardContent>
 
       </Card>

@@ -22,18 +22,18 @@ export default function Home() {
         <ThemeToggle />
       </div>
 
-      <h1 className='mb-16 text-6xl text-[4rem] text-center font-extrabold underline decoration-primary'>
+      <h1 className='mt-20 md:mt-10 mb-10 sm:mb-16 text-5xl sm:text-6xl sm:text-[4rem] text-center font-extrabold underline decoration-primary'>
         A pick-and-place,<br />
         for <em className='italic'>rapid</em> prototyping.
       </h1>
 
-      <Badge variant='secondary' className='mb-16 text-lg'>
+      <Badge variant='secondary' className='mb-8 sm:mb-16 text-xs sm:text-base'>
         <code className='font-mono p-2'>
           {SUBTITLES[Math.floor(Math.random() * SUBTITLES.length)]}
         </code>
       </Badge>
 
-      <div className='grid grid-cols-1 md:grid-cols-2 w-full max-w-3xl gap-6 mt-2'>
+      <div className='mb-auto md:mb-0 pb-10 grid grid-cols-1 md:grid-cols-2 w-full max-w-3xl gap-4 sm:gap-6 mt-2'>
 
         <LinkCard href='/place' title='Place' description='Position with precision.' icon={Crosshair2Icon} className='w-full md:col-span-2' />
 
