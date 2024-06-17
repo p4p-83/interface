@@ -184,10 +184,10 @@ export function PlaceOverlay({ socketUrl, overlaySize, circleSize, hideOverlay =
 
     overlayElement.focus()
 
-    function handleKeydown(event: KeyboardEvent) {
+    function handleKeyDown(event: KeyboardEvent) {
       if (!overlaySize) return
 
-      console.info(`Keydown for ${event.code} (${event.key})`)
+      console.info(`Key down for ${event.code} (${event.key})`)
 
       setOverlayTargetPosition((previousPosition) => {
         if (!previousPosition) {
@@ -248,10 +248,10 @@ export function PlaceOverlay({ socketUrl, overlaySize, circleSize, hideOverlay =
       // socket.sendTargetDeltas(webSocket, targetPosition, overlaySize)
     }
 
-    overlayElement.addEventListener('keydown', handleKeydown)
+    overlayElement.addEventListener('keydown', handleKeyDown)
 
     return () => {
-      overlayElement.removeEventListener('keydown', handleKeydown)
+      overlayElement.removeEventListener('keydown', handleKeyDown)
     }
   }, [overlaySize])
 
