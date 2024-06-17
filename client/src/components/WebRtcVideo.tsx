@@ -6,6 +6,7 @@ import { toast } from 'sonner'
 
 import { Progress } from '@/components/ui/progress'
 import { ToastIds, DISMISS_BUTTON } from '@/components/ui/sonner'
+import { cn } from '@/lib/utils'
 
 import { Size } from '@/app/place/PlaceInterface'
 
@@ -16,7 +17,7 @@ const PROGRESS_BAR = {
   PLAYER_CONSTRUCTED: 2,
   PLAYER_LOADED: 20,
   VIDEO_LOAD_START: 67,
-  VIDEO_LOADED_METADATA: 99,
+  VIDEO_LOADED_METADATA: 99.99,
   VIDEO_LOADED_DATA: 100,
   // Interval increments
   INCREMENT: 1,
@@ -151,29 +152,31 @@ export function WebRtcVideo({ url, setVideoSize, setIsVideoStreaming, setHasVide
     if (!videoRef?.current) return
     const videoElement = videoRef.current
 
-    const startHandler = () => {
+    const handleStart = () => {
       setLoadProgress(PROGRESS_BAR.VIDEO_LOAD_START)
       setLoadProgressGrowthStop(PROGRESS_BAR.VIDEO_LOADED_METADATA)
     }
-    const metadataHandler = () => {
+    const handleMetadata = () => {
       setLoadProgress(PROGRESS_BAR.VIDEO_LOADED_METADATA)
       setLoadProgressGrowthStop(PROGRESS_BAR.VIDEO_LOADED_DATA)
     }
-    const dataHandler = () => {
+    const handleData = async () => {
+      await new Promise((resolve) => setTimeout(resolve, 325))
+
       setLoadProgress(PROGRESS_BAR.VIDEO_LOADED_DATA)
       setLoadProgressGrowthStop(PROGRESS_BAR.VIDEO_LOADED_DATA)
       setIsVideoStreaming?.(true)
     }
 
-    videoElement.addEventListener('loadstart', startHandler)
-    videoElement.addEventListener('loadedmetadata', metadataHandler)
-    videoElement.addEventListener('loadeddata', dataHandler)
+    videoElement.addEventListener('loadstart', handleStart)
+    videoElement.addEventListener('loadedmetadata', handleMetadata)
+    videoElement.addEventListener('loadeddata', handleData)
 
     return () => {
       setIsVideoStreaming?.(false)
-      videoElement.removeEventListener('loadstart', startHandler)
-      videoElement.removeEventListener('loadedmetadata', metadataHandler)
-      videoElement.removeEventListener('loadeddata', dataHandler)
+      videoElement.removeEventListener('loadstart', handleStart)
+      videoElement.removeEventListener('loadedmetadata', handleMetadata)
+      videoElement.removeEventListener('loadeddata', handleData)
     }
   }, [videoRef, setIsVideoStreaming])
 
@@ -183,7 +186,7 @@ export function WebRtcVideo({ url, setVideoSize, setIsVideoStreaming, setHasVide
       setLoadProgress((previousProgress) => {
         const incremented = (previousProgress + PROGRESS_BAR.INCREMENT)
 
-        if (incremented > loadProgressGrowthStop) {
+        if (incremented >= loadProgressGrowthStop) {
           (intervalRef.current) && clearInterval(intervalRef.current)
           return previousProgress
         }
@@ -203,7 +206,15 @@ export function WebRtcVideo({ url, setVideoSize, setIsVideoStreaming, setHasVide
         <Progress value={loadProgress} className='absolute max-w-[50%]'/>
       )}
 
-      <video ref={videoRef} autoPlay muted playsInline className='object-contain object-center h-full w-full pointer-events-none' />
+      <video
+        ref={videoRef}
+        autoPlay
+        muted
+        playsInline
+        className={cn(
+          'object-contain object-center h-full w-full pointer-events-none',
+          (loadProgress !== PROGRESS_BAR.FINAL) && 'invisible'
+        )}/>
     </>
   )
 
