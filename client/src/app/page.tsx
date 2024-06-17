@@ -6,7 +6,7 @@ import { HomeLinkCards } from './HomeLinkCards'
 const SUBTITLES = [
   '#define PART_IV_PROJECT "ECSE #83"',
   '~ echo "ECSE Part IV Project #83"',
-  'char project[] = "ECSE Part IV Project #83";',
+  'const char project[] = "ECSE Part IV Project #83";',
   '~ [ "$number" -eq 83 ] && echo "ECSE Part IV Project #$number"',
   'printf("ECSE Part IV Project #%u\\n", 83);',
   'std::cout << "ECSE Part IV Project #83" << std::endl;',
