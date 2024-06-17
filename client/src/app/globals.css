@@ -52,7 +52,7 @@
   }
 
   ::selection {
-    background-color: hsl(var(--primary));
+    background-color: hsl(var(--primary-accent));
     color: hsl(var(--primary-foreground));
   }
 }
