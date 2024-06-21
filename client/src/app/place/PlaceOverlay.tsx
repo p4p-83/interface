@@ -19,7 +19,7 @@ export function PlaceOverlay({ socketUrl, overlaySize, circleSize, hideOverlay =
   const overlayRef = useRef<HTMLDivElement>(null)
   const didUnmount = useRef(false)
 
-  const [overlayTargetPosition, setOverlayTargetPosition] = useState<Position | null>(null)
+  const [targetOffset, setTargetOffset] = useState<Position | null>(null)
 
   // Unmount
   useEffect(() => {
@@ -63,13 +63,11 @@ export function PlaceOverlay({ socketUrl, overlaySize, circleSize, hideOverlay =
         switch (action.actionType) {
 
         case 'MOVE_TARGET':
-          if (!overlaySize) break
-          const overlayDeltas = socket.denormaliseOverlayDeltas(action.payload, overlaySize)
-          setOverlayTargetPosition((previousPosition) => {
-            if (!previousPosition) return null
+          setTargetOffset((previousOffset) => {
+            if (!previousOffset) return null
             return {
-              x: previousPosition.x - overlayDeltas.x,
-              y: previousPosition.y - overlayDeltas.y,
+              x: previousOffset.x - action.payload.x,
+              y: previousOffset.y - action.payload.y,
             }
           })
           break
@@ -77,6 +75,7 @@ export function PlaceOverlay({ socketUrl, overlaySize, circleSize, hideOverlay =
         }
 
         if (action.silent) return
+
         toast.message(`Message received (${action.messageType}):`, {
           id: ToastIds.MESSAGE,
           className: 'pointer-events-none',
@@ -158,14 +157,14 @@ export function PlaceOverlay({ socketUrl, overlaySize, circleSize, hideOverlay =
     function handleClick(event: MouseEvent) {
       if (!overlaySize) return
 
-      const targetPosition: Position = {
-        x: event.offsetX,
-        y: event.offsetY,
+      const offset: Position = {
+        x: (event.offsetX / overlaySize.width),
+        y: (event.offsetY / overlaySize.height),
       }
-      setOverlayTargetPosition(targetPosition)
+      setTargetOffset(offset)
 
-      console.info(`Clicked at (${targetPosition.x}, ${targetPosition.y})`)
-      socket.sendTargetDeltas(webSocket, targetPosition, overlaySize)
+      console.info(`Clicked at (${offset.x}, ${offset.y})`)
+      socket.sendTargetDeltas(webSocket, offset)
     }
 
     // Added to the overlay, so the user cannot click out of bounds!
@@ -189,63 +188,63 @@ export function PlaceOverlay({ socketUrl, overlaySize, circleSize, hideOverlay =
 
       console.info(`Key down for ${event.code} (${event.key})`)
 
-      setOverlayTargetPosition((previousPosition) => {
-        if (!previousPosition) {
-          previousPosition = {
-            x: (overlaySize.width / 2),
-            y: (overlaySize.height / 2),
+      setTargetOffset((previousOffset) => {
+        if (!previousOffset) {
+          previousOffset = {
+            x: 0.5,
+            y: 0.5,
           }
         }
 
-        const unclampedPosition = { ...previousPosition }
+        const unclampedOffset = { ...previousOffset }
         switch (event.code) {
 
         case 'KeyS':
         case 'ArrowDown':
         case 'KeyJ':
           // TODO: non-literal
-          unclampedPosition.y = previousPosition.y + 50
+          unclampedOffset.y = previousOffset.y + 0.05
           break
 
         case 'KeyW':
         case 'ArrowUp':
         case 'KeyK':
-          unclampedPosition.y = previousPosition.y - 50
+          unclampedOffset.y = previousOffset.y - 0.05
           break
 
         case 'KeyA':
         case 'ArrowLeft':
         case 'KeyH':
-          unclampedPosition.x = previousPosition.x - 50
+          unclampedOffset.x = previousOffset.x - 0.05
           break
 
         case 'KeyD':
         case 'ArrowRight':
         case 'KeyL':
-          unclampedPosition.x = previousPosition.x + 50
+          unclampedOffset.x = previousOffset.x + 0.05
           break
 
         case 'KeyR':
-          unclampedPosition.x = (overlaySize.width / 2)
-          unclampedPosition.y = (overlaySize.height / 2)
+          unclampedOffset.x = 0.5
+          unclampedOffset.y = 0.5
           break
 
         }
 
-        const clampedPosition = {
-          x: Math.max(0, Math.min(overlaySize.width, unclampedPosition.x)),
-          y: Math.max(0, Math.min(overlaySize.height, unclampedPosition.y)),
+        const clampedOffset = {
+          x: Math.max(0, Math.min(1, unclampedOffset.x)),
+          y: Math.max(0, Math.min(1, unclampedOffset.y)),
         }
 
-        if ((clampedPosition.x === (overlaySize.width / 2)) && (clampedPosition.y === (overlaySize.height / 2))) {
+        if ((clampedOffset.x === 0.5) && (clampedOffset.y === 0.5)) {
           console.log('Returning null')
           return null
         }
 
-        return clampedPosition
+        return clampedOffset
       })
 
-      // socket.sendTargetDeltas(webSocket, targetPosition, overlaySize)
+      // socket.sendTargetDeltas(webSocket, targetOffset)
     }
 
     overlayElement.addEventListener('keydown', handleKeyDown)
@@ -253,23 +252,7 @@ export function PlaceOverlay({ socketUrl, overlaySize, circleSize, hideOverlay =
     return () => {
       overlayElement.removeEventListener('keydown', handleKeyDown)
     }
-  }, [overlaySize])
-
-  // Clear target on resize
-  const [lastOverlaySize, setLastOverlaySize] = useState(overlaySize)
-  if ((overlaySize?.width !== lastOverlaySize?.width) || (overlaySize?.height !== lastOverlaySize?.height)) {
-    setLastOverlaySize(overlaySize)
-    setOverlayTargetPosition(null)
-  }
-  useEffect(() => {
-    function clearOverlayTargetPosition() {
-      setOverlayTargetPosition(null)
-    }
-    window.addEventListener('resize', clearOverlayTargetPosition)
-    return () => {
-      window.removeEventListener('resize', clearOverlayTargetPosition)
-    }
-  }, [])
+  }, [overlaySize, webSocket])
 
   if (hideOverlay || !overlaySize) return
 
@@ -287,15 +270,15 @@ export function PlaceOverlay({ socketUrl, overlaySize, circleSize, hideOverlay =
           height: overlaySize.height,
         }}
       >
-        {/* Click circle */}
-        {(overlayTargetPosition) && (
+        {/* Target circle */}
+        {(targetOffset) && (
           <div
             className='absolute opacity-75 bg-ring outline outline-1 outline-primary-foreground rounded-full pointer-events-none cursor-crosshair'
             style={{
               width: circleSize,
               height: circleSize,
-              top: overlayTargetPosition.y - (circleSize / 2),
-              left: overlayTargetPosition.x - (circleSize / 2),
+              top: (targetOffset.y * overlaySize.height) - (circleSize / 2),
+              left: (targetOffset.x * overlaySize.width) - (circleSize / 2),
             }}
           />
         )}
