@@ -74,8 +74,8 @@ export function HomeLinkCards() {
 
       {primaryCard}
 
-      <LinkCard href='/' title='Learn' description='Meet your match.' icon={RocketIcon} className='w-full' />
-      <LinkCard href='/' title='Project' description='Explore the lore.' icon={IdCardIcon} className='w-full' />
+      <LinkCard href='/learn' title='Learn' description='Meet your match.' icon={RocketIcon} className='w-full' />
+      <LinkCard href='/project' title='Project' description='Explore the lore.' icon={IdCardIcon} className='w-full' />
 
     </div>
   )
