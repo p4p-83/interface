@@ -58,9 +58,8 @@ export async function processMessage(data: unknown): Promise<Action> {
 
   const rawPayload = new Uint8Array(await data.arrayBuffer())
   const messageType = (Object.entries(MESSAGE_TAGS) as [MessageType, MessageTag][])
-    .find(
-      (value) => rawPayload[0] === value[1]
-    )?.[0] ?? 'INVALID'
+    .find((value) => rawPayload[0] === value[1])
+    ?.[0] ?? 'INVALID'
 
   switch (messageType) {
 
