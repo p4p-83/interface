@@ -38,7 +38,7 @@ export namespace pnp.v1 {
         get has_deltas() {
             return pb_1.Message.getField(this, 2) != null;
         }
-        get _deltas() {
+        get payload() {
             const cases: {
                 [index: number]: "none" | "deltas";
             } = {

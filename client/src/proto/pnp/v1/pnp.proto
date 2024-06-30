@@ -4,16 +4,16 @@ package pnp.v1;
 
 message Message {
   MessageTags tag = 1;
-  optional Deltas deltas = 2;
-
-  message Deltas {
-    sint32 x = 1;
-    sint32 y = 2;
-  }
+  oneof payload { Deltas deltas = 2; }
 
   enum MessageTags {
     HEARTBEAT = 0;
     TARGET_DELTAS = 1;
     MOVED_DELTAS = 2;
+  }
+
+  message Deltas {
+    sint32 x = 1;
+    sint32 y = 2;
   }
 }
