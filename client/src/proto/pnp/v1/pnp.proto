@@ -3,10 +3,10 @@ syntax = "proto3";
 package pnp.v1;
 
 message Message {
-  MessageTags tag = 1;
+  Tags tag = 1;
   oneof payload { Deltas deltas = 2; }
 
-  enum MessageTags {
+  enum Tags {
     HEARTBEAT = 0;
     TARGET_DELTAS = 1;
     MOVED_DELTAS = 2;

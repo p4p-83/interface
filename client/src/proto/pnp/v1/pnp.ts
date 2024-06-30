@@ -8,7 +8,7 @@ export namespace pnp.v1 {
     export class Message extends pb_1.Message {
         #one_of_decls: number[][] = [[2]];
         constructor(data?: any[] | ({
-            tag?: Message.MessageTags;
+            tag?: Message.Tags;
         } & (({
             deltas?: Message.Deltas;
         })))) {
@@ -24,9 +24,9 @@ export namespace pnp.v1 {
             }
         }
         get tag() {
-            return pb_1.Message.getFieldWithDefault(this, 1, Message.MessageTags.HEARTBEAT) as Message.MessageTags;
+            return pb_1.Message.getFieldWithDefault(this, 1, Message.Tags.HEARTBEAT) as Message.Tags;
         }
-        set tag(value: Message.MessageTags) {
+        set tag(value: Message.Tags) {
             pb_1.Message.setField(this, 1, value);
         }
         get deltas() {
@@ -48,7 +48,7 @@ export namespace pnp.v1 {
             return cases[pb_1.Message.computeOneofCase(this, [2])];
         }
         static fromObject(data: {
-            tag?: Message.MessageTags;
+            tag?: Message.Tags;
             deltas?: ReturnType<typeof Message.Deltas.prototype.toObject>;
         }): Message {
             const message = new Message({});
@@ -62,7 +62,7 @@ export namespace pnp.v1 {
         }
         toObject() {
             const data: {
-                tag?: Message.MessageTags;
+                tag?: Message.Tags;
                 deltas?: ReturnType<typeof Message.Deltas.prototype.toObject>;
             } = {};
             if (this.tag != null) {
@@ -77,7 +77,7 @@ export namespace pnp.v1 {
         serialize(w: pb_1.BinaryWriter): void;
         serialize(w?: pb_1.BinaryWriter): Uint8Array | void {
             const writer = w || new pb_1.BinaryWriter();
-            if (this.tag != Message.MessageTags.HEARTBEAT)
+            if (this.tag != Message.Tags.HEARTBEAT)
                 writer.writeEnum(1, this.tag);
             if (this.has_deltas)
                 writer.writeMessage(2, this.deltas, () => this.deltas.serialize(writer));
@@ -109,7 +109,7 @@ export namespace pnp.v1 {
         }
     }
     export namespace Message {
-        export enum MessageTags {
+        export enum Tags {
             HEARTBEAT = 0,
             TARGET_DELTAS = 1,
             MOVED_DELTAS = 2

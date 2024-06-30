@@ -14,4 +14,4 @@ mv ../pnp.jl .
 sed -i '' 's|v1/||' pnp.jl
 
 # See James' Logbook for full details (30 June)
-sed -i '' 's/x.tag != var"Message.MessageTags".HEARTBEAT && //g' pnp_pb.jl
+sed -i '' 's/x.tag != var"Message.Tags".HEARTBEAT && //g' pnp_pb.jl

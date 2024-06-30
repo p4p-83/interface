@@ -18,7 +18,7 @@ type ActionType = keyof ActionPayloads
 export type Action = {
   [K in ActionType]: {
     actionType: K;
-    messageType: pnp.v1.Message.MessageTags | 'INVALID';
+    messageType: pnp.v1.Message.Tags | 'INVALID';
     rawPayload: string | Uint8Array;
     silent?: boolean;
   } & (ActionPayloads[K] extends null ? Record<never, never> : { payload: ActionPayloads[K] });
@@ -36,7 +36,7 @@ export async function processMessage(data: unknown): Promise<Action> {
 
     switch (decodedMessage.tag) {
 
-    case pnp.v1.Message.MessageTags.MOVED_DELTAS:
+    case pnp.v1.Message.Tags.MOVED_DELTAS:
       return {
         actionType: 'MOVE_TARGET',
         messageType: decodedMessage.tag,
@@ -44,8 +44,8 @@ export async function processMessage(data: unknown): Promise<Action> {
         payload: denormaliseTargetDeltas(decodedMessage.deltas),
       }
 
-    case pnp.v1.Message.MessageTags.HEARTBEAT:
-    case pnp.v1.Message.MessageTags.TARGET_DELTAS:
+    case pnp.v1.Message.Tags.HEARTBEAT:
+    case pnp.v1.Message.Tags.TARGET_DELTAS:
       return {
         actionType: 'NO_OPERATION',
         messageType: decodedMessage.tag,
@@ -75,14 +75,14 @@ function sendMessage(webSocket: WebSocketHook, message: pnp.v1.Message) {
 
 export function getHeartbeatMessage(): Uint8Array {
   return new pnp.v1.Message({
-    tag: pnp.v1.Message.MessageTags.HEARTBEAT,
+    tag: pnp.v1.Message.Tags.HEARTBEAT,
   })
     .serializeBinary()
 }
 
 export function sendHeartbeat(webSocket: WebSocketHook) {
   sendMessage(webSocket, new pnp.v1.Message({
-    tag: pnp.v1.Message.MessageTags.HEARTBEAT,
+    tag: pnp.v1.Message.Tags.HEARTBEAT,
   }))
 }
 
@@ -133,7 +133,7 @@ export function sendTargetDeltas(webSocket: WebSocketHook, targetOffset: Positio
   console.info(`Delta normalised to (${normalisedDeltas.x}, ${normalisedDeltas.y})`)
 
   sendMessage(webSocket, new pnp.v1.Message({
-    tag: pnp.v1.Message.MessageTags.TARGET_DELTAS,
+    tag: pnp.v1.Message.Tags.TARGET_DELTAS,
     deltas: new pnp.v1.Message.Deltas(normalisedDeltas),
   }))
 }
