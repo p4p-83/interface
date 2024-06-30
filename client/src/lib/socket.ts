@@ -15,13 +15,19 @@ export type ActionPayloads = {
 }
 type ActionType = keyof ActionPayloads
 
+type ActionWithoutPayload<T extends ActionType> = {
+  actionType: T;
+  messageType: pnp.v1.Message.Tags;
+  rawPayload: string | Uint8Array;
+  silent?: boolean;
+}
+type ActionPayloadIfNotNull<T extends ActionType> = ActionPayloads[T] extends null
+  ? Record<never, never>
+  : {
+    payload: ActionPayloads[T]
+  }
 export type Action = {
-  [K in ActionType]: {
-    actionType: K;
-    messageType: pnp.v1.Message.Tags;
-    rawPayload: string | Uint8Array;
-    silent?: boolean;
-  } & (ActionPayloads[K] extends null ? Record<never, never> : { payload: ActionPayloads[K] });
+  [T in ActionType]: ActionWithoutPayload<T> & ActionPayloadIfNotNull<T>;
 }[ActionType]
 
 export async function processMessage(data: unknown): Promise<Action> {
