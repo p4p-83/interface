@@ -1,5 +1,4 @@
 import { type WebSocketHook } from 'react-use-websocket/dist/lib/types'
-import * as protobuf from 'protobufjs/minimal'
 
 import { pnp } from '@/proto/pnp/v1/pnp'
 import { type Position } from '@/app/place/PlaceInterface'
@@ -33,19 +32,16 @@ export async function processMessage(data: unknown): Promise<Action> {
     }
 
     const rawPayload = new Uint8Array(await data?.arrayBuffer())
-    const decodedMessage = pnp.v1.Message.decode(rawPayload)
+    const decodedMessage = pnp.v1.Message.deserializeBinary(rawPayload)
 
     switch (decodedMessage.tag) {
 
     case pnp.v1.Message.MessageTags.MOVED_DELTAS:
-      if (decodedMessage.deltas) {
-        return {
-          actionType: 'MOVE_TARGET',
-          messageType: decodedMessage.tag,
-          rawPayload,
-          // TODO: these types are horrific
-          payload: denormaliseTargetDeltas(decodedMessage.deltas),
-        }
+      return {
+        actionType: 'MOVE_TARGET',
+        messageType: decodedMessage.tag,
+        rawPayload,
+        payload: denormaliseTargetDeltas(decodedMessage.deltas),
       }
 
     case pnp.v1.Message.MessageTags.HEARTBEAT:
@@ -61,13 +57,7 @@ export async function processMessage(data: unknown): Promise<Action> {
 
   }
   catch (error) {
-    if (error instanceof protobuf.util.ProtocolError) {
-      // e.instance holds the so far decoded message with missing required fields
-      console.warn('Received invalid instance: ', error.instance.toJSON())
-    }
-    else {
-      console.warn('Wire error: ', data, error)
-    }
+    console.warn('Wire error: ', data, error)
 
     return {
       actionType: 'NO_OPERATION',
@@ -80,14 +70,14 @@ export async function processMessage(data: unknown): Promise<Action> {
 
 function sendMessage(webSocket: WebSocketHook, message: pnp.v1.Message) {
   console.info({ message })
-  webSocket.sendMessage(pnp.v1.Message.encode(message).finish())
+  webSocket.sendMessage(message.serializeBinary())
 }
 
 export function getHeartbeatMessage(): Uint8Array {
-  const message = new pnp.v1.Message({
+  return new pnp.v1.Message({
     tag: pnp.v1.Message.MessageTags.HEARTBEAT,
   })
-  return pnp.v1.Message.encode(message).finish()
+    .serializeBinary()
 }
 
 export function sendHeartbeat(webSocket: WebSocketHook) {
@@ -144,6 +134,6 @@ export function sendTargetDeltas(webSocket: WebSocketHook, targetOffset: Positio
 
   sendMessage(webSocket, new pnp.v1.Message({
     tag: pnp.v1.Message.MessageTags.TARGET_DELTAS,
-    deltas: normalisedDeltas,
+    deltas: new pnp.v1.Message.Deltas(normalisedDeltas),
   }))
 }
