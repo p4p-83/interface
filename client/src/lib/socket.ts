@@ -1,5 +1,7 @@
 import { type WebSocketHook } from 'react-use-websocket/dist/lib/types'
+import * as protobuf from 'protobufjs/minimal'
 
+import { pnp } from '@/proto/pnp/v1/pnp'
 import { type Position } from '@/app/place/PlaceInterface'
 
 const INT16_CONSTANTS = {
@@ -7,28 +9,6 @@ const INT16_CONSTANTS = {
   MINIMUM: -32768,
   MAXIMUM: 32767,
 } as const
-
-/*
- * A message looks like:
- * - A `Uint8` byte stream
- * - A leading 'tag'/'type' byte
- * - An optional following stream of payload bytes defined by the tag
- */
-
-type MessagePayloads = {
-  ['HEARTBEAT']: null,
-  ['TARGET_DELTAS']: Int16Array,
-  ['MOVED_DELTAS']: Int16Array,
-}
-type MessageType = keyof MessagePayloads
-type MessageReceivedType = MessageType | 'INVALID'
-
-const MESSAGE_TAGS: Record<MessageType, number> = {
-  'HEARTBEAT': 0x00,
-  'TARGET_DELTAS': 0x01,
-  'MOVED_DELTAS': 0x02,
-} as const
-type MessageTag = (typeof MESSAGE_TAGS)[MessageType]
 
 export type ActionPayloads = {
   ['NO_OPERATION']: null,
@@ -39,7 +19,7 @@ type ActionType = keyof ActionPayloads
 export type Action = {
   [K in ActionType]: {
     actionType: K;
-    messageType: MessageReceivedType;
+    messageType: pnp.v1.Message.MessageTags | 'INVALID';
     rawPayload: string | Uint8Array;
     silent?: boolean;
   } & (ActionPayloads[K] extends null ? Record<never, never> : { payload: ActionPayloads[K] });
@@ -47,8 +27,49 @@ export type Action = {
 
 export async function processMessage(data: unknown): Promise<Action> {
 
-  if (!(data instanceof Blob)) {
-    console.warn('Non-Blob data received: ', data)
+  try {
+    if (!(data instanceof Blob)) {
+      throw new Error('Non-Blob data received!')
+    }
+
+    const rawPayload = new Uint8Array(await data?.arrayBuffer())
+    const decodedMessage = pnp.v1.Message.decode(rawPayload)
+
+    switch (decodedMessage.tag) {
+
+    case pnp.v1.Message.MessageTags.MOVED_DELTAS:
+      const deltas = new Int16Array(rawPayload.slice(1).buffer)
+      return {
+        actionType: 'MOVE_TARGET',
+        messageType: decodedMessage.tag,
+        rawPayload,
+        payload: denormaliseTargetDeltas({
+          x: deltas[0],
+          y: deltas[1],
+        }),
+      }
+
+    case pnp.v1.Message.MessageTags.HEARTBEAT:
+    case pnp.v1.Message.MessageTags.TARGET_DELTAS:
+      return {
+        actionType: 'NO_OPERATION',
+        messageType: decodedMessage.tag,
+        rawPayload,
+        silent: true,
+      }
+
+    }
+
+  }
+  catch (error) {
+    if (error instanceof protobuf.util.ProtocolError) {
+      // e.instance holds the so far decoded message with missing required fields
+      console.warn('Received invalid instance: ', error.instance.toJSON())
+    }
+    else {
+      console.warn('Wire error: ', data)
+    }
+
     return {
       actionType: 'NO_OPERATION',
       messageType: 'INVALID',
@@ -56,69 +77,24 @@ export async function processMessage(data: unknown): Promise<Action> {
     }
   }
 
-  const rawPayload = new Uint8Array(await data.arrayBuffer())
-  const messageType = (Object.entries(MESSAGE_TAGS) as [MessageType, MessageTag][])
-    .find((value) => rawPayload[0] === value[1])
-    ?.[0] ?? 'INVALID'
-
-  switch (messageType) {
-
-  case 'MOVED_DELTAS':
-    const deltas = new Int16Array(rawPayload.slice(1).buffer)
-    return {
-      actionType: 'MOVE_TARGET',
-      messageType,
-      rawPayload,
-      payload: denormaliseTargetDeltas({
-        x: deltas[0],
-        y: deltas[1],
-      }),
-    }
-
-  case 'HEARTBEAT':
-  case 'TARGET_DELTAS':
-    return {
-      actionType: 'NO_OPERATION',
-      messageType,
-      rawPayload,
-      silent: true,
-    }
-
-  case 'INVALID':
-    return {
-      actionType: 'NO_OPERATION',
-      messageType,
-      rawPayload,
-    }
-
-  }
-
 }
 
-function sendMessage<T extends MessageType>(webSocket: WebSocketHook, type: T, payload: MessagePayloads[T]) {
-  let message: Uint8Array
-
-  if (!payload) {
-    message = new Uint8Array([MESSAGE_TAGS[type]])
-  }
-  else {
-    message = new Uint8Array(payload.byteLength + 1)
-    // Set the message tag
-    message[0] = MESSAGE_TAGS[type]
-    // Set the message payload
-    message.set(new Uint8Array(payload.buffer), 1)
-  }
-
-  console.info({ payload, message })
-  webSocket.sendMessage(message)
+function sendMessage(webSocket: WebSocketHook, message: pnp.v1.Message) {
+  console.info({ message })
+  webSocket.sendMessage(pnp.v1.Message.encode(message).finish())
 }
 
 export function getHeartbeatMessage(): Uint8Array {
-  return new Uint8Array([MESSAGE_TAGS['HEARTBEAT']])
+  const message = new pnp.v1.Message({
+    tag: pnp.v1.Message.MessageTags.HEARTBEAT,
+  })
+  return pnp.v1.Message.encode(message).finish()
 }
 
 export function sendHeartbeat(webSocket: WebSocketHook) {
-  sendMessage(webSocket, 'HEARTBEAT', null)
+  sendMessage(webSocket, new pnp.v1.Message({
+    tag: pnp.v1.Message.MessageTags.HEARTBEAT,
+  }))
 }
 
 function normaliseTargetDeltas(targetDeltas: Position): Position {
@@ -167,5 +143,8 @@ export function sendTargetDeltas(webSocket: WebSocketHook, targetOffset: Positio
   normalisedDeltas.y = Math.max(INT16_CONSTANTS.MINIMUM, Math.min(INT16_CONSTANTS.MAXIMUM, Math.floor(normalisedDeltas.y)))
   console.info(`Delta normalised to (${normalisedDeltas.x}, ${normalisedDeltas.y})`)
 
-  sendMessage(webSocket, 'TARGET_DELTAS', new Int16Array([normalisedDeltas.x, normalisedDeltas.y]))
+  sendMessage(webSocket, new pnp.v1.Message({
+    tag: pnp.v1.Message.MessageTags.TARGET_DELTAS,
+    deltas: normalisedDeltas,
+  }))
 }
