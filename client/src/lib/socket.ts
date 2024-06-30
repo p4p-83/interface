@@ -38,15 +38,14 @@ export async function processMessage(data: unknown): Promise<Action> {
     switch (decodedMessage.tag) {
 
     case pnp.v1.Message.MessageTags.MOVED_DELTAS:
-      const deltas = new Int16Array(rawPayload.slice(1).buffer)
-      return {
-        actionType: 'MOVE_TARGET',
-        messageType: decodedMessage.tag,
-        rawPayload,
-        payload: denormaliseTargetDeltas({
-          x: deltas[0],
-          y: deltas[1],
-        }),
+      if (decodedMessage.deltas) {
+        return {
+          actionType: 'MOVE_TARGET',
+          messageType: decodedMessage.tag,
+          rawPayload,
+          // TODO: these types are horrific
+          payload: denormaliseTargetDeltas(decodedMessage.deltas),
+        }
       }
 
     case pnp.v1.Message.MessageTags.HEARTBEAT:
@@ -67,7 +66,7 @@ export async function processMessage(data: unknown): Promise<Action> {
       console.warn('Received invalid instance: ', error.instance.toJSON())
     }
     else {
-      console.warn('Wire error: ', data)
+      console.warn('Wire error: ', data, error)
     }
 
     return {
