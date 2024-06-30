@@ -7,9 +7,10 @@ message Message {
   oneof payload { Deltas deltas = 2; }
 
   enum Tags {
-    HEARTBEAT = 0;
-    TARGET_DELTAS = 1;
-    MOVED_DELTAS = 2;
+    INVALID = 0;
+    HEARTBEAT = 1;
+    TARGET_DELTAS = 2;
+    MOVED_DELTAS = 3;
   }
 
   message Deltas {

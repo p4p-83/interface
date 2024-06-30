@@ -18,7 +18,7 @@ type ActionType = keyof ActionPayloads
 export type Action = {
   [K in ActionType]: {
     actionType: K;
-    messageType: pnp.v1.Message.Tags | 'INVALID';
+    messageType: pnp.v1.Message.Tags;
     rawPayload: string | Uint8Array;
     silent?: boolean;
   } & (ActionPayloads[K] extends null ? Record<never, never> : { payload: ActionPayloads[K] });
@@ -37,6 +37,11 @@ export async function processMessage(data: unknown): Promise<Action> {
     switch (decodedMessage.tag) {
 
     case pnp.v1.Message.Tags.MOVED_DELTAS:
+      if (!decodedMessage.has_deltas) {
+        console.error('Missing deltas payload: ', decodedMessage)
+        throw new Error('Missing deltas payload')
+      }
+
       return {
         actionType: 'MOVE_TARGET',
         messageType: decodedMessage.tag,
@@ -53,6 +58,13 @@ export async function processMessage(data: unknown): Promise<Action> {
         silent: true,
       }
 
+    case pnp.v1.Message.Tags.INVALID:
+      return {
+        actionType: 'NO_OPERATION',
+        messageType: decodedMessage.tag,
+        rawPayload,
+      }
+
     }
 
   }
@@ -61,7 +73,7 @@ export async function processMessage(data: unknown): Promise<Action> {
 
     return {
       actionType: 'NO_OPERATION',
-      messageType: 'INVALID',
+      messageType: pnp.v1.Message.Tags.INVALID,
       rawPayload: String(data),
     }
   }

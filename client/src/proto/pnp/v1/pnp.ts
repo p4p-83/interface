@@ -24,7 +24,7 @@ export namespace pnp.v1 {
             }
         }
         get tag() {
-            return pb_1.Message.getFieldWithDefault(this, 1, Message.Tags.HEARTBEAT) as Message.Tags;
+            return pb_1.Message.getFieldWithDefault(this, 1, Message.Tags.INVALID) as Message.Tags;
         }
         set tag(value: Message.Tags) {
             pb_1.Message.setField(this, 1, value);
@@ -77,7 +77,7 @@ export namespace pnp.v1 {
         serialize(w: pb_1.BinaryWriter): void;
         serialize(w?: pb_1.BinaryWriter): Uint8Array | void {
             const writer = w || new pb_1.BinaryWriter();
-            if (this.tag != Message.Tags.HEARTBEAT)
+            if (this.tag != Message.Tags.INVALID)
                 writer.writeEnum(1, this.tag);
             if (this.has_deltas)
                 writer.writeMessage(2, this.deltas, () => this.deltas.serialize(writer));
@@ -110,9 +110,10 @@ export namespace pnp.v1 {
     }
     export namespace Message {
         export enum Tags {
-            HEARTBEAT = 0,
-            TARGET_DELTAS = 1,
-            MOVED_DELTAS = 2
+            INVALID = 0,
+            HEARTBEAT = 1,
+            TARGET_DELTAS = 2,
+            MOVED_DELTAS = 3
         }
         export class Deltas extends pb_1.Message {
             #one_of_decls: number[][] = [];
