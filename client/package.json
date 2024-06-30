@@ -6,8 +6,7 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint",
-    "protoc": "bash src/proto/pnp/v1/protoc-gen.sh"
+    "lint": "next lint"
   },
   "dependencies": {
     "@eyevinn/webrtc-player": "^0.13.0",
