@@ -367,17 +367,20 @@ export function PlaceOverlay({ socketUrl, overlaySize, circleSize, hideOverlay =
                 angleDegrees += 360
               }
 
+              let angleDifferenceDegrees = Math.abs(angleDegrees - searchAngleDegrees)
+              angleDifferenceDegrees = Math.min((360 - angleDifferenceDegrees), angleDifferenceDegrees)
+
               // console.info(JSON.stringify({
               //   ...targetPosition,
               //   radius: Math.hypot(targetDeltas.x, targetDeltas.y),
-              //   angleDegrees,
-              //   searchAngleDegrees,
-              //   searchArcDegrees,
-              //   difference: Math.abs(angleDegrees - searchAngleDegrees),
-              //   kept: Math.abs(angleDegrees - searchAngleDegrees) > searchArcDegrees,
+              //   angle: angleDegrees,
+              //   searchAngle: searchAngleDegrees,
+              //   searchArc: searchArcDegrees,
+              //   difference: angleDifferenceDegrees,
+              //   flattened: angleDifferenceDegrees > searchArcDegrees,
               // }, null, 2))
 
-              if (Math.abs(angleDegrees - searchAngleDegrees) > searchArcDegrees) return []
+              if (angleDifferenceDegrees > searchArcDegrees) return []
 
               return [{
                 ...targetPosition,
