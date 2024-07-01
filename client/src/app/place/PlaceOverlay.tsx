@@ -1,4 +1,4 @@
-import { useRef, useEffect, useState } from 'react'
+import { useRef, useCallback, useEffect, useState, type MouseEvent, type KeyboardEvent } from 'react'
 import useWebSocket from 'react-use-websocket'
 import { toast } from 'sonner'
 
@@ -149,110 +149,10 @@ export function PlaceOverlay({ socketUrl, overlaySize, circleSize, hideOverlay =
     }
   )
 
-  // Handle clicks
-  useEffect(() => {
-    if (!overlayRef?.current) return
-    const overlayElement = overlayRef.current
-
-    function handleClick(event: MouseEvent) {
-      if (!overlaySize) return
-
-      const offset: Position = {
-        x: (event.offsetX / overlaySize.width),
-        y: (event.offsetY / overlaySize.height),
-      }
-      setTargetOffset(offset)
-
-      console.info(`Clicked at (${offset.x}, ${offset.y})`)
-      socket.sendTargetDeltas(webSocket, offset)
-    }
-
-    // Added to the overlay, so the user cannot click out of bounds!
-    overlayElement.addEventListener('mousedown', handleClick)
-
-    return () => {
-      overlayElement.removeEventListener('mousedown', handleClick)
-    }
-  }, [overlaySize, webSocket])
-
-  // Handle keyboard input
-  useEffect(() => {
-    // TODO: https://arc.net/l/quote/ruztcwya
-    if (!overlayRef?.current || !overlaySize) return
-    const overlayElement = overlayRef.current
-
-    overlayElement.focus()
-
-    function handleKeyDown(event: KeyboardEvent) {
-      if (!overlaySize) return
-
-      console.info(`Key down for ${event.code} (${event.key})`)
-
-      setTargetOffset((previousOffset) => {
-        if (!previousOffset) {
-          previousOffset = {
-            x: 0.5,
-            y: 0.5,
-          }
-        }
-
-        const unclampedOffset = { ...previousOffset }
-        switch (event.code) {
-
-        case 'KeyS':
-        case 'ArrowDown':
-        case 'KeyJ':
-          // TODO: non-literal
-          unclampedOffset.y = previousOffset.y + 0.05
-          break
-
-        case 'KeyW':
-        case 'ArrowUp':
-        case 'KeyK':
-          unclampedOffset.y = previousOffset.y - 0.05
-          break
-
-        case 'KeyA':
-        case 'ArrowLeft':
-        case 'KeyH':
-          unclampedOffset.x = previousOffset.x - 0.05
-          break
-
-        case 'KeyD':
-        case 'ArrowRight':
-        case 'KeyL':
-          unclampedOffset.x = previousOffset.x + 0.05
-          break
-
-        case 'KeyR':
-          unclampedOffset.x = 0.5
-          unclampedOffset.y = 0.5
-          break
-
-        }
-
-        const clampedOffset = {
-          x: Math.max(0, Math.min(1, unclampedOffset.x)),
-          y: Math.max(0, Math.min(1, unclampedOffset.y)),
-        }
-
-        if ((clampedOffset.x === 0.5) && (clampedOffset.y === 0.5)) {
-          console.log('Returning null')
-          return null
-        }
-
-        return clampedOffset
-      })
-
-      // socket.sendTargetDeltas(webSocket, targetOffset)
-    }
-
-    overlayElement.addEventListener('keydown', handleKeyDown)
-
-    return () => {
-      overlayElement.removeEventListener('keydown', handleKeyDown)
-    }
-  }, [overlaySize, webSocket])
+  // Auto-focus overlay
+  const overlayRef = useCallback((overlayElement: HTMLDivElement) => {
+    if (overlayElement) overlayElement.focus()
+  }, [])
 
   if (hideOverlay || !overlaySize) return
 
@@ -269,7 +169,84 @@ export function PlaceOverlay({ socketUrl, overlaySize, circleSize, hideOverlay =
           width: overlaySize.width,
           height: overlaySize.height,
         }}
+
+        onMouseDown={(event: MouseEvent) => {
+          const offset: Position = {
+            x: (event.nativeEvent.offsetX / overlaySize.width),
+            y: (event.nativeEvent.offsetY / overlaySize.height),
+          }
+          setTargetOffset(offset)
+
+          console.info(`Clicked at (${offset.x}, ${offset.y})`)
+          socket.sendTargetDeltas(webSocket, offset)
+        }}
+
+        // TODO: https://arc.net/l/quote/ruztcwya
+        onKeyDown={(event: KeyboardEvent) => {
+          if (!overlaySize) return
+
+          console.info(`Key down for ${event.code} (${event.key})`)
+
+          setTargetOffset((previousOffset) => {
+            if (!previousOffset) {
+              previousOffset = {
+                x: 0.5,
+                y: 0.5,
+              }
+            }
+
+            const unclampedOffset = { ...previousOffset }
+            switch (event.code) {
+
+            case 'KeyS':
+            case 'ArrowDown':
+            case 'KeyJ':
+              // TODO: non-literal
+              unclampedOffset.y = previousOffset.y + 0.05
+              break
+
+            case 'KeyW':
+            case 'ArrowUp':
+            case 'KeyK':
+              unclampedOffset.y = previousOffset.y - 0.05
+              break
+
+            case 'KeyA':
+            case 'ArrowLeft':
+            case 'KeyH':
+              unclampedOffset.x = previousOffset.x - 0.05
+              break
+
+            case 'KeyD':
+            case 'ArrowRight':
+            case 'KeyL':
+              unclampedOffset.x = previousOffset.x + 0.05
+              break
+
+            case 'KeyR':
+              unclampedOffset.x = 0.5
+              unclampedOffset.y = 0.5
+              break
+
+            }
+
+            const clampedOffset = {
+              x: Math.max(0, Math.min(1, unclampedOffset.x)),
+              y: Math.max(0, Math.min(1, unclampedOffset.y)),
+            }
+
+            if ((clampedOffset.x === 0.5) && (clampedOffset.y === 0.5)) {
+              console.log('Returning null')
+              return null
+            }
+
+            return clampedOffset
+          })
+
+          // socket.sendTargetDeltas(webSocket, targetOffset)
+        }}
       >
+
         {/* Target circle */}
         {(targetOffset) && (
           <div
