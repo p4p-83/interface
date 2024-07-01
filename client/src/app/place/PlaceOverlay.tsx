@@ -191,49 +191,50 @@ export function PlaceOverlay({ socketUrl, overlaySize, circleSize, hideOverlay =
         onKeyDown={(event: KeyboardEvent) => {
           if (!overlaySize) return
 
-          console.info(`Key down for ${event.code} (${event.key})`)
+          console.info(`Key down for ${event.code} (${event.key}) [${event.shiftKey}]`)
 
-          setTargetOffset((previousOffset) => {
-            if (!previousOffset) {
-              previousOffset = {
-                x: 0.5,
-                y: 0.5,
-              }
-            }
+          /*
+           * Direction will jump to the nearest target in the specified direction
+           * Shift+Direction will cause the gantry to step a fixed distance in the specified direction
+           */
+
+          if (event.shiftKey) {
+            const previousOffset = targetOffset ?? { x:0.5, y:0.5 }
 
             const unclampedOffset = { ...previousOffset }
             switch (event.code) {
-
             case 'KeyS':
             case 'ArrowDown':
             case 'KeyJ':
               // TODO: non-literal
               unclampedOffset.y = previousOffset.y + 0.05
+              socket.sendGantryStep(webSocket, socket.GantryDirection.TOWARDS_Y_MIN)
               break
-
             case 'KeyW':
             case 'ArrowUp':
             case 'KeyK':
               unclampedOffset.y = previousOffset.y - 0.05
+              socket.sendGantryStep(webSocket, socket.GantryDirection.TOWARDS_Y_MAX)
               break
-
             case 'KeyA':
             case 'ArrowLeft':
             case 'KeyH':
               unclampedOffset.x = previousOffset.x - 0.05
+              socket.sendGantryStep(webSocket, socket.GantryDirection.TOWARDS_X_MAX)
               break
-
             case 'KeyD':
             case 'ArrowRight':
             case 'KeyL':
               unclampedOffset.x = previousOffset.x + 0.05
+              socket.sendGantryStep(webSocket, socket.GantryDirection.TOWARDS_X_MAX)
               break
-
             case 'KeyR':
               unclampedOffset.x = 0.5
               unclampedOffset.y = 0.5
+              socket.sendGantryStep(webSocket, socket.GantryDirection.ZERO)
               break
-
+            default:
+              return
             }
 
             const clampedOffset = {
@@ -242,14 +243,17 @@ export function PlaceOverlay({ socketUrl, overlaySize, circleSize, hideOverlay =
             }
 
             if ((clampedOffset.x === 0.5) && (clampedOffset.y === 0.5)) {
-              console.log('Returning null')
-              return null
+              console.log('Setting null')
+              setTargetOffset(null)
             }
-
-            return clampedOffset
-          })
-
-          // socket.sendTargetDeltas(webSocket, targetOffset)
+            else {
+              setTargetOffset(clampedOffset)
+              socket.sendTargetDeltas(webSocket, clampedOffset)
+            }
+          }
+          else {
+            // TODO:
+          }
         }}
       >
 

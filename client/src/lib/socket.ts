@@ -9,6 +9,8 @@ const INT16_CONSTANTS = {
   MAXIMUM: 32767,
 } as const
 
+export const GantryDirection = pnp.v1.Message.Step.Direction
+
 export type ActionPayloads = {
   ['NO_OPERATION']: null,
   ['MOVE_TARGET']: Position,
@@ -71,6 +73,7 @@ export async function processMessage(data: unknown): Promise<Action> {
 
     case pnp.v1.Message.Tags.HEARTBEAT:
     case pnp.v1.Message.Tags.TARGET_DELTAS:
+    case pnp.v1.Message.Tags.STEP_GANTRY:
       return {
         actionType: 'NO_OPERATION',
         messageType: decodedMessage.tag,
@@ -167,5 +170,14 @@ export function sendTargetDeltas(webSocket: WebSocketHook, targetOffset: Positio
   sendMessage(webSocket, new pnp.v1.Message({
     tag: pnp.v1.Message.Tags.TARGET_DELTAS,
     deltas: new pnp.v1.Message.Deltas(normalisedDeltas),
+  }))
+}
+
+export function sendGantryStep(webSocket: WebSocketHook, direction: pnp.v1.Message.Step.Direction) {
+  console.info(`Stepping gantry in direction ${direction}`)
+
+  sendMessage(webSocket, new pnp.v1.Message({
+    tag: pnp.v1.Message.Tags.STEP_GANTRY,
+    step: new pnp.v1.Message.Step({ direction }),
   }))
 }
