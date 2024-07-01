@@ -55,7 +55,7 @@ export function PlaceOverlay({ socketUrl, overlaySize, circleSize, hideOverlay =
       },
 
       onMessage: async (message) => {
-        console.log(message)
+        console.log({ message })
 
         const action = await socket.processMessage(message.data)
         console.log({ action })
@@ -85,10 +85,9 @@ export function PlaceOverlay({ socketUrl, overlaySize, circleSize, hideOverlay =
 
         toast.message(`Message received (${action.messageType}):`, {
           id: ToastIds.MESSAGE,
-          className: 'pointer-events-none',
           description: (
             <pre className='mt-2'>
-              <code className='w-[320px] block rounded-md p-4 bg-secondary text-secondary-foreground'>
+              <code className='w-[320px] block rounded-md p-4 bg-secondary text-secondary-foreground text-wrap'>
                 {String(action.rawPayload)}
               </code>
               {
