@@ -216,7 +216,8 @@ export function WebRtcVideo({ url, setVideoSize, setIsVideoStreaming, setHasVide
         className={cn(
           'object-contain object-center h-full w-full pointer-events-none',
           (loadProgress !== PROGRESS_BAR.FINAL) && 'invisible'
-        )}/>
+        )}
+      />
     </>
   )
 
