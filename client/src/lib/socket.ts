@@ -52,7 +52,7 @@ export async function processMessage(data: unknown): Promise<Action> {
         actionType: 'MOVE_TARGET',
         messageType: decodedMessage.tag,
         rawPayload,
-        payload: denormaliseTargetDeltas(decodedMessage.deltas),
+        payload: denormalisePosition(decodedMessage.deltas),
       }
 
     case pnp.v1.Message.Tags.HEARTBEAT:
@@ -104,17 +104,17 @@ export function sendHeartbeat(webSocket: WebSocketHook) {
   }))
 }
 
-function normaliseTargetDeltas(targetDeltas: Position): Position {
+function normalisePosition(position: Position): Position {
   return {
-    x: (targetDeltas.x * INT16_CONSTANTS.RANGE),
-    y: (targetDeltas.y * INT16_CONSTANTS.RANGE),
+    x: (position.x * INT16_CONSTANTS.RANGE),
+    y: (position.y * INT16_CONSTANTS.RANGE),
   }
 }
 
-function denormaliseTargetDeltas(normalisedDeltas: Position): Position {
+function denormalisePosition(position: Position): Position {
   return {
-    x: (normalisedDeltas.x / INT16_CONSTANTS.RANGE),
-    y: (normalisedDeltas.y / INT16_CONSTANTS.RANGE),
+    x: (position.x / INT16_CONSTANTS.RANGE),
+    y: (position.y / INT16_CONSTANTS.RANGE),
   }
 }
 
@@ -141,7 +141,7 @@ export function sendTargetDeltas(webSocket: WebSocketHook, targetOffset: Positio
    *
    * In other words, the burden is left to the controller to map the Int16 delta into real camera pixels
    */
-  const normalisedDeltas = normaliseTargetDeltas({
+  const normalisedDeltas = normalisePosition({
     x: (targetOffset.x - 0.5),
     y: (targetOffset.y - 0.5),
   })
