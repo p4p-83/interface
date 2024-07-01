@@ -170,7 +170,6 @@ export function PlaceOverlay({ socketUrl, overlaySize, circleSize, hideOverlay =
           break
 
         case 'DRAW_TARGETS':
-          console.log(action.payload)
           setTargetPositionOffsets(action.payload)
           break
 
