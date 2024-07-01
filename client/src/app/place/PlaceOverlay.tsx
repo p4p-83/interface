@@ -354,56 +354,58 @@ export function PlaceOverlay({ socketUrl, overlaySize, circleSize, hideOverlay =
 
             if (!targetPositionOffsets?.length) return
 
-            const getSortingFunction = (searchAngleDegrees: number) => (targetPosition: Position) => {
+            const getFlatMapper = (searchAngleDegrees: number, searchArcDegrees: number) => (targetPosition: Position) => {
               const targetDeltas = {
                 x: (targetPosition.x - previousOffset.x),
                 y: (targetPosition.y - previousOffset.y),
               }
-              const radius = Math.hypot(targetDeltas.x, targetDeltas.y)
-              let angleRadians = -Math.atan2(targetDeltas.y, targetDeltas.x)
-              if (angleRadians < 0) {
-                angleRadians += 2 * Math.PI
+
+              if ((targetDeltas.x === 0) && (targetDeltas.y === 0)) return []
+
+              let angleDegrees = (-Math.atan2(targetDeltas.y, targetDeltas.x) * 180) / Math.PI
+              if (angleDegrees < 0) {
+                angleDegrees += 360
               }
 
-              const angleFactor = ((angleRadians - (searchAngleDegrees * Math.PI / 180)) ** 2) + 1
+              // console.info(JSON.stringify({
+              //   ...targetPosition,
+              //   radius: Math.hypot(targetDeltas.x, targetDeltas.y),
+              //   angleDegrees,
+              //   searchAngleDegrees,
+              //   searchArcDegrees,
+              //   difference: Math.abs(angleDegrees - searchAngleDegrees),
+              //   kept: Math.abs(angleDegrees - searchAngleDegrees) > searchArcDegrees,
+              // }, null, 2))
 
-              // console.log({
-              //   x: targetDeltas.x,
-              //   radius,
-              //   angle: angleRadians * 180 / Math.PI,
-              //   angleFactor,
-              //   searchAngle: searchAngleDegrees,
-              //   result: radius * angleFactor,
-              // })
+              if (Math.abs(angleDegrees - searchAngleDegrees) > searchArcDegrees) return []
 
-              return (radius * angleFactor)
+              return [{
+                ...targetPosition,
+                radius: Math.hypot(targetDeltas.x, targetDeltas.y),
+                angleDegrees,
+              }]
             }
 
-            let filterPredicate: (value: Position) => boolean
             let searchAngleDegrees: number
             switch (event.code) {
             case 'KeyS':
             case 'ArrowDown':
             case 'KeyJ':
-              filterPredicate = (value) => value.y > previousOffset.y
               searchAngleDegrees = 270
               break
             case 'KeyW':
             case 'ArrowUp':
             case 'KeyK':
-              filterPredicate = (value) => value.y < previousOffset.y
               searchAngleDegrees = 90
               break
             case 'KeyA':
             case 'ArrowLeft':
             case 'KeyH':
-              filterPredicate = (value) => value.x < previousOffset.x
               searchAngleDegrees = 180
               break
             case 'KeyD':
             case 'ArrowRight':
             case 'KeyL':
-              filterPredicate = (value) => value.x > previousOffset.x
               searchAngleDegrees = 0
               break
             case 'KeyR':
@@ -417,12 +419,10 @@ export function PlaceOverlay({ socketUrl, overlaySize, circleSize, hideOverlay =
             }
 
             // Find nearest target
-            // This is done like this for TypeScript to ensure all paths assign searchAngleDegrees
-            const sortingFunction = getSortingFunction(searchAngleDegrees)
-
+            // A higher-order getter function is used here for TypeScript to statically ensure all code paths assign searchAngleDegrees
             const nearestTargetOffset = targetPositionOffsets
-              .filter(filterPredicate)
-              .toSorted((a, b) => sortingFunction(a) - sortingFunction(b))
+              .flatMap(getFlatMapper(searchAngleDegrees, 45))
+              .toSorted((a, b) => a.radius - b.radius)
               [0]
 
             if (!nearestTargetOffset) {
