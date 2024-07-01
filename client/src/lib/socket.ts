@@ -12,6 +12,7 @@ const INT16_CONSTANTS = {
 export type ActionPayloads = {
   ['NO_OPERATION']: null,
   ['MOVE_TARGET']: Position,
+  ['DRAW_TARGETS']: Position[],
 }
 type ActionType = keyof ActionPayloads
 
@@ -53,6 +54,19 @@ export async function processMessage(data: unknown): Promise<Action> {
         messageType: decodedMessage.tag,
         rawPayload,
         payload: denormalisePosition(decodedMessage.deltas),
+      }
+
+    case pnp.v1.Message.Tags.TARGET_POSITIONS:
+      if (!decodedMessage.has_positions) {
+        console.error('Missing positions payload: ', decodedMessage)
+        throw new Error('Missing positions payload')
+      }
+
+      return {
+        actionType: 'DRAW_TARGETS',
+        messageType: decodedMessage.tag,
+        rawPayload,
+        payload: decodedMessage.positions.offsets.map(denormalisePosition),
       }
 
     case pnp.v1.Message.Tags.HEARTBEAT:

@@ -16,10 +16,10 @@ type PlaceOverlayProps = {
 }
 
 export function PlaceOverlay({ socketUrl, overlaySize, circleSize, hideOverlay = false }: PlaceOverlayProps) {
-  const overlayRef = useRef<HTMLDivElement>(null)
   const didUnmount = useRef(false)
 
   const [targetOffset, setTargetOffset] = useState<Position | null>(null)
+  const [targetPositionOffsets, setTargetPositionOffsets] = useState<Position[] | null>(null)
 
   // Unmount
   useEffect(() => {
@@ -70,6 +70,13 @@ export function PlaceOverlay({ socketUrl, overlaySize, circleSize, hideOverlay =
               y: previousOffset.y - action.payload.y,
             }
           })
+          break
+
+        case 'DRAW_TARGETS':
+          setTargetPositionOffsets(action.payload)
+          break
+
+        case 'NO_OPERATION':
           break
 
         }
@@ -260,6 +267,26 @@ export function PlaceOverlay({ socketUrl, overlaySize, circleSize, hideOverlay =
           />
         )}
 
+        {/* Target positions */}
+        {(targetPositionOffsets?.length) && targetPositionOffsets.map((position, index) => (
+          <div
+            key={index}
+            className='absolute opacity-50 bg-ring outline outline-1 outline-primary-foreground rounded-none cursor-pointer'
+            onMouseDown={(event: MouseEvent) => {
+              console.info(`Clicked target at position (${position.x}, ${position.y})`)
+              event.stopPropagation()
+              setTargetOffset(position)
+              socket.sendTargetDeltas(webSocket, position)
+            }}
+            style={{
+              width: circleSize,
+              height: circleSize,
+              top: (position.y * overlaySize.height) - (circleSize / 2),
+              left: (position.x * overlaySize.width) - (circleSize / 2),
+            }}
+          />
+        ))}
+
         {/* Centre circle */}
         <div
           className='relative opacity-50 bg-secondary outline outline-1 outline-secondary-foreground rounded-full pointer-events-none cursor-crosshair'
@@ -270,6 +297,7 @@ export function PlaceOverlay({ socketUrl, overlaySize, circleSize, hideOverlay =
             left: (overlaySize.width / 2) - (circleSize / 2),
           }}
         />
+
       </div>
 
     </>
