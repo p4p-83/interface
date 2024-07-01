@@ -354,32 +354,57 @@ export function PlaceOverlay({ socketUrl, overlaySize, circleSize, hideOverlay =
 
             if (!targetPositionOffsets?.length) return
 
+            const getSortingFunction = (searchAngleDegrees: number) => (targetPosition: Position) => {
+              const targetDeltas = {
+                x: (targetPosition.x - previousOffset.x),
+                y: (targetPosition.y - previousOffset.y),
+              }
+              const radius = Math.hypot(targetDeltas.x, targetDeltas.y)
+              let angleRadians = -Math.atan2(targetDeltas.y, targetDeltas.x)
+              if (angleRadians < 0) {
+                angleRadians += 2 * Math.PI
+              }
+
+              const angleFactor = ((angleRadians - (searchAngleDegrees * Math.PI / 180)) ** 2) + 1
+
+              // console.log({
+              //   x: targetDeltas.x,
+              //   radius,
+              //   angle: angleRadians * 180 / Math.PI,
+              //   angleFactor,
+              //   searchAngle: searchAngleDegrees,
+              //   result: radius * angleFactor,
+              // })
+
+              return (radius * angleFactor)
+            }
+
             let filterPredicate: (value: Position) => boolean
-            let sortingFunction: (targetPosition: Position) => number
+            let searchAngleDegrees: number
             switch (event.code) {
             case 'KeyS':
             case 'ArrowDown':
             case 'KeyJ':
               filterPredicate = (value) => value.y > previousOffset.y
-              sortingFunction = (targetPosition) => ((targetPosition.y * 100) - (previousOffset.y * 100)) + (((targetPosition.x * 100) - (previousOffset.x * 100)) ** 2)
+              searchAngleDegrees = 270
               break
             case 'KeyW':
             case 'ArrowUp':
             case 'KeyK':
               filterPredicate = (value) => value.y < previousOffset.y
-              sortingFunction = (targetPosition) => ((previousOffset.y * 100) - (targetPosition.y * 100)) + (((previousOffset.x * 100) - (targetPosition.x * 100)) ** 2)
+              searchAngleDegrees = 90
               break
             case 'KeyA':
             case 'ArrowLeft':
             case 'KeyH':
               filterPredicate = (value) => value.x < previousOffset.x
-              sortingFunction = (targetPosition) => ((previousOffset.x * 100) - (targetPosition.x * 100)) + (((previousOffset.y * 100) - (targetPosition.y * 100)) ** 2)
+              searchAngleDegrees = 180
               break
             case 'KeyD':
             case 'ArrowRight':
             case 'KeyL':
               filterPredicate = (value) => value.x > previousOffset.x
-              sortingFunction = (targetPosition) => ((targetPosition.x * 100) - (previousOffset.x * 100)) + (((targetPosition.y * 100) - (previousOffset.y * 100)) ** 2)
+              searchAngleDegrees = 0
               break
             case 'KeyR':
               setTargetOffset(null)
@@ -392,10 +417,18 @@ export function PlaceOverlay({ socketUrl, overlaySize, circleSize, hideOverlay =
             }
 
             // Find nearest target
+            // This is done like this for TypeScript to ensure all paths assign searchAngleDegrees
+            const sortingFunction = getSortingFunction(searchAngleDegrees)
+
             const nearestTargetOffset = targetPositionOffsets
               .filter(filterPredicate)
               .toSorted((a, b) => sortingFunction(a) - sortingFunction(b))
               [0]
+
+            if (!nearestTargetOffset) {
+              console.info('No target found')
+              return
+            }
 
             // Go there
             console.info('Found: ', nearestTargetOffset)
