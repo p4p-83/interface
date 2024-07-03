@@ -286,7 +286,26 @@ export function PlaceOverlay({ socketUrl, overlaySize, circleSize, hideOverlay =
                 ...targetPosition,
                 radius: Math.hypot(targetDeltas.x, targetDeltas.y),
                 angleDegrees,
+                angleDifferenceDegrees,
               }]
+            }
+
+            const getSortFunction = (searchAngleDegrees: number, searchArcDegrees: number) => (position: Position & {
+              radius: number,
+              angleDegrees: number,
+              angleDifferenceDegrees: number,
+            }) => {
+              const angleDeviationRatio = position.angleDifferenceDegrees / (searchArcDegrees / 2)
+
+              // console.log(JSON.stringify({
+              //   ...position,
+              //   sD: searchAngleDegrees,
+              //   devR: angleDeviationRatio,
+              //   res: (position.radius * angleDeviationRatio),
+              // }, null, 2))
+
+              // * See James' Logbook for 3 July!
+              return (position.radius * (angleDeviationRatio + 1.5))
             }
 
             let searchAngleDegrees: number
@@ -323,9 +342,12 @@ export function PlaceOverlay({ socketUrl, overlaySize, circleSize, hideOverlay =
 
             // Find nearest target
             // A higher-order getter function is used here for TypeScript to statically ensure all code paths assign searchAngleDegrees
+            const flatMapper = getFlatMapper(searchAngleDegrees, 90)
+            const sortFunction = getSortFunction(searchAngleDegrees, 90)
+
             const nearestTargetOffset = targetPositionOffsets
-              .flatMap(getFlatMapper(searchAngleDegrees, 90))
-              .toSorted((a, b) => a.radius - b.radius)
+              .flatMap(flatMapper)
+              .toSorted((a, b) => sortFunction(a) - sortFunction(b))
               [0]
 
             if (!nearestTargetOffset) {
