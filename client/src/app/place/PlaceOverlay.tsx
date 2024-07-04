@@ -366,7 +366,7 @@ export function PlaceOverlay({ socketUrl, overlaySize, circleSize, hideOverlay =
         {/* Target circle */}
         {(targetOffset) && (
           <div
-            className='absolute z-50 opacity-75 bg-ring outline outline-1 outline-primary-foreground rounded-full pointer-events-none cursor-crosshair'
+            className='absolute z-50 bg-ring/75 outline outline-1 outline-primary-foreground rounded-full pointer-events-none cursor-crosshair'
             style={{
               width: circleSize,
               height: circleSize,
@@ -380,7 +380,7 @@ export function PlaceOverlay({ socketUrl, overlaySize, circleSize, hideOverlay =
         {(targetPositionOffsets?.length) && targetPositionOffsets.map((position, index) => (
           <div
             key={index}
-            className='absolute z-0 opacity-25 bg-accent-foreground outline outline-1 outline-accent rounded-none cursor-pointer'
+            className='absolute z-0 bg-accent-foreground/25 outline outline-1 outline-accent rounded-none cursor-pointer'
             onMouseDown={(event: MouseEvent) => {
               console.info(`Clicked target at position (${position.x}, ${position.y})`)
               event.stopPropagation()
@@ -398,7 +398,7 @@ export function PlaceOverlay({ socketUrl, overlaySize, circleSize, hideOverlay =
 
         {/* Centre circle */}
         <div
-          className='relative opacity-50 bg-secondary outline outline-1 outline-secondary-foreground rounded-full pointer-events-none cursor-crosshair'
+          className='relative bg-secondary/50 outline outline-1 outline-secondary-foreground rounded-full pointer-events-none cursor-crosshair'
           style={{
             width: circleSize,
             height: circleSize,
