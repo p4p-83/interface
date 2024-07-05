@@ -3,7 +3,7 @@ import './globals.css'
 
 import { ubuntu } from '@/styles/fonts'
 import { Toaster } from '@/components/ui/sonner'
-import { ThemeProvider } from '@/components/ThemeProvider'
+import { ThemeProvider } from '@/context/ThemeProvider'
 import { cn } from '@/lib/utils'
 
 export const metadata: Metadata = {
