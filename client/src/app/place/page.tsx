@@ -1,5 +1,7 @@
 import type { Metadata } from 'next'
 
+import { DataContextProvider } from '@/context/DataContextProvider'
+
 import PlaceInterface from './PlaceInterface'
 
 export const metadata: Metadata = {
@@ -10,7 +12,9 @@ export const metadata: Metadata = {
 export default function Place() {
   return (
 
-    <PlaceInterface />
+    <DataContextProvider>
+      <PlaceInterface />
+    </DataContextProvider>
 
   )
 }
