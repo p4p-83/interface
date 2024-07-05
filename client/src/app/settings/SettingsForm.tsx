@@ -66,7 +66,7 @@ export function SettingsForm() {
 
           <CardHeader>
             <CardTitle>Server addresses</CardTitle>
-            <CardDescription>Configure the WHEP source and WebSocket.</CardDescription>
+            <CardDescription>Configure the WHEP source and WebSocket address.</CardDescription>
           </CardHeader>
 
           <CardContent className='grid w-full items-center gap-4'>
