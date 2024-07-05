@@ -3,6 +3,8 @@ import type { Metadata } from 'next'
 import { ThemeToggle } from '@/components/ThemeToggle'
 import { PageHeading } from '@/components/PageHeading'
 
+import { SettingsForm } from './SettingsForm'
+
 export const metadata: Metadata = {
   title: 'Settings | PnP << 83',
   description: 'Set your stage.',
@@ -18,6 +20,10 @@ export default function Settings() {
       </div>
 
       <PageHeading title='Settings' subTitle='Set your stage.' />
+
+      <div className='mt-12 grid grid-cols-1 w-full max-w-3xl gap-4 md:gap-6'>
+        <SettingsForm />
+      </div>
 
     </>
 
