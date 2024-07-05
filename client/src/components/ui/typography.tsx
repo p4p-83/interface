@@ -1,3 +1,4 @@
+import Link from 'next/link'
 import { type ReactNode, type HTMLAttributes } from 'react'
 
 import { cn } from '@/lib/utils'
@@ -126,8 +127,8 @@ type TypographyLinkProps = TypographyProps & {
 
 export function TypographyLink({ children, href }: TypographyLinkProps) {
   return (
-    <a href={href} className='font-medium text-primary underline underline-offset-4' >
+    <Link href={href} className='font-medium text-primary underline underline-offset-4' >
       {children}
-    </a>
+    </Link>
   )
 }
