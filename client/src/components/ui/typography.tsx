@@ -1,8 +1,12 @@
-import { type ReactNode } from 'react'
+import { type ReactNode, type HTMLAttributes } from 'react'
+
+import { cn } from '@/lib/utils'
 
 type TypographyProps = {
 	children: ReactNode;
 }
+
+type Styleable<T> = HTMLAttributes<T>;
 
 export function TypographyH1({ children }: TypographyProps) {
   return (
@@ -76,9 +80,9 @@ export function TypographyInlineCode({ children }: TypographyProps) {
 
 export function TypographyLead({ children }: TypographyProps) {
   return (
-    <p className='text-xl text-muted-foreground'>
+    <span className='text-xl text-muted-foreground'>
       {children}
-    </p>
+    </span>
   )
 }
 
@@ -98,9 +102,9 @@ export function TypographySmall({ children }: TypographyProps) {
   )
 }
 
-export function TypographyMuted({ children }: TypographyProps) {
+export function TypographyMuted({ children, className }: TypographyProps & Styleable<HTMLSpanElement>) {
   return (
-    <span className='text-sm text-muted-foreground'>
+    <span className={cn(className, 'text-muted-foreground')}>
       {children}
     </span>
   )

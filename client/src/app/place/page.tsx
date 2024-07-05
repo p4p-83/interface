@@ -4,7 +4,7 @@ import PlaceInterface from './PlaceInterface'
 
 export const metadata: Metadata = {
   title: 'Place | PnP << 83',
-  description: 'Create a new file upload request',
+  description: 'Position with precision.',
 }
 
 export default function Place() {
