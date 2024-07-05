@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 
+import { LayoutMain } from '@/components/LayoutMain'
 import { DataContextProvider } from '@/context/DataContextProvider'
 
 import PlaceInterface from './PlaceInterface'
@@ -12,9 +13,13 @@ export const metadata: Metadata = {
 export default function Place() {
   return (
 
-    <DataContextProvider>
-      <PlaceInterface />
-    </DataContextProvider>
+    <LayoutMain>
+
+      <DataContextProvider>
+        <PlaceInterface />
+      </DataContextProvider>
+
+    </LayoutMain>
 
   )
 }

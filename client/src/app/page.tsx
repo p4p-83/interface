@@ -1,4 +1,5 @@
 import { Badge } from '@/components/ui/badge'
+import { LayoutMain } from '@/components/LayoutMain'
 import { ThemeToggle } from '@/components/ThemeToggle'
 
 import { HomeLinkCards } from './HomeLinkCards'
@@ -15,7 +16,7 @@ const SUBTITLES = [
 export default function Home() {
   return (
 
-    <>
+    <LayoutMain>
 
       <div className='absolute top-6 right-6'>
         <ThemeToggle />
@@ -34,7 +35,7 @@ export default function Home() {
 
       <HomeLinkCards />
 
-    </>
+    </LayoutMain>
 
   )
 }

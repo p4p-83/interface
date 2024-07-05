@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 
+import { LayoutMain } from '@/components/LayoutMain'
 import { Header } from '@/components/Header'
 import { PageHeading } from '@/components/PageHeading'
 
@@ -15,7 +16,7 @@ export const metadata: Metadata = {
 export default function Settings() {
   return (
 
-    <>
+    <LayoutMain>
 
       <Header />
 
@@ -27,7 +28,7 @@ export default function Settings() {
         </DataContextProvider>
       </div>
 
-    </>
+    </LayoutMain>
 
   )
 }

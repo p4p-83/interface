@@ -27,9 +27,7 @@ export default function RootLayout({
           disableTransitionOnChange
         >
 
-          <main className='flex min-h-screen flex-col items-center justify-center px-5 has-[header]:py-32'>
-            {children}
-          </main>
+          {children}
 
           <Toaster richColors />
 
