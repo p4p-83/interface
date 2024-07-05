@@ -1,5 +1,6 @@
 'use client'
 
+import { useContext } from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
@@ -23,46 +24,38 @@ import {
   FormMessage,
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
+import { DISMISS_BUTTON } from '@/components/ui/sonner'
+
+import { DataContext } from '@/context/DataContextProvider'
 import * as schemas from '@/lib/schemas'
-// import { newRequest } from '@/mocks/mock-responses'
 
 import * as config from './config'
 
-const formSchema = zod.object(
-  {
+const formSchema = zod.object({
+  urls: zod.object({
     whepVideoUrl: schemas.URL,
     webSocketUrl: schemas.URL,
-  }
-)
+  }),
+})
 
-type StandardFormValues = zod.infer<typeof formSchema>
-
-const defaultValues: Partial<StandardFormValues> = {
-  whepVideoUrl: '',
-  webSocketUrl: '',
-}
+type SettingsFormValues = zod.infer<typeof formSchema>
 
 export function SettingsForm() {
-  const form = useForm<StandardFormValues>({
+  const { settingsData, setSettingsData } = useContext(DataContext)
+
+  const form = useForm<SettingsFormValues>({
     resolver: zodResolver(formSchema),
-    defaultValues,
+    defaultValues: settingsData,
   })
 
-  function onSubmit(values: StandardFormValues) {
-    console.log(values)
+  function onSubmit(settings: SettingsFormValues) {
+    console.log(settings)
+    setSettingsData(settings)
 
-    // toast.promise(promise, {
-    //   loading: 'Creating file upload request...',
-    //   success: () => {
-    //     form.reset()
-    //     return 'File upload request created!'
-    //   },
-    //   cancel: {
-    //     label: 'Close',
-    //     onClick: () => null,
-    //   },
-    //   error: 'Error',
-    // })
+    toast.success('Settings saved!', {
+      cancel: DISMISS_BUTTON,
+      duration: 1500,
+    })
   }
 
   return (
@@ -80,7 +73,7 @@ export function SettingsForm() {
 
             <FormField
               control={form.control}
-              name='whepVideoUrl'
+              name='urls.whepVideoUrl'
               render={({ field }) => (
                 <FormItem className='flex flex-col space-y-1.5'>
                   <FormLabel>WebRTC video source</FormLabel>
@@ -94,7 +87,7 @@ export function SettingsForm() {
 
             <FormField
               control={form.control}
-              name='webSocketUrl'
+              name='urls.webSocketUrl'
               render={({ field }) => (
                 <FormItem className='flex flex-col space-y-1.5'>
                   <FormLabel>WebSocket server</FormLabel>
@@ -109,7 +102,7 @@ export function SettingsForm() {
           </CardContent>
 
           <CardFooter className='flex justify-between'>
-            <Button type='reset' variant='outline' onClick={() => form.reset()}>Cancel</Button>
+            <Button type='reset' variant='outline' onClick={() => form.reset(settingsData)}>Cancel</Button>
             <Button type='submit'>Save</Button>
           </CardFooter>
 
