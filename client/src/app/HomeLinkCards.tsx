@@ -1,12 +1,14 @@
 'use client'
 
+import { useRouter } from 'next/navigation'
 import { useState, useEffect, type ReactNode } from 'react'
 import { Crosshair2Icon, MixerHorizontalIcon, GearIcon, RocketIcon, IdCardIcon } from '@radix-ui/react-icons'
 
 import { LinkCard } from '@/components/LinkCard'
 
 export function HomeLinkCards() {
-  'use client'
+  const router = useRouter()
+
   const [isKeyCPressed, setIsKeyCPressed] = useState(false)
   const [isKeySPressed, setIsKeySPressed] = useState(false)
 
@@ -14,16 +16,32 @@ export function HomeLinkCards() {
     function handleKeyDown(event: KeyboardEvent) {
       console.info(`Key down for ${event.code} (${event.key})`)
 
-      switch (event.code) {
-
-      case 'KeyC':
-        setIsKeyCPressed(true)
-        break
-
-      case 'KeyS':
-        setIsKeySPressed(true)
-        break
-
+      if (!event.shiftKey) {
+        switch (event.code) {
+        case 'KeyC':
+          setIsKeyCPressed(true)
+          break
+        case 'KeyS':
+          setIsKeySPressed(true)
+          break
+        }
+      }
+      else {
+        // Immediate Shift-key navigation
+        switch (event.code) {
+        case 'KeyP':
+          router.push('/place')
+          break
+        case 'KeyC':
+          router.push('/calibrate')
+          break
+        case 'KeyS':
+          router.push('/settings')
+          break
+        case 'KeyL':
+          router.push('/learn')
+          break
+        }
       }
     }
 
@@ -31,15 +49,12 @@ export function HomeLinkCards() {
       console.info(`Key up for ${event.code} (${event.key})`)
 
       switch (event.code) {
-
       case 'KeyC':
         setIsKeyCPressed(false)
         break
-
       case 'KeyS':
         setIsKeySPressed(false)
         break
-
       }
     }
 
@@ -50,7 +65,7 @@ export function HomeLinkCards() {
       document.removeEventListener('keydown', handleKeyDown)
       document.removeEventListener('keyup', handleKeyUp)
     }
-  }, [])
+  }, [router])
 
   let primaryCard: ReactNode
   if (!isKeyCPressed && !isKeySPressed) {
