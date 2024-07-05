@@ -7,6 +7,7 @@ import { PageHeading } from '@/components/PageHeading'
 import {
   TypographyH2,
   TypographyH3,
+  TypographyH4,
   TypographyP,
   TypographyBlockquote,
   TypographyInlineCode,
@@ -41,59 +42,11 @@ export default function Learn() {
             ~ <TypographyLink href={GLOBALS.EXTERAL_URLS.PERSON.JAMES}>James Bao</TypographyLink> and <TypographyLink href={GLOBALS.EXTERAL_URLS.PERSON.SAM}>Sam Skinner</TypographyLink>
           </TypographyBlockquote>
 
-          <TypographyH3>System Architecture</TypographyH3>
+          <SystemArchitecture />
 
-          <TypographyH3>Global Interface</TypographyH3>
-          - Theme toggle (defaults to System, can be forced to light/dark)
+          <GlobalInterface />
 
-          <TypographyH3>{GLOBALS.PAGES.HOME.name} Page</TypographyH3>
-          <TypographyP>
-          The home <TypographyInlineCode>{GLOBALS.PAGES.HOME.path}</TypographyInlineCode> page is the launchpad of our user interface.
-          From there, you can access:
-          </TypographyP>
-
-          <TypographyList>
-            <TypographyListItem>
-              <TypographyInlineCode>{GLOBALS.PAGES.PLACE.path}</TypographyInlineCode>: Operate the pick-and-place machine.
-            </TypographyListItem>
-            <TypographyListItem>
-              <TypographyInlineCode>{GLOBALS.PAGES.CALIBRATE.path}</TypographyInlineCode>: Tune the machine&apos;s operating parameters to improve performance.
-            </TypographyListItem>
-            <TypographyListItem>
-              <TypographyInlineCode>{GLOBALS.PAGES.SETTINGS.path}</TypographyInlineCode>: Configure the system&apos;s interface parameters to reflect deployment changes.
-            </TypographyListItem>
-            <TypographyListItem>
-              <TypographyInlineCode>{GLOBALS.PAGES.LEARN.path}</TypographyInlineCode>: This page; learn about how to operate and maintain the pick-and-place machine.
-            </TypographyListItem>
-            <TypographyListItem>
-              <TypographyInlineCode>{GLOBALS.PAGES.PROJECT.path}</TypographyInlineCode>: Read about the background motivations of this research project.
-            </TypographyListItem>
-          </TypographyList>
-
-          <TypographyP>
-            Note that <TypographyInlineCode>{GLOBALS.PAGES.CALIBRATE.path}</TypographyInlineCode> and <TypographyInlineCode>{GLOBALS.PAGES.SETTINGS.path}</TypographyInlineCode> are implemented as &lsquo;hidden&rsquo; pages, in that they are not visible by default.
-            This design decision is motivated by an intent that they should be scarcely necessary—under regular circumstances, one should not need to access them.
-            On the off-chance that they might become necessary, however, they may be &lsquo;activated&rsquo; by pressing the <TypographyInlineCode>c</TypographyInlineCode> or <TypographyInlineCode>s</TypographyInlineCode> key respectively whilst on the home page—which will cause the respective link to appear.
-          </TypographyP>
-
-          <TypographyP>
-            The home page additionally implements instant keyboard page navigation using the <TypographyInlineCode>Shift</TypographyInlineCode> modifier key.
-            The pages that may be accessed using this feature are:
-          </TypographyP>
-          <TypographyList>
-            <TypographyListItem>
-              <TypographyInlineCode>{GLOBALS.PAGES.PLACE.path}</TypographyInlineCode>: By pressing <TypographyInlineCode>Shift</TypographyInlineCode> + <TypographyInlineCode>P</TypographyInlineCode>
-            </TypographyListItem>
-            <TypographyListItem>
-              <TypographyInlineCode>{GLOBALS.PAGES.CALIBRATE.path}</TypographyInlineCode>: By pressing <TypographyInlineCode>Shift</TypographyInlineCode> + <TypographyInlineCode>C</TypographyInlineCode>
-            </TypographyListItem>
-            <TypographyListItem>
-              <TypographyInlineCode>{GLOBALS.PAGES.SETTINGS.path}</TypographyInlineCode>: By pressing <TypographyInlineCode>Shift</TypographyInlineCode> + <TypographyInlineCode>S</TypographyInlineCode>
-            </TypographyListItem>
-            <TypographyListItem>
-              <TypographyInlineCode>{GLOBALS.PAGES.LEARN.path}</TypographyInlineCode>: By pressing <TypographyInlineCode>Shift</TypographyInlineCode> + <TypographyInlineCode>L</TypographyInlineCode>
-            </TypographyListItem>
-          </TypographyList>
+          <ConstituentPages />
 
           <TypographyH2>{GLOBALS.PAGES.PLACE.description}</TypographyH2>
           <TypographyBlockquote>
@@ -106,5 +59,86 @@ export default function Learn() {
 
     </LayoutMain>
 
+  )
+}
+
+function SystemArchitecture() {
+  return (
+    <>
+      <TypographyH3>System Architecture</TypographyH3>
+    </>
+  )
+}
+
+function GlobalInterface() {
+  return (
+    <>
+      <TypographyH3>Global Interface</TypographyH3>
+      - Theme toggle (defaults to System, can be forced to light/dark)
+    </>
+  )
+}
+
+function ConstituentPages() {
+  return (
+    <>
+      <TypographyH3>Constituent Pages</TypographyH3>
+      <ConstituentHomePage />
+    </>
+  )
+}
+
+function ConstituentHomePage() {
+  return (
+    <>
+      <TypographyH4>{GLOBALS.PAGES.HOME.name} Page</TypographyH4>
+      <TypographyP>
+            The home <TypographyInlineCode>{GLOBALS.PAGES.HOME.path}</TypographyInlineCode> page is the launchpad of our user interface.
+            From there, you can access:
+      </TypographyP>
+
+      <TypographyList>
+        <TypographyListItem>
+          <TypographyInlineCode>{GLOBALS.PAGES.PLACE.path}</TypographyInlineCode>: Operate the pick-and-place machine.
+        </TypographyListItem>
+        <TypographyListItem>
+          <TypographyInlineCode>{GLOBALS.PAGES.CALIBRATE.path}</TypographyInlineCode>: Tune the machine&apos;s operating parameters to improve performance.
+        </TypographyListItem>
+        <TypographyListItem>
+          <TypographyInlineCode>{GLOBALS.PAGES.SETTINGS.path}</TypographyInlineCode>: Configure the system&apos;s interface parameters to reflect deployment changes.
+        </TypographyListItem>
+        <TypographyListItem>
+          <TypographyInlineCode>{GLOBALS.PAGES.LEARN.path}</TypographyInlineCode>: This page; learn about how to operate and maintain the pick-and-place machine.
+        </TypographyListItem>
+        <TypographyListItem>
+          <TypographyInlineCode>{GLOBALS.PAGES.PROJECT.path}</TypographyInlineCode>: Read about the background motivations of this research project.
+        </TypographyListItem>
+      </TypographyList>
+
+      <TypographyP>
+            Note that <TypographyInlineCode>{GLOBALS.PAGES.CALIBRATE.path}</TypographyInlineCode> and <TypographyInlineCode>{GLOBALS.PAGES.SETTINGS.path}</TypographyInlineCode> are implemented as &lsquo;hidden&rsquo; pages, in that they are not visible by default.
+            This design decision is motivated by an intent that they should be scarcely necessary—under regular circumstances, one should not need to access them.
+            On the off-chance that they might become necessary, however, they may be &lsquo;activated&rsquo; by pressing the <TypographyInlineCode>c</TypographyInlineCode> or <TypographyInlineCode>s</TypographyInlineCode> key respectively whilst on the home page—which will cause the respective link to appear.
+      </TypographyP>
+
+      <TypographyP>
+            The home page additionally implements instant keyboard page navigation using the <TypographyInlineCode>Shift</TypographyInlineCode> modifier key.
+            The pages that may be accessed using this feature are:
+      </TypographyP>
+      <TypographyList>
+        <TypographyListItem>
+          <TypographyInlineCode>{GLOBALS.PAGES.PLACE.path}</TypographyInlineCode>: By pressing <TypographyInlineCode>Shift</TypographyInlineCode> + <TypographyInlineCode>P</TypographyInlineCode>
+        </TypographyListItem>
+        <TypographyListItem>
+          <TypographyInlineCode>{GLOBALS.PAGES.CALIBRATE.path}</TypographyInlineCode>: By pressing <TypographyInlineCode>Shift</TypographyInlineCode> + <TypographyInlineCode>C</TypographyInlineCode>
+        </TypographyListItem>
+        <TypographyListItem>
+          <TypographyInlineCode>{GLOBALS.PAGES.SETTINGS.path}</TypographyInlineCode>: By pressing <TypographyInlineCode>Shift</TypographyInlineCode> + <TypographyInlineCode>S</TypographyInlineCode>
+        </TypographyListItem>
+        <TypographyListItem>
+          <TypographyInlineCode>{GLOBALS.PAGES.LEARN.path}</TypographyInlineCode>: By pressing <TypographyInlineCode>Shift</TypographyInlineCode> + <TypographyInlineCode>L</TypographyInlineCode>
+        </TypographyListItem>
+      </TypographyList>
+    </>
   )
 }
