@@ -24,7 +24,7 @@ export const Header = () => {
 
           <NavItem hideWhenSmall href='/' label='Home' />
           <NavItem href='/place' label='Place' />
-          <NavItem href='/settings' label='Learn' />
+          <NavItem href='/learn' label='Learn' />
           <NavItem href='/project' label='Project' />
 
           <div className='pl-2 lg:pl-3'>
