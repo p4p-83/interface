@@ -22,7 +22,7 @@ export const Header = () => {
 
         <nav className='inline-flex flex-row items-center justify-between align-middle gap-x-0.5 lg:gap-x-5'>
 
-          <NavItem href='/' label='Home' />
+          <NavItem hideWhenSmall href='/' label='Home' />
           <NavItem href='/place' label='Place' />
           <NavItem href='/settings' label='Learn' />
           <NavItem href='/project' label='Project' />
