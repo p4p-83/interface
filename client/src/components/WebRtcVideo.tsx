@@ -62,7 +62,9 @@ export function WebRtcVideo({ url, setVideoSize, setIsVideoStreaming, setHasVide
     player.load(new URL(url))
       .then(() => setLoadProgress(PROGRESS_BAR.PLAYER_LOADED))
 
-    function handleConnectError() {
+    function handleConnectError(error?: unknown) {
+      console.error('Connect error: ', error)
+
       setLoadProgress(PROGRESS_BAR.PLAYER_LOADED)
       setLoadProgressGrowthStop(PROGRESS_BAR.PLAYER_LOADED);
       (intervalRef.current) && clearInterval(intervalRef.current)
@@ -76,6 +78,11 @@ export function WebRtcVideo({ url, setVideoSize, setIsVideoStreaming, setHasVide
         duration: Infinity,
       })
     }
+
+    // Notify error if origin is unreachable
+    fetch(new URL(url).origin)
+      .then(console.log)
+      .catch(handleConnectError)
 
     player.on('peer-connection-failed', handleConnectError)
     player.on('initial-connection-failed', handleConnectError)

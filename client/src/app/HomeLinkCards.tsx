@@ -65,7 +65,7 @@ export function HomeLinkCards() {
   }
   else if (isKeySPressed) {
     primaryCard = (
-      <LinkCard href='/settings' title='Settings' description='Set the stage.' icon={GearIcon} className='w-full md:col-span-2' />
+      <LinkCard href='/settings' title='Settings' description='Set your stage.' icon={GearIcon} className='w-full md:col-span-2' />
     )
   }
 
