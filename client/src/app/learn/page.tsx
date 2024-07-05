@@ -3,7 +3,16 @@ import type { Metadata } from 'next'
 import { LayoutMain } from '@/components/LayoutMain'
 import { Header } from '@/components/Header'
 import { PageHeading } from '@/components/PageHeading'
-import { TypographyH2, TypographyH3, TypographyBlockquote, TypographyInlineCode, TypographyList, TypographyListItem, TypographyP } from '@/components/ui/typography'
+import {
+  TypographyH2,
+  TypographyH3,
+  TypographyP,
+  TypographyBlockquote,
+  TypographyInlineCode,
+  TypographyLink,
+  TypographyList,
+  TypographyListItem,
+} from '@/components/ui/typography'
 
 export const metadata: Metadata = {
   title: 'Learn | PnP << 83',
@@ -25,13 +34,13 @@ export default function Learn() {
           <TypographyH2>A pick-and-place for rapid prototyping</TypographyH2>
 
           <TypographyBlockquote>
-          Welcome to our Part IV Project!
+            Welcome to our <TypographyLink href='/project'>Part IV Project</TypographyLink>!
             <br />
             <br />
-          We hope that, in time, this page may serve as a one-stop-shop towards the discovery of the operating principles behind, and features comprising, our pick-and-place machine.
+            We hope that, in time, this page may serve as a one-stop-shop towards the discovery of the operating principles behind, and features comprising, our pick-and-place machine.
             <br />
             <br />
-          ~ James and Sam
+            ~ <TypographyLink href='https://www.linkedin.com/in/jamesnzl/'>James Bao</TypographyLink> and <TypographyLink href='https://www.linkedin.com/in/sam-skinner-752347224/'>Sam Skinner</TypographyLink>
           </TypographyBlockquote>
 
           <TypographyH3>System Architecture</TypographyH3>
@@ -87,6 +96,12 @@ export default function Learn() {
               <TypographyInlineCode>/learn</TypographyInlineCode>: By pressing <TypographyInlineCode>Shift</TypographyInlineCode> + <TypographyInlineCode>L</TypographyInlineCode>
             </TypographyListItem>
           </TypographyList>
+
+          <TypographyH2>Position with precision</TypographyH2>
+          <TypographyBlockquote>
+            Mastered the manual?
+            Start <TypographyLink href='/place'>placing</TypographyLink>!
+          </TypographyBlockquote>
         </div>
 
       </div>

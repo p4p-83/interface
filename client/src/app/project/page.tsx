@@ -7,11 +7,12 @@ import {
   TypographyH2,
   TypographyH3,
   TypographyH4,
+  TypographyP,
+  TypographyBlockquote,
   TypographyInlineCode,
+  TypographyLink,
   TypographyList,
   TypographyListItem,
-  TypographyP,
-  TypographyLink,
 } from '@/components/ui/typography'
 
 export const metadata: Metadata = {
@@ -93,11 +94,22 @@ export default function Learn() {
             </TypographyListItem>
           </TypographyList>
 
+          <TypographyH2>See what we&apos;ve built</TypographyH2>
+
           <TypographyH3>GitHub Organisation</TypographyH3>
           <TypographyP>
             Our work towards this research project is contained within our GitHub organisation, <TypographyLink href='https://github.com/p4p-83'><TypographyInlineCode>p4p-83</TypographyInlineCode></TypographyLink>.
             We have additionally maintained logbooks throughout this project within an Obsidian vault (ie Markdown <TypographyInlineCode>.md</TypographyInlineCode> files), which is version controlled in a repository at <TypographyLink href='https://github.com/p4p-83/docs'><TypographyInlineCode>p4p-83/docs</TypographyInlineCode></TypographyLink>.
           </TypographyP>
+
+          <TypographyH3>Meet your match</TypographyH3>
+          <TypographyBlockquote>
+            Gotten the gist?
+            <br />
+            <br />
+            <TypographyLink href='/learn'>Learn</TypographyLink> about what we&apos;ve built, and how to use it!
+          </TypographyBlockquote>
+
         </div>
 
       </div>
