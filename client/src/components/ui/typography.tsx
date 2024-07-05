@@ -56,12 +56,22 @@ export function TypographyBlockquote({ children }: TypographyProps) {
   )
 }
 
-export function TypographyList({ children }: TypographyProps) {
-  return (
-    <ul className='my-6 ml-6 list-disc [&>li]:mt-2'>
-      {children}
-    </ul>
-  )
+type TypographyListProps = TypographyProps & {
+  ordered?: boolean;
+}
+
+export function TypographyList({ children, ordered = false }: TypographyListProps) {
+  return (ordered)
+    ? (
+      <ol className='my-6 ml-6 list-decimal [&>li]:mt-2'>
+        {children}
+      </ol>
+    )
+    : (
+      <ul className='my-6 ml-6 list-disc [&>li]:mt-2'>
+        {children}
+      </ul>
+    )
 }
 
 export function TypographyListItem({ children }: TypographyProps) {
@@ -107,5 +117,17 @@ export function TypographyMuted({ children, className }: TypographyProps & Style
     <span className={cn(className, 'text-muted-foreground')}>
       {children}
     </span>
+  )
+}
+
+type TypographyLinkProps = TypographyProps & {
+  href: string;
+}
+
+export function TypographyLink({ children, href }: TypographyLinkProps) {
+  return (
+    <a href={href} className='font-medium text-primary underline underline-offset-4' >
+      {children}
+    </a>
   )
 }
