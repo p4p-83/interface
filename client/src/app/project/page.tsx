@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 
+import * as GLOBALS from '@/app/globals'
 import { LayoutMain } from '@/components/LayoutMain'
 import { Header } from '@/components/Header'
 import { PageHeading } from '@/components/PageHeading'
@@ -15,12 +16,9 @@ import {
   TypographyListItem,
 } from '@/components/ui/typography'
 
-export const metadata: Metadata = {
-  title: 'Project | PnP << 83',
-  description: 'Explore the lore.',
-}
+export const metadata: Metadata = GLOBALS.PAGES.getMetadata(GLOBALS.PAGES.PROJECT)
 
-export default function Learn() {
+export default function Project() {
   return (
 
     <LayoutMain justifyStart>
@@ -30,15 +28,15 @@ export default function Learn() {
       <div className='grid grid-cols-1 w-full max-w-3xl gap-4 md:gap-6'>
 
         <div>
-          <PageHeading title='Project' subTitle='Explore the lore.' />
+          <PageHeading {...GLOBALS.PAGES.PROJECT} />
 
           <TypographyH2>Part IV Project #83</TypographyH2>
 
           <TypographyP>
-            <TypographyLink href='https://part4project.foe.auckland.ac.nz/home/project/detail/5032/'>Part IV Project 2024 #83</TypographyLink> — <TypographyLink href='https://www.linkedin.com/in/jamesnzl/'>James Bao</TypographyLink> and <TypographyLink href='https://www.linkedin.com/in/sam-skinner-752347224/'>Sam Skinner</TypographyLink>, supervised by <TypographyLink href='https://profiles.auckland.ac.nz/nd-patel'>Dr. Nitish Patel</TypographyLink>.
+            <TypographyLink href={GLOBALS.EXTERAL_URLS.PROJECT.MANAGEMENT_SYSTEM}>Part IV Project 2024 #83</TypographyLink> — <TypographyLink href={GLOBALS.EXTERAL_URLS.PERSON.JAMES}>James Bao</TypographyLink> and <TypographyLink href={GLOBALS.EXTERAL_URLS.PERSON.SAM}>Sam Skinner</TypographyLink>, supervised by <TypographyLink href={GLOBALS.EXTERAL_URLS.PERSON.NITISH}>Dr. Nitish Patel</TypographyLink>.
           </TypographyP>
           <TypographyP>
-            <TypographyLink href='https://www.auckland.ac.nz/en/engineering/about-the-faculty/electrical-computer-and-software-engineering.html'>Department of Electrical, Computer, and Software Engineering</TypographyLink>, <TypographyLink href='https://www.auckland.ac.nz/en.html'>The University of Auckland</TypographyLink>.
+            <TypographyLink href={GLOBALS.EXTERAL_URLS.UNIVERSITY.ECSE}>Department of Electrical, Computer, and Software Engineering</TypographyLink>, <TypographyLink href={GLOBALS.EXTERAL_URLS.UNIVERSITY.HOME}>The University of Auckland</TypographyLink>.
           </TypographyP>
 
           <TypographyH3>A pick-and-place for rapid prototyping</TypographyH3>
@@ -98,16 +96,16 @@ export default function Learn() {
 
           <TypographyH3>GitHub Organisation</TypographyH3>
           <TypographyP>
-            Our work towards this research project is contained within our GitHub organisation, <TypographyLink href='https://github.com/p4p-83'><TypographyInlineCode>p4p-83</TypographyInlineCode></TypographyLink>.
-            We have additionally maintained logbooks throughout this project within an Obsidian vault (ie Markdown <TypographyInlineCode>.md</TypographyInlineCode> files), which is version controlled in a repository at <TypographyLink href='https://github.com/p4p-83/docs'><TypographyInlineCode>p4p-83/docs</TypographyInlineCode></TypographyLink>.
+            Our work towards this research project is contained within our GitHub organisation, <TypographyLink href={GLOBALS.EXTERAL_URLS.PROJECT.GITHUB.ORGANISATION.URL}><TypographyInlineCode>{GLOBALS.EXTERAL_URLS.PROJECT.GITHUB.ORGANISATION.NAME}</TypographyInlineCode></TypographyLink>.
+            We have additionally maintained logbooks throughout this project within an Obsidian vault (ie Markdown <TypographyInlineCode>.md</TypographyInlineCode> files), which is version controlled in a repository at <TypographyLink href={GLOBALS.EXTERAL_URLS.PROJECT.GITHUB.DOCS.URL}><TypographyInlineCode>{GLOBALS.EXTERAL_URLS.PROJECT.GITHUB.DOCS.NAME}</TypographyInlineCode></TypographyLink>.
           </TypographyP>
 
-          <TypographyH3>Meet your match</TypographyH3>
+          <TypographyH3>{GLOBALS.PAGES.LEARN.description}</TypographyH3>
           <TypographyBlockquote>
             Gotten the gist?
             <br />
             <br />
-            <TypographyLink href='/learn'>Learn</TypographyLink> about what we&apos;ve built, and how to use it!
+            <TypographyLink href={GLOBALS.PAGES.LEARN.path}>Learn</TypographyLink> about what we&apos;ve built, and how to use it!
           </TypographyBlockquote>
 
         </div>

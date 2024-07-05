@@ -4,6 +4,7 @@ import { useRouter } from 'next/navigation'
 import { useState, useEffect, type ReactNode } from 'react'
 import { Crosshair2Icon, MixerHorizontalIcon, GearIcon, RocketIcon, IdCardIcon } from '@radix-ui/react-icons'
 
+import * as GLOBALS from '@/app/globals'
 import { LinkCard } from '@/components/LinkCard'
 
 export function HomeLinkCards() {
@@ -30,16 +31,16 @@ export function HomeLinkCards() {
         // Immediate Shift-key navigation
         switch (event.code) {
         case 'KeyP':
-          router.push('/place')
+          router.push(GLOBALS.PAGES.PLACE.path)
           break
         case 'KeyC':
-          router.push('/calibrate')
+          router.push(GLOBALS.PAGES.CALIBRATE.path)
           break
         case 'KeyS':
-          router.push('/settings')
+          router.push(GLOBALS.PAGES.SETTINGS.path)
           break
         case 'KeyL':
-          router.push('/learn')
+          router.push(GLOBALS.PAGES.LEARN.path)
           break
         }
       }
@@ -70,17 +71,17 @@ export function HomeLinkCards() {
   let primaryCard: ReactNode
   if (!isKeyCPressed && !isKeySPressed) {
     primaryCard = (
-      <LinkCard href='/place' title='Place' description='Position with precision.' icon={Crosshair2Icon} className='w-full md:col-span-2' />
+      <LinkCard href={GLOBALS.PAGES.PLACE.path} title={GLOBALS.PAGES.PLACE.name} description={`${GLOBALS.PAGES.PLACE.description}.`} icon={Crosshair2Icon} className='w-full md:col-span-2' />
     )
   }
   else if (isKeyCPressed) {
     primaryCard = (
-      <LinkCard href='/calibrate' title='Calibrate' description='Measure twice, place once.' icon={MixerHorizontalIcon} className='w-full md:col-span-2' />
+      <LinkCard href={GLOBALS.PAGES.CALIBRATE.path} title={GLOBALS.PAGES.CALIBRATE.name} description={`${GLOBALS.PAGES.CALIBRATE.description}.`} icon={MixerHorizontalIcon} className='w-full md:col-span-2' />
     )
   }
   else if (isKeySPressed) {
     primaryCard = (
-      <LinkCard href='/settings' title='Settings' description='Set your stage.' icon={GearIcon} className='w-full md:col-span-2' />
+      <LinkCard href={GLOBALS.PAGES.SETTINGS.path} title={GLOBALS.PAGES.SETTINGS.name} description={`${GLOBALS.PAGES.SETTINGS.description}.`} icon={GearIcon} className='w-full md:col-span-2' />
     )
   }
 
@@ -89,8 +90,8 @@ export function HomeLinkCards() {
 
       {primaryCard}
 
-      <LinkCard href='/learn' title='Learn' description='Meet your match.' icon={RocketIcon} className='w-full' />
-      <LinkCard href='/project' title='Project' description='Explore the lore.' icon={IdCardIcon} className='w-full' />
+      <LinkCard href={GLOBALS.PAGES.LEARN.path} title={GLOBALS.PAGES.LEARN.name} description={`${GLOBALS.PAGES.LEARN.description}.`} icon={RocketIcon} className='w-full' />
+      <LinkCard href={GLOBALS.PAGES.PROJECT.path} title={GLOBALS.PAGES.PROJECT.name} description={`${GLOBALS.PAGES.PROJECT.description}.`} icon={IdCardIcon} className='w-full' />
 
     </div>
   )

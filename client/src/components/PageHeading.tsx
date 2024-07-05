@@ -1,19 +1,18 @@
-import { TypographyH1, TypographyP, TypographyMuted } from './ui/typography'
+import { TypographyH1, TypographyP, TypographyMuted } from '@/components/ui/typography'
 
-type PageHeadingProps = {
-  title: string;
-  subTitle?: string;
-};
+import { type Page } from '@/app/globals'
 
-export function PageHeading({ title, subTitle }: PageHeadingProps) {
+type PageHeadingProps = Pick<Page, 'name' | 'description'>;
+
+export function PageHeading({ name, description }: PageHeadingProps) {
   return (
     <>
 
-      <TypographyH1>{title}</TypographyH1>
+      <TypographyH1>{name}</TypographyH1>
 
-      {(subTitle) && (
+      {(description) && (
         <TypographyP>
-          <TypographyMuted className='text-base'>{subTitle}</TypographyMuted>
+          <TypographyMuted className='text-base'>{description}.</TypographyMuted>
         </TypographyP>
       )}
 
