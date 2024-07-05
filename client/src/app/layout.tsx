@@ -18,7 +18,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang='en' suppressHydrationWarning>
-      <body className={cn(ubuntu.className, 'flex min-h-screen flex-col items-center justify-center px-5')}>
+      <body className={cn(ubuntu.className, 'bg-background text-foreground')}>
 
         <ThemeProvider
           attribute='class'
@@ -27,7 +27,9 @@ export default function RootLayout({
           disableTransitionOnChange
         >
 
-          {children}
+          <main className='flex min-h-screen flex-col items-center justify-center px-5 has-[header]:py-32'>
+            {children}
+          </main>
 
           <Toaster richColors />
 

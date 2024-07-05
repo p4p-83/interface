@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
 
-import { ThemeToggle } from '@/components/ThemeToggle'
+import { Header } from '@/components/Header'
 import { PageHeading } from '@/components/PageHeading'
 
 import { DataContextProvider } from '@/context/DataContextProvider'
@@ -17,9 +17,7 @@ export default function Settings() {
 
     <>
 
-      <div className='absolute top-6 right-6'>
-        <ThemeToggle />
-      </div>
+      <Header />
 
       <PageHeading title='Settings' subTitle='Set your stage.' />
 
