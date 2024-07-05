@@ -49,7 +49,7 @@ export const NavItem = ({ href, label, hideWhenSmall }: NavItemProps) => {
 
   let linkStyle = cn(
     'py-4 px-2 lg:px-4',
-    'transition-colors duration-200',
+    'transition-colors',
     'font-medium uppercase text-sm md:text-base',
     'select-none cursor-pointer'
   )
