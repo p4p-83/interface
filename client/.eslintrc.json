@@ -1,6 +1,9 @@
 {
   "root": true,
   "extends": "next/core-web-vitals",
+  "ignorePatterns": [
+    "/src/proto/**/*.ts"
+  ],
   "overrides": [
     {
       "files": [
