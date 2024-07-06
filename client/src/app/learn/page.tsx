@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import { ReactNode } from 'react'
 
 import * as GLOBALS from '@/app/globals'
 import { LayoutMain } from '@/components/LayoutMain'
@@ -21,6 +22,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from '@/components/ui/accordion'
+
 export const metadata: Metadata = GLOBALS.PAGES.getMetadata(GLOBALS.PAGES.LEARN)
 
 export default function Learn() {
@@ -85,15 +87,24 @@ function GlobalInterface() {
 }
 
 function ConstituentPages() {
-  if (false) {
+  type PageAccordionItemProps = {
+    children: ReactNode;
+    page: GLOBALS.Page;
+  }
+
+  function PageAccordionItem({ children, page }: PageAccordionItemProps) {
     return (
-      <>
-        <TypographyH3>Constituent Pages</TypographyH3>
-        <TypographyH4>{GLOBALS.PAGES.HOME.name} Page</TypographyH4>
-        <ConstituentHomePage />
-        <TypographyH4>{GLOBALS.PAGES.PLACE.name} Page</TypographyH4>
-        <ConstituentPlacePage />
-      </>
+      <AccordionItem value={page.path}>
+        <AccordionTrigger>
+          <span className='flex flex-row gap-2 justify-between items-center w-full pr-2'>
+            <TypographyH4>{page.name} Page</TypographyH4>
+            <TypographyInlineCode>{page.path}</TypographyInlineCode>
+          </span>
+        </AccordionTrigger>
+        <AccordionContent>
+          {children}
+        </AccordionContent>
+      </AccordionItem>
     )
   }
 
@@ -102,23 +113,21 @@ function ConstituentPages() {
       <TypographyH3>Constituent Pages</TypographyH3>
       <Accordion type='multiple' className='w-full mt-2'>
 
-        <AccordionItem value={GLOBALS.PAGES.HOME.path}>
-          <AccordionTrigger>
-            <TypographyH4>{GLOBALS.PAGES.HOME.name} Page</TypographyH4>
-          </AccordionTrigger>
-          <AccordionContent>
-            <ConstituentHomePage />
-          </AccordionContent>
-        </AccordionItem>
+        <PageAccordionItem page={GLOBALS.PAGES.HOME}>
+          <ConstituentHomePage />
+        </PageAccordionItem>
 
-        <AccordionItem value={GLOBALS.PAGES.PLACE.path}>
-          <AccordionTrigger>
-            <TypographyH4>{GLOBALS.PAGES.PLACE.name} Page</TypographyH4>
-          </AccordionTrigger>
-          <AccordionContent>
-            <ConstituentPlacePage />
-          </AccordionContent>
-        </AccordionItem>
+        <PageAccordionItem page={GLOBALS.PAGES.PLACE}>
+          <ConstituentPlacePage />
+        </PageAccordionItem>
+
+        {/* <PageAccordionItem page={GLOBALS.PAGES.CALIBRATE}>
+          <ConstituentCalibratePage />
+        </PageAccordionItem>
+
+        <PageAccordionItem page={GLOBALS.PAGES.SETTINGS}>
+          <ConstituentSettingsPage />
+        </PageAccordionItem> */}
 
       </Accordion>
     </>
