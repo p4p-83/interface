@@ -10,7 +10,7 @@ import { cn } from '@/lib/utils'
 
 export const Header = () => {
   return (
-    <header className='fixed bg-background top-0 left-0 right-0 z-40'>
+    <header className='fixed bg-card/95 backdrop-blur supports-[backdrop-filter]:bg-card/60 text-card-foreground border-b shadow top-0 left-0 right-0 z-40'>
       <div className='flex items-center justify-between px-6 my-0 mx-auto h-28 max-w-5xl'>
 
         <Link href={GLOBALS.PAGES.HOME.path} className='p-2 md:p-4 select-none cursor-pointer m-0 inline-flex items-end'>

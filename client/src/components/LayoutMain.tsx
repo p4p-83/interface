@@ -12,7 +12,7 @@ export function LayoutMain({ children, justifyStart = false }: LayoutMainProps) 
 
     <main className={cn(
       'flex min-h-screen flex-col items-center px-5',
-      (justifyStart) ? 'justify-start has-[header]:py-36' : 'justify-center has-[header]:py-32',
+      (justifyStart) ? 'justify-start has-[header]:py-40' : 'justify-center has-[header]:py-32',
     )}>
       {children}
     </main>
