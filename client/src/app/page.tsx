@@ -1,7 +1,7 @@
 import { LayoutMain } from '@/components/LayoutMain'
 import { ThemeToggle } from '@/components/ThemeToggle'
 
-import { HomeRandomSubtitle } from './home/HomeRandomSubtitle'
+import { HomeRandomSubtitle } from '@/app/home/HomeRandomSubtitle'
 import { HomeLinkCards } from '@/app/home/HomeLinkCards'
 
 export default function Home() {
