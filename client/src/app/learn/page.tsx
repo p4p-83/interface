@@ -15,7 +15,12 @@ import {
   TypographyList,
   TypographyListItem,
 } from '@/components/ui/typography'
-
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from '@/components/ui/accordion'
 export const metadata: Metadata = GLOBALS.PAGES.getMetadata(GLOBALS.PAGES.LEARN)
 
 export default function Learn() {
@@ -80,10 +85,42 @@ function GlobalInterface() {
 }
 
 function ConstituentPages() {
+  if (false) {
+    return (
+      <>
+        <TypographyH3>Constituent Pages</TypographyH3>
+        <TypographyH4>{GLOBALS.PAGES.HOME.name} Page</TypographyH4>
+        <ConstituentHomePage />
+        <TypographyH4>{GLOBALS.PAGES.PLACE.name} Page</TypographyH4>
+        <ConstituentPlacePage />
+      </>
+    )
+  }
+
   return (
     <>
       <TypographyH3>Constituent Pages</TypographyH3>
-      <ConstituentHomePage />
+      <Accordion type='multiple' className='w-full mt-2'>
+
+        <AccordionItem value={GLOBALS.PAGES.HOME.path}>
+          <AccordionTrigger>
+            <TypographyH4>{GLOBALS.PAGES.HOME.name} Page</TypographyH4>
+          </AccordionTrigger>
+          <AccordionContent>
+            <ConstituentHomePage />
+          </AccordionContent>
+        </AccordionItem>
+
+        <AccordionItem value={GLOBALS.PAGES.PLACE.path}>
+          <AccordionTrigger>
+            <TypographyH4>{GLOBALS.PAGES.PLACE.name} Page</TypographyH4>
+          </AccordionTrigger>
+          <AccordionContent>
+            <ConstituentPlacePage />
+          </AccordionContent>
+        </AccordionItem>
+
+      </Accordion>
     </>
   )
 }
@@ -91,10 +128,9 @@ function ConstituentPages() {
 function ConstituentHomePage() {
   return (
     <>
-      <TypographyH4>{GLOBALS.PAGES.HOME.name} Page</TypographyH4>
       <TypographyP>
-            The home <TypographyInlineCode>{GLOBALS.PAGES.HOME.path}</TypographyInlineCode> page is the launchpad of our user interface.
-            From there, you can access:
+        The home <TypographyInlineCode>{GLOBALS.PAGES.HOME.path}</TypographyInlineCode> page is the launchpad of our user interface.
+        From there, you can access:
       </TypographyP>
 
       <TypographyList>
@@ -116,14 +152,49 @@ function ConstituentHomePage() {
       </TypographyList>
 
       <TypographyP>
-            Note that <TypographyInlineCode>{GLOBALS.PAGES.CALIBRATE.path}</TypographyInlineCode> and <TypographyInlineCode>{GLOBALS.PAGES.SETTINGS.path}</TypographyInlineCode> are implemented as &lsquo;hidden&rsquo; pages, in that they are not visible by default.
-            This design decision is motivated by an intent that they should be scarcely necessary—under regular circumstances, one should not need to access them.
-            On the off-chance that they might become necessary, however, they may be &lsquo;activated&rsquo; by pressing the <TypographyInlineCode>c</TypographyInlineCode> or <TypographyInlineCode>s</TypographyInlineCode> key respectively whilst on the home page—which will cause the respective link to appear.
+        Note that <TypographyInlineCode>{GLOBALS.PAGES.CALIBRATE.path}</TypographyInlineCode> and <TypographyInlineCode>{GLOBALS.PAGES.SETTINGS.path}</TypographyInlineCode> are implemented as &lsquo;hidden&rsquo; pages, in that they are not visible by default.
+        This design decision is motivated by an intent that they should be scarcely necessary—under regular circumstances, one should not need to access them.
+        On the off-chance that they might become necessary, however, they may be &lsquo;activated&rsquo; by pressing the <TypographyInlineCode>c</TypographyInlineCode> or <TypographyInlineCode>s</TypographyInlineCode> key respectively whilst on the home page—which will cause the respective link to appear.
       </TypographyP>
 
       <TypographyP>
-            The home page additionally implements instant keyboard page navigation using the <TypographyInlineCode>Shift</TypographyInlineCode> modifier key.
-            The pages that may be accessed using this feature are:
+        The home page additionally implements instant keyboard page navigation using the <TypographyInlineCode>Shift</TypographyInlineCode> modifier key.
+        The pages that may be accessed using this feature are:
+      </TypographyP>
+      <TypographyList>
+        <TypographyListItem>
+          <TypographyInlineCode>{GLOBALS.PAGES.PLACE.path}</TypographyInlineCode>: By pressing <TypographyInlineCode>Shift</TypographyInlineCode> + <TypographyInlineCode>P</TypographyInlineCode>
+        </TypographyListItem>
+        <TypographyListItem>
+          <TypographyInlineCode>{GLOBALS.PAGES.CALIBRATE.path}</TypographyInlineCode>: By pressing <TypographyInlineCode>Shift</TypographyInlineCode> + <TypographyInlineCode>C</TypographyInlineCode>
+        </TypographyListItem>
+        <TypographyListItem>
+          <TypographyInlineCode>{GLOBALS.PAGES.SETTINGS.path}</TypographyInlineCode>: By pressing <TypographyInlineCode>Shift</TypographyInlineCode> + <TypographyInlineCode>S</TypographyInlineCode>
+        </TypographyListItem>
+        <TypographyListItem>
+          <TypographyInlineCode>{GLOBALS.PAGES.LEARN.path}</TypographyInlineCode>: By pressing <TypographyInlineCode>Shift</TypographyInlineCode> + <TypographyInlineCode>L</TypographyInlineCode>
+        </TypographyListItem>
+      </TypographyList>
+    </>
+  )
+}
+
+function ConstituentPlacePage() {
+  return (
+    <>
+      <TypographyP>
+        The <TypographyInlineCode>{GLOBALS.PAGES.PLACE.path}</TypographyInlineCode> page is centrepiece of our project.
+      </TypographyP>
+
+      <TypographyP>
+        Note that <TypographyInlineCode>{GLOBALS.PAGES.CALIBRATE.path}</TypographyInlineCode> and <TypographyInlineCode>{GLOBALS.PAGES.SETTINGS.path}</TypographyInlineCode> are implemented as &lsquo;hidden&rsquo; pages, in that they are not visible by default.
+        This design decision is motivated by an intent that they should be scarcely necessary—under regular circumstances, one should not need to access them.
+        On the off-chance that they might become necessary, however, they may be &lsquo;activated&rsquo; by pressing the <TypographyInlineCode>c</TypographyInlineCode> or <TypographyInlineCode>s</TypographyInlineCode> key respectively whilst on the home page—which will cause the respective link to appear.
+      </TypographyP>
+
+      <TypographyP>
+        The home page additionally implements instant keyboard page navigation using the <TypographyInlineCode>Shift</TypographyInlineCode> modifier key.
+        The pages that may be accessed using this feature are:
       </TypographyP>
       <TypographyList>
         <TypographyListItem>
