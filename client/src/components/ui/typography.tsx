@@ -41,6 +41,14 @@ export function TypographyH4({ children }: TypographyProps) {
   )
 }
 
+export function TypographyH5({ children }: TypographyProps) {
+  return (
+    <h5 className='mt-6 scroll-m-20 text-lg font-medium tracking-tight first:mt-0'>
+      {children}
+    </h5>
+  )
+}
+
 export function TypographyP({ children }: TypographyProps) {
   return (
     <p className='leading-7 [&:not(:first-child)]:mt-6'>
