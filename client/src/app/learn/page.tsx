@@ -22,6 +22,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from '@/components/ui/accordion'
+import { ThemeToggleIcon } from '@/components/ThemeToggle'
 
 export const metadata: Metadata = GLOBALS.PAGES.getMetadata(GLOBALS.PAGES.LEARN)
 
@@ -81,7 +82,12 @@ function GlobalInterface() {
   return (
     <>
       <TypographyH3>Global Interface</TypographyH3>
-      - Theme toggle (defaults to System, can be forced to light/dark)
+
+      <TypographyH4>Light/Dark Theme</TypographyH4>
+      <TypographyP>
+        This web application implements a global light and dark theme that is by default responsive to the browser/system preferences.
+        You may change this at any time by using the <TypographyInlineCode><ThemeToggleIcon className='align-text-top' /></TypographyInlineCode> toggle at the top right-hand corner of the viewport.
+      </TypographyP>
     </>
   )
 }
