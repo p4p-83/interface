@@ -13,7 +13,7 @@ export default function Home() {
         <ThemeToggle />
       </div>
 
-      <h1 className='mt-20 md:mt-10 mb-10 sm:mb-16 text-5xl sm:text-6xl sm:text-[4rem] text-center font-extrabold underline decoration-primary'>
+      <h1 className='mt-20 md:mt-10 mb-10 sm:mb-16 text-3xl sm:text-6xl sm:text-[4rem] text-center font-extrabold underline decoration-primary'>
         A pick-and-place,<br />
         for <em className='italic'>rapid</em> prototyping.
       </h1>

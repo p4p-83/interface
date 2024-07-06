@@ -19,7 +19,7 @@ export function TypographyH1({ children }: TypographyProps) {
 
 export function TypographyH2({ children }: TypographyProps) {
   return (
-    <h2 className='mt-10 scroll-m-20 border-b pb-2 text-3xl font-semibold tracking-tight first:mt-0'>
+    <h2 className='mt-10 scroll-m-20 border-b pb-2 text-2xl sm:text-3xl font-semibold tracking-tight first:mt-0'>
       {children}
     </h2>
   )
@@ -27,7 +27,7 @@ export function TypographyH2({ children }: TypographyProps) {
 
 export function TypographyH3({ children }: TypographyProps) {
   return (
-    <h3 className='mt-8 scroll-m-20 text-2xl font-semibold tracking-tight first:mt-0'>
+    <h3 className='mt-8 scroll-m-20 text-xl sm:text-2xl font-semibold tracking-tight first:mt-0'>
       {children}
     </h3>
   )
@@ -35,7 +35,7 @@ export function TypographyH3({ children }: TypographyProps) {
 
 export function TypographyH4({ children }: TypographyProps) {
   return (
-    <h4 className='mt-6 scroll-m-20 text-xl font-semibold tracking-tight first:mt-0'>
+    <h4 className='mt-6 scroll-m-20 text-lg sm:text-xl font-semibold tracking-tight first:mt-0'>
       {children}
     </h4>
   )
@@ -43,7 +43,7 @@ export function TypographyH4({ children }: TypographyProps) {
 
 export function TypographyH5({ children }: TypographyProps) {
   return (
-    <h5 className='mt-6 scroll-m-20 text-lg font-medium tracking-tight first:mt-0'>
+    <h5 className='mt-6 scroll-m-20 text-base sm:text-lg font-medium tracking-tight first:mt-0'>
       {children}
     </h5>
   )
@@ -51,7 +51,7 @@ export function TypographyH5({ children }: TypographyProps) {
 
 export function TypographyP({ children }: TypographyProps) {
   return (
-    <p className='leading-7 [&:not(:first-child)]:mt-6'>
+    <p className='leading-7 text-sm sm:text-base [&:not(:first-child)]:mt-6'>
       {children}
     </p>
   )
@@ -59,7 +59,7 @@ export function TypographyP({ children }: TypographyProps) {
 
 export function TypographyBlockquote({ children }: TypographyProps) {
   return (
-    <blockquote className='mt-6 border-l-2 pl-6 italic first:mt-0'>
+    <blockquote className='mt-6 text-sm sm:text-base border-l-2 pl-6 italic first:mt-0'>
       {children}
     </blockquote>
   )
@@ -85,13 +85,13 @@ export function TypographyList({ children, ordered = false }: TypographyListProp
 
 export function TypographyListItem({ children }: TypographyProps) {
   return (
-    <li>{children}</li>
+    <li className='text-sm sm:text-base'>{children}</li>
   )
 }
 
 export function TypographyInlineCode({ children }: TypographyProps) {
   return (
-    <code className='relative rounded bg-muted px-[0.3rem] py-[0.2rem] font-mono text-sm'>
+    <code className='relative rounded bg-muted px-[0.3rem] py-[0.2rem] font-mono text-xs sm:text-sm'>
       {children}
     </code>
   )
@@ -99,7 +99,7 @@ export function TypographyInlineCode({ children }: TypographyProps) {
 
 export function TypographyLead({ children }: TypographyProps) {
   return (
-    <span className='text-xl text-muted-foreground'>
+    <span className='text-lg sm:text-xl text-muted-foreground'>
       {children}
     </span>
   )
@@ -107,7 +107,7 @@ export function TypographyLead({ children }: TypographyProps) {
 
 export function TypographyLarge({ children }: TypographyProps) {
   return (
-    <span className='text-lg font-semibold'>
+    <span className='text-base sm:text-lg font-semibold'>
       {children}
     </span>
   )
@@ -115,7 +115,7 @@ export function TypographyLarge({ children }: TypographyProps) {
 
 export function TypographySmall({ children }: TypographyProps) {
   return (
-    <small className='text-sm font-medium leading-none'>
+    <small className='text-xs sm:text-sm font-medium leading-none'>
       {children}
     </small>
   )

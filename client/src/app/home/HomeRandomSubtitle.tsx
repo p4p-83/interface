@@ -21,7 +21,7 @@ export function HomeRandomSubtitle() {
   }, [])
 
   return (
-    <Badge variant='secondary' className='mb-8 sm:mb-16 text-xs sm:text-base'>
+    <Badge variant='secondary' className='mb-8 sm:mb-16 text-[0.625rem] font-normal sm:font-semibold sm:text-base'>
       <code className='font-mono p-2'>
         {subtitle}
       </code>
