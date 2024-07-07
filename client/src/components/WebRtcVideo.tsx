@@ -15,13 +15,12 @@ const PROGRESS_BAR = {
   FINAL: 100,
   // Fixed progresses
   PLAYER_CONSTRUCTED: 2,
-  PLAYER_LOADED: 20,
-  VIDEO_LOAD_START: 67,
-  VIDEO_LOADED_METADATA: 99.99,
-  VIDEO_LOADED_DATA: 100,
+  PLAYER_LOADED: 15,
+  VIDEO_LOAD_START: 30,
+  VIDEO_LOADED_METADATA: 85,
+  VIDEO_LOADED_DATA: 99.99,
   // Interval increments
-  INCREMENT: 1,
-  INCREMENT_FINAL: 98,
+  INCREMENT: 0.5,
   INCREMENT_INTERVAL_MS: 50,
   // Delay before hiding
   LOADED_DELAY_MS: 325,
@@ -170,10 +169,12 @@ export function WebRtcVideo({ url, setVideoSize, setIsVideoStreaming, setHasVide
       setLoadProgressGrowthStop(PROGRESS_BAR.VIDEO_LOADED_DATA)
     }
     const handleData = async () => {
-      await new Promise((resolve) => setTimeout(resolve, PROGRESS_BAR.LOADED_DELAY_MS))
-
       setLoadProgress(PROGRESS_BAR.VIDEO_LOADED_DATA)
       setLoadProgressGrowthStop(PROGRESS_BAR.VIDEO_LOADED_DATA)
+
+      await new Promise((resolve) => setTimeout(resolve, PROGRESS_BAR.LOADED_DELAY_MS))
+      setLoadProgress(PROGRESS_BAR.FINAL)
+      setLoadProgressGrowthStop(PROGRESS_BAR.FINAL)
       setIsVideoStreaming?.(true)
     }
 
