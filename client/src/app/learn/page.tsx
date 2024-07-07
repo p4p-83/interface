@@ -34,6 +34,13 @@ import {
   AccordionTrigger,
   AccordionContent,
 } from '@/components/ui/accordion'
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from '@/components/ui/carousel'
 
 export const metadata: Metadata = GLOBALS.PAGES.getMetadata(GLOBALS.PAGES.LEARN)
 
@@ -140,7 +147,7 @@ function ApplicationInterface() {
             </TypographyList>
 
             <TypographyP>
-               This keyboard navigation scheme is accessed via the <TypographyInlineCode>Shift</TypographyInlineCode> modifier key.
+              This keyboard navigation scheme is accessed via the <TypographyInlineCode>Shift</TypographyInlineCode> modifier key.
               The pages that may be accessed using this scheme are:
             </TypographyP>
             <TypographyList>
@@ -286,34 +293,48 @@ function ConstituentPlacePage() {
       </TypographyP>
 
       <TypographyH5>Page Lifecycle</TypographyH5>
-      <TypographyP>
+      <TypographyList ordered>
+        <TypographyListItem>
         Upon navigating to <GLOBALS.InlineCode.Pages.Place />, the the operator is first shown a dynamic progress bar whilst this <GLOBALS.InlineCode.GitHub.Interface /> establishes a WebRTC connection to the <GLOBALS.InlineCode.GitHub.Controller />&apos;s WHEP stream address as configured on <GLOBALS.InlineCode.Pages.Settings />.
-      </TypographyP>
+        </TypographyListItem>
 
-      {/* TODO: Carousel */}
-      <TypographyImage
-        src={placeProgressImage}
-        alt='/place page progress bar'
-      />
-
-      <TypographyP>
+        <TypographyListItem>
         If the connection fails, an error page is displayed with a button to navigate home.
-      </TypographyP>
+        </TypographyListItem>
 
-      <TypographyImage
-        src={placeErrorImage}
-        alt='/place video error'
-      />
-
-      <TypographyP>
+        <TypographyListItem>
         If instead the connection succeeds, this <GLOBALS.InlineCode.GitHub.Interface /> subsequently establishes a WebSocket connection to the <GLOBALS.InlineCode.GitHub.Controller />&apos;s WebSocket address, also configurable via <GLOBALS.InlineCode.Pages.Settings />.
         Provided that this too succeeds, the heads-up display is then rendered and overlaid atop the video stream.
-      </TypographyP>
+        </TypographyListItem>
+      </TypographyList>
 
-      <TypographyImage
-        src={placeSocketImage}
-        alt='/place connected WebSocket'
-      />
+      <Carousel className='w-full' opts={{
+        loop: true,
+      }}>
+        <CarouselContent>
+          <CarouselItem>
+            <TypographyImage
+              src={placeProgressImage}
+              alt='/place page progress bar'
+            />
+          </CarouselItem>
+          <CarouselItem>
+            <TypographyImage
+              src={placeErrorImage}
+              alt='/place video error'
+            />
+          </CarouselItem>
+          <CarouselItem>
+            <TypographyImage
+              src={placeSocketImage}
+              alt='/place connected WebSocket'
+            />
+          </CarouselItem>
+        </CarouselContent>
+
+        <CarouselPrevious />
+        <CarouselNext />
+      </Carousel>
 
       <TypographyH5>Heads-Up Display</TypographyH5>
       <TypographyP>
