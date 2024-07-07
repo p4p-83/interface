@@ -90,6 +90,7 @@ function SystemArchitecture() {
 
       <TypographyList>
 
+        {/* TODO: accordion */}
         <TypographyListItem>
           <GLOBALS.Links.GitHub.Gantry />: The stateless, low-level machine control of our stepper motors, vacuum nozzle, and limit switches.
         </TypographyListItem>
@@ -307,7 +308,17 @@ function ConstituentHomePage() {
         {/* TODO: option modifier */}
         Note that <GLOBALS.InlineCode.Pages.Calibrate /> and <GLOBALS.InlineCode.Pages.Settings /> are implemented as &lsquo;hidden&rsquo; pages, in that they are not visible by default.
         This design decision is motivated by an intent that they should be scarcely necessary—under regular circumstances, one should not need to access them.
-        On the off-chance that they might become necessary, however, they may be &lsquo;activated&rsquo; by pressing the <TypographyInlineCode>c</TypographyInlineCode> or <TypographyInlineCode>s</TypographyInlineCode> key respectively whilst on the home page—which will cause the respective link to appear.
+        On the off-chance that they might become necessary, however, they may be revealed by pressing:
+      </TypographyP>
+
+      <TypographyList>
+        <TypographyListItem><TypographyInlineCode>⌥</TypographyInlineCode> on macOS, or</TypographyListItem>
+        <TypographyListItem><TypographyInlineCode>Alt</TypographyInlineCode> on Windows/Linux.</TypographyListItem>
+      </TypographyList>
+
+      <TypographyP>
+        Alternatively, pressing the <TypographyInlineCode>c</TypographyInlineCode> and/or <TypographyInlineCode>s</TypographyInlineCode> key(s) will selectively reveal the <GLOBALS.InlineCode.Pages.Calibrate /> and/or <GLOBALS.InlineCode.Pages.Settings /> links respectively.
+          This is particularly useful in cases where the <TypographyInlineCode>⌥</TypographyInlineCode>/<TypographyInlineCode>Alt</TypographyInlineCode> modifier key holds special meaning to the browser.
       </TypographyP>
 
       <TypographyH5>Keyboard Navigation</TypographyH5>
