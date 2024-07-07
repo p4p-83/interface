@@ -432,7 +432,7 @@ function SystemArchitecture() {
           <TypographyTableRow>
             <TypographyTableDataCell><GLOBALS.Links.GitHub.Gantry /></TypographyTableDataCell>
             <TypographyTableDataCell>
-              <span className='*:mx-0.5'>
+              <span className='*:m-0.5'>
                 <Badge variant='outline'>C++</Badge>
                 <Badge variant='outline'>Protobufs</Badge>
               </span>
@@ -445,7 +445,7 @@ function SystemArchitecture() {
           <TypographyTableRow>
             <TypographyTableDataCell><GLOBALS.Links.GitHub.Vision /></TypographyTableDataCell>
             <TypographyTableDataCell>
-              <span className='*:mx-0.5'>
+              <span className='*:m-0.5'>
                 <Badge variant='outline'>C++</Badge>
                 <Badge variant='outline'>Julia</Badge>
                 <Badge variant='outline'>libcamera</Badge>
@@ -461,7 +461,7 @@ function SystemArchitecture() {
           <TypographyTableRow>
             <TypographyTableDataCell><GLOBALS.Links.GitHub.Controller /></TypographyTableDataCell>
             <TypographyTableDataCell>
-              <span className='*:mx-0.5'>
+              <span className='*:m-0.5'>
                 <Badge variant='outline'>C++</Badge>
                 <Badge variant='outline'>Julia</Badge>
                 <Badge variant='outline'>Protobufs</Badge>
@@ -477,7 +477,7 @@ function SystemArchitecture() {
           <TypographyTableRow>
             <TypographyTableDataCell><GLOBALS.Links.GitHub.Interface /></TypographyTableDataCell>
             <TypographyTableDataCell>
-              <span className='*:mx-0.5'>
+              <span className='*:m-0.5'>
                 <Badge variant='outline'>TypeScript</Badge>
                 <Badge variant='outline'>Next.js</Badge>
                 <Badge variant='outline'>React</Badge>
