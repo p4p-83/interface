@@ -1,4 +1,4 @@
-import { type HTMLAttributes } from 'react'
+import { Fragment, type HTMLAttributes } from 'react'
 import { SymbolIcon } from '@radix-ui/react-icons'
 import Link from 'next/link'
 
@@ -8,7 +8,7 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card'
-import { TypographyInlineCode } from './ui/typography'
+import { TypographyInlineCode } from '@/components/ui/typography'
 
 type LinkCardProps = HTMLAttributes<HTMLAnchorElement> & {
   href: string;
@@ -30,13 +30,13 @@ export function LinkCard({ className, href, title, description, icon: Icon, keyS
             {title}
             {(keyShortcut && showKeyShortcut) && (
               <span className='flex flex-row gap-0.5 ml-auto items-baseline normal-case font-semibold'>
-                {keyShortcut.map((character, index) => (
-                  <>
-                    <TypographyInlineCode key={index}>
-                      {character}
+                {keyShortcut.map(key => (
+                  <Fragment key={href + key}>
+                    <TypographyInlineCode>
+                      {key}
                     </TypographyInlineCode>
                     <span className='last:hidden text-base font-medium'>+</span>
-                  </>
+                  </Fragment>
                 ))}
               </span>
             )}

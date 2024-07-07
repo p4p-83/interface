@@ -379,9 +379,9 @@ export function PlaceOverlay({ socketUrl, overlaySize, circleSize, hideOverlay =
         )}
 
         {/* Target positions */}
-        {(targetPositionOffsets?.length) && targetPositionOffsets.map((position, index) => (
+        {(targetPositionOffsets?.length) && targetPositionOffsets.map(position => (
           <div
-            key={index}
+            key={`${position.x},${position.y}`}
             className='absolute z-0 bg-accent-foreground/25 outline outline-1 outline-accent rounded-none cursor-pointer'
             onMouseDown={(event: MouseEvent) => {
               console.info(`Clicked target at position (${position.x}, ${position.y})`)
