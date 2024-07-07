@@ -1,9 +1,11 @@
 import Link from 'next/link'
+import Image, { type ImageProps } from 'next/image'
 import { type ReactNode, type HTMLAttributes } from 'react'
 
 import { cn } from '@/lib/utils'
 
 type TypographyProps = {
+  id?: string;
 	children: ReactNode;
 }
 
@@ -41,17 +43,17 @@ export function TypographyH4({ children }: TypographyProps) {
   )
 }
 
-export function TypographyH5({ children }: TypographyProps) {
+export function TypographyH5({ id, children }: TypographyProps) {
   return (
-    <h5 className='mt-6 scroll-m-20 text-base sm:text-lg font-medium tracking-tight first:mt-0'>
+    <h5 id={id} className='mt-6 scroll-m-20 text-base sm:text-lg font-medium tracking-tight first:mt-0'>
       {children}
     </h5>
   )
 }
 
-export function TypographyP({ children }: TypographyProps) {
+export function TypographyP({ id, children }: TypographyProps) {
   return (
-    <p className='leading-7 text-sm sm:text-base [&:not(:first-child)]:mt-6'>
+    <p id={id} className='leading-7 text-sm sm:text-base [&:not(:first-child)]:mt-6'>
       {children}
     </p>
   )
@@ -135,8 +137,70 @@ type TypographyLinkProps = TypographyProps & {
 
 export function TypographyLink({ children, href }: TypographyLinkProps) {
   return (
-    <Link href={href} className='font-medium text-primary underline underline-offset-4' >
+    <Link href={href} className='font-medium text-primary-accent underline underline-offset-4' >
       {children}
     </Link>
+  )
+}
+
+export function TypographyImage({ src, alt }: ImageProps) {
+  return (
+    <Image
+      src={src}
+      alt={alt}
+      placeholder='blur'
+      className='mt-6'
+      quality={85}
+    />
+  )
+}
+
+export function TypographyTable({ children }: TypographyProps) {
+  return (
+    <div className="my-6 w-full overflow-y-auto">
+      <table className="w-full">
+        {children}
+      </table>
+    </div>
+  )
+}
+
+export function TypographyTableHead({ children }: TypographyProps) {
+  return (
+    <thead>
+      {children}
+    </thead>
+  )
+}
+
+export function TypographyTableBody({ children }: TypographyProps) {
+  return (
+    <tbody>
+      {children}
+    </tbody>
+  )
+}
+
+export function TypographyTableRow({ children }: TypographyProps) {
+  return (
+    <tr className="m-0 border-t p-0 even:bg-muted">
+      {children}
+    </tr>
+  )
+}
+
+export function TypographyTableHeaderCell({ children }: TypographyProps) {
+  return (
+    <th className="border px-4 py-2 text-left font-bold [&[align=center]]:text-center [&[align=right]]:text-right">
+      {children}
+    </th>
+  )
+}
+
+export function TypographyTableDataCell({ children }: TypographyProps) {
+  return (
+    <td className="border px-4 py-2 text-left [&[align=center]]:text-center [&[align=right]]:text-right">
+      {children}
+    </td>
   )
 }

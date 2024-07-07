@@ -68,6 +68,22 @@ export const EXTERAL_URLS = {
         NAME: 'p4p-83/docs',
         URL: 'https://github.com/p4p-83/docs',
       },
+      GANTRY: {
+        NAME: 'p4p-83/gantry',
+        URL: 'https://github.com/p4p-83/gantry',
+      },
+      VISION: {
+        NAME: 'p4p-83/vision',
+        URL: 'https://github.com/p4p-83/vision',
+      },
+      CONTROLLER: {
+        NAME: 'p4p-83/controller',
+        URL: 'https://github.com/p4p-83/controller',
+      },
+      INTERFACE: {
+        NAME: 'p4p-83/interface',
+        URL: 'https://github.com/p4p-83/interface',
+      },
     },
   },
   UNIVERSITY: {
