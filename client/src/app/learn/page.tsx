@@ -19,6 +19,12 @@ import {
   TypographyH5,
   TypographyImage,
   TypographyMuted,
+  TypographyTable,
+  TypographyTableHead,
+  TypographyTableBody,
+  TypographyTableRow,
+  TypographyTableHeaderCell,
+  TypographyTableDataCell,
 } from '@/components/ui/typography'
 import {
   Accordion,
@@ -88,26 +94,82 @@ function SystemArchitecture() {
         These components are:
       </TypographyP>
 
-      <TypographyList>
+      <TypographyTable>
 
-        {/* TODO: accordion */}
-        <TypographyListItem>
-          <GLOBALS.Links.GitHub.Gantry />: The stateless, low-level machine control of our stepper motors, vacuum nozzle, and limit switches.
-        </TypographyListItem>
+        <TypographyTableHead>
+          <TypographyTableRow>
+            <TypographyTableHeaderCell>Component</TypographyTableHeaderCell>
+            <TypographyTableHeaderCell>Technologies</TypographyTableHeaderCell>
+            <TypographyTableHeaderCell>Description</TypographyTableHeaderCell>
+          </TypographyTableRow>
+        </TypographyTableHead>
 
-        <TypographyListItem>
-          <GLOBALS.Links.GitHub.Vision />: The machine vision that makes our machine intelligent.
-        </TypographyListItem>
+        <TypographyTableBody>
+          <TypographyTableRow>
+            <TypographyTableDataCell><GLOBALS.Links.GitHub.Gantry /></TypographyTableDataCell>
+            <TypographyTableDataCell>
+              <span className='*:mx-0.5'>
+                <Badge variant='outline'>C++</Badge>
+                <Badge variant='outline'>Protobufs</Badge>
+              </span>
+            </TypographyTableDataCell>
+            <TypographyTableDataCell>
+              The stateless, low-level machine control of our stepper motors, vacuum nozzle, and limit switches.
+            </TypographyTableDataCell>
+          </TypographyTableRow>
 
-        <TypographyListItem>
-          <GLOBALS.Links.GitHub.Controller />: The heart of our system, serving as the command & control that conducts the orchestra.
-        </TypographyListItem>
+          <TypographyTableRow>
+            <TypographyTableDataCell><GLOBALS.Links.GitHub.Vision /></TypographyTableDataCell>
+            <TypographyTableDataCell>
+              <span className='*:mx-0.5'>
+                <Badge variant='outline'>C++</Badge>
+                <Badge variant='outline'>Julia</Badge>
+                <Badge variant='outline'>libcamera</Badge>
+                <Badge variant='outline'>OpenCV</Badge>
+                <Badge variant='outline'>ffmpeg</Badge>
+              </span>
+            </TypographyTableDataCell>
+            <TypographyTableDataCell>
+              The machine vision that makes our machine intelligent.
+            </TypographyTableDataCell>
+          </TypographyTableRow>
 
-        <TypographyListItem>
-          <GLOBALS.Links.GitHub.Interface />: This web application; the user interface of our pick-and-place machine.
-        </TypographyListItem>
+          <TypographyTableRow>
+            <TypographyTableDataCell><GLOBALS.Links.GitHub.Controller /></TypographyTableDataCell>
+            <TypographyTableDataCell>
+              <span className='*:mx-0.5'>
+                <Badge variant='outline'>C++</Badge>
+                <Badge variant='outline'>Julia</Badge>
+                <Badge variant='outline'>Protobufs</Badge>
+                <Badge variant='outline'>WebRTC</Badge>
+                <Badge variant='outline'>WebSockets</Badge>
+              </span>
+            </TypographyTableDataCell>
+            <TypographyTableDataCell>
+              The heart of our system, serving as the command & control that conducts the orchestra.
+            </TypographyTableDataCell>
+          </TypographyTableRow>
 
-      </TypographyList>
+          <TypographyTableRow>
+            <TypographyTableDataCell><GLOBALS.Links.GitHub.Interface /></TypographyTableDataCell>
+            <TypographyTableDataCell>
+              <span className='*:mx-0.5'>
+                <Badge variant='outline'>TypeScript</Badge>
+                <Badge variant='outline'>Next.js</Badge>
+                <Badge variant='outline'>React</Badge>
+                <Badge variant='outline'>Tailwind CSS</Badge>
+                <Badge variant='outline'>shadcn/ui</Badge>
+                <Badge variant='outline'>zod</Badge>
+                <Badge variant='outline'>Protobufs</Badge>
+              </span>
+            </TypographyTableDataCell>
+            <TypographyTableDataCell>
+            This web application; the user interface of our pick-and-place machine.
+            </TypographyTableDataCell>
+          </TypographyTableRow>
+        </TypographyTableBody>
+
+      </TypographyTable>
 
       <TypographyP>
         The <GLOBALS.InlineCode.GitHub.Gantry />, <GLOBALS.InlineCode.GitHub.Vision />, and <GLOBALS.InlineCode.GitHub.Controller /> each run on a single <TypographyLink href={GLOBALS.RASPBERRY_PI_5}>Raspberry Pi 5</TypographyLink>.
@@ -173,7 +235,7 @@ function SystemArchitecture() {
 
       <TypographyP>
         Numeric data, such as the <TypographyInlineCode>TARGET_DELTAS</TypographyInlineCode> between the present gantry position and the operator&apos;s desired target, is <span id={FRAGMENT_IDS.DATA_NORMALISATION}>normalised into an absolute, invariant range of <TypographyInlineCode>[0, 65535]</TypographyInlineCode>.
-        This normalisation ensures that the exchanged units are independent of run-time variables—the client viewport, or streamed video dimensions, for instance</span>.
+          This normalisation ensures that the exchanged units are independent of run-time variables—the client viewport, or streamed video dimensions, for instance</span>.
         The representation range of a <TypographyInlineCode>16-bit</TypographyInlineCode> integer was chosen for performance—by using this range, we can leverage the efficiency of protocol buffer <TypographyLink href={GLOBALS.PROTOCOL_BUFFERS.VARINTS}>varints</TypographyLink>, which is not possible with a <TypographyInlineCode>float</TypographyInlineCode> or <TypographyInlineCode>double</TypographyInlineCode> in the range of <TypographyInlineCode>[0, 1]</TypographyInlineCode>.
       </TypographyP>
 
@@ -305,7 +367,6 @@ function ConstituentHomePage() {
       </TypographyList>
 
       <TypographyP>
-        {/* TODO: option modifier */}
         Note that <GLOBALS.InlineCode.Pages.Calibrate /> and <GLOBALS.InlineCode.Pages.Settings /> are implemented as &lsquo;hidden&rsquo; pages, in that they are not visible by default.
         This design decision is motivated by an intent that they should be scarcely necessary—under regular circumstances, one should not need to access them.
         On the off-chance that they might become necessary, however, they may be revealed by pressing:
@@ -318,7 +379,7 @@ function ConstituentHomePage() {
 
       <TypographyP>
         Alternatively, pressing the <TypographyInlineCode>c</TypographyInlineCode> and/or <TypographyInlineCode>s</TypographyInlineCode> key(s) will selectively reveal the <GLOBALS.InlineCode.Pages.Calibrate /> and/or <GLOBALS.InlineCode.Pages.Settings /> links respectively.
-          This is particularly useful in cases where the <TypographyInlineCode>⌥</TypographyInlineCode>/<TypographyInlineCode>Alt</TypographyInlineCode> modifier key holds special meaning to the browser.
+        This is particularly useful in cases where the <TypographyInlineCode>⌥</TypographyInlineCode>/<TypographyInlineCode>Alt</TypographyInlineCode> modifier key holds special meaning to the browser.
       </TypographyP>
 
       <TypographyH5>Keyboard Navigation</TypographyH5>
@@ -351,6 +412,7 @@ function ConstituentHomePage() {
 import placeProgressImage from './place-progress.png'
 import placeErrorImage from './place-error.png'
 import placeSocketImage from './place-socket.png'
+import { Badge } from '@/components/ui/badge'
 function ConstituentPlacePage() {
   return (
     <>

@@ -93,7 +93,7 @@ export function TypographyListItem({ children }: TypographyProps) {
 
 export function TypographyInlineCode({ children }: TypographyProps) {
   return (
-    <code className='relative rounded bg-muted px-[0.3rem] py-[0.2rem] font-mono text-xs sm:text-sm'>
+    <code className='relative rounded bg-muted group-even/muted:border group-even/muted:shadow px-[0.3rem] py-[0.2rem] font-mono text-xs sm:text-sm'>
       {children}
     </code>
   )
@@ -194,7 +194,7 @@ export function TypographyTableBody({ children }: TypographyProps) {
 
 export function TypographyTableRow({ children }: TypographyProps) {
   return (
-    <tr className="m-0 border-t p-0 even:bg-muted">
+    <tr className="m-0 border-t p-0 even:bg-muted dark:even:bg-muted/20 group/muted">
       {children}
     </tr>
   )
