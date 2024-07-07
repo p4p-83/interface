@@ -9,6 +9,7 @@ import * as GLOBALS from '@/app/globals'
 import { ThemeToggle } from '@/components/ThemeToggle'
 import { Button } from '@/components/ui/button'
 import { Sheet, SheetContent, SheetTrigger, SheetClose } from '@/components/ui/sheet'
+import { Separator } from '@/components/ui/separator'
 import { cn } from '@/lib/utils'
 
 function HeaderTitle() {
@@ -72,9 +73,9 @@ export function NavigationMobile() {
           </SheetTrigger>
         </div>
 
-        <SheetContent side='left' className='p-0' noCloseButton>
+        <SheetContent side='left' className='pt-0' noCloseButton>
 
-          <div className='flex items-center justify-between gap-4 h-20 px-6 border-b shadow'>
+          <div className='flex items-center justify-between gap-4 h-20'>
 
             <Link href={GLOBALS.PAGES.HOME.path} className='p-2 md:p-4 grow select-none cursor-pointer m-0 inline-flex items-center'>
               <HeaderTitle />
@@ -89,7 +90,9 @@ export function NavigationMobile() {
 
           </div>
 
-          <div className='flex flex-col my-6 pl-12 space-y-3'>
+          <Separator />
+
+          <div className='flex flex-col my-6 pl-6 space-y-3'>
             {/* TODO: other links? */}
             {Object.values(GLOBALS.PAGES)
               .filter(page => (page instanceof Object) && ('path' in page))
