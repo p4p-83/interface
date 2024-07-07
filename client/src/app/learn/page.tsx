@@ -328,19 +328,19 @@ function ConstituentHomePage() {
       </TypographyP>
       <TypographyList>
         <TypographyListItem>
-          <GLOBALS.InlineCode.Pages.Place />: By pressing <TypographyInlineCode>Shift</TypographyInlineCode>+<TypographyInlineCode>P</TypographyInlineCode>
+          <GLOBALS.InlineCode.Pages.Place />: By pressing <TypographyInlineCode>Shift</TypographyInlineCode>+<TypographyInlineCode>P</TypographyInlineCode>.
         </TypographyListItem>
         <TypographyListItem>
-          <GLOBALS.InlineCode.Pages.Calibrate />: By pressing <TypographyInlineCode>Shift</TypographyInlineCode>+<TypographyInlineCode>C</TypographyInlineCode>
+          <GLOBALS.InlineCode.Pages.Calibrate />: By pressing <TypographyInlineCode>Shift</TypographyInlineCode>+<TypographyInlineCode>C</TypographyInlineCode>.
         </TypographyListItem>
         <TypographyListItem>
-          <GLOBALS.InlineCode.Pages.Settings />: By pressing <TypographyInlineCode>Shift</TypographyInlineCode>+<TypographyInlineCode>S</TypographyInlineCode>
+          <GLOBALS.InlineCode.Pages.Settings />: By pressing <TypographyInlineCode>Shift</TypographyInlineCode>+<TypographyInlineCode>S</TypographyInlineCode>.
         </TypographyListItem>
         <TypographyListItem>
-          <GLOBALS.InlineCode.Pages.Learn />: By pressing <TypographyInlineCode>Shift</TypographyInlineCode>+<TypographyInlineCode>L</TypographyInlineCode>
+          <GLOBALS.InlineCode.Pages.Learn />: By pressing <TypographyInlineCode>Shift</TypographyInlineCode>+<TypographyInlineCode>L</TypographyInlineCode>.
         </TypographyListItem>
         <TypographyListItem>
-          <GLOBALS.InlineCode.Pages.Project />: By pressing <TypographyInlineCode>Shift</TypographyInlineCode>+<TypographyInlineCode>J</TypographyInlineCode>
+          <GLOBALS.InlineCode.Pages.Project />: By pressing <TypographyInlineCode>Shift</TypographyInlineCode>+<TypographyInlineCode>J</TypographyInlineCode>.
         </TypographyListItem>
       </TypographyList>
     </>
