@@ -130,8 +130,7 @@ function SystemArchitecture() {
 
       <TypographyH4>Video Streaming</TypographyH4>
       <TypographyP>
-        {/* TODO: Why? */}
-        For the user to operate a real-time pick-and-place, they necessarily require a real-time video feed.
+        Any operator of a real-time pick-and-place necessarily requires a real-time video feed.
         This video feed is streamed from the <GLOBALS.InlineCode.GitHub.Controller /> to this <GLOBALS.InlineCode.GitHub.Interface />, where it is displayed to the operator.
       </TypographyP>
 
