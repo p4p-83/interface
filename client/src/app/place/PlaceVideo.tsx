@@ -10,7 +10,7 @@ import { cn } from '@/lib/utils'
 import { Size } from './PlaceInterface'
 import { PlaceOverlay } from './PlaceOverlay'
 
-interface PlaceVideoProps extends HTMLAttributes<HTMLDivElement> {
+type PlaceVideoProps = HTMLAttributes<HTMLDivElement> & {
 	videoUrl: string;
   socketUrl: string;
 }

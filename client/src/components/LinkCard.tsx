@@ -10,7 +10,7 @@ import {
 } from '@/components/ui/card'
 import { TypographyInlineCode } from './ui/typography'
 
-interface LinkCardProps extends HTMLAttributes<HTMLAnchorElement> {
+type LinkCardProps = HTMLAttributes<HTMLAnchorElement> & {
   href: string;
   title: string;
   description: string;

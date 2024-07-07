@@ -8,7 +8,7 @@ import { Button } from '@/components/ui/button'
 import { TypographyP, TypographyH2 } from '@/components/ui/typography'
 import { cn } from '@/lib/utils'
 
-interface ErrorProps extends HTMLAttributes<HTMLDivElement>{
+type ErrorProps = HTMLAttributes<HTMLDivElement> & {
 	children: ReactNode;
 	buttonLabel?: string;
 	buttonOnClick?: () => unknown;
