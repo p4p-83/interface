@@ -214,6 +214,8 @@ export function PlaceOverlay({ socketUrl, overlaySize, circleSize, hideOverlay =
             case 'KeyS':
             case 'ArrowDown':
             case 'KeyJ':
+            // TODO: This must be a internalisable distance.
+            // Either have a new setting that configures this for a real um/mm, or have some ability to switch in real time—probably some HUD indicator, and a key like 'u' to switch units (and have a corresponding tag on the protobuf)
               unclampedOffset.y = previousOffset.y + 0.01
               break
             case 'KeyW':
