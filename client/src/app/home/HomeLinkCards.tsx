@@ -5,68 +5,52 @@ import { useState, useEffect } from 'react'
 import { Crosshair2Icon, MixerHorizontalIcon, GearIcon, RocketIcon, IdCardIcon } from '@radix-ui/react-icons'
 
 import * as GLOBALS from '@/app/globals'
+import { performShiftKeyNavigation } from '@/components/Header'
 import { LinkCard } from '@/components/LinkCard'
 import { cn } from '@/lib/utils'
 
 export function HomeLinkCards() {
   const router = useRouter()
 
-  const [isKeyCPressed, setIsKeyCPressed] = useState(false)
-  const [isKeySPressed, setIsKeySPressed] = useState(false)
-  const [isKeyShiftPressed, setIsKeyShiftPressed] = useState(false)
-  const [isKeyOptionPressed, setIsKeyOptionPressed] = useState(false)
+  const [isCalibrateRevealed, setIsCalibrateRevealed] = useState(false)
+  const [isSettingsRevealed, setIsSettingsRevealed] = useState(false)
+  const [isShiftPressed, setIsShiftPressed] = useState(false)
+  const [isOptionPressed, setIsOptionPressed] = useState(false)
 
   useEffect(() => {
     function handleKeyDown(event: KeyboardEvent) {
       console.info(`Key down for ${event.code} (${event.key})`)
 
-      setIsKeyShiftPressed(event.shiftKey)
-      setIsKeyOptionPressed(event.altKey)
+      setIsShiftPressed(event.shiftKey)
+      setIsOptionPressed(event.altKey)
 
       if (!event.shiftKey) {
         switch (event.code) {
-        case 'KeyC':
-          setIsKeyCPressed(true)
+        case GLOBALS.PAGES.getShortcutKeyCode(GLOBALS.PAGES.CALIBRATE):
+          setIsCalibrateRevealed(true)
           break
-        case 'KeyS':
-          setIsKeySPressed(true)
+        case GLOBALS.PAGES.getShortcutKeyCode(GLOBALS.PAGES.SETTINGS):
+          setIsSettingsRevealed(true)
           break
         }
       }
       else {
-        // Immediate Shift-key navigation
-        switch (event.code) {
-        case 'KeyP':
-          router.push(GLOBALS.PAGES.PLACE.path)
-          break
-        case 'KeyC':
-          router.push(GLOBALS.PAGES.CALIBRATE.path)
-          break
-        case 'KeyS':
-          router.push(GLOBALS.PAGES.SETTINGS.path)
-          break
-        case 'KeyL':
-          router.push(GLOBALS.PAGES.LEARN.path)
-          break
-        case 'KeyJ':
-          router.push(GLOBALS.PAGES.PROJECT.path)
-          break
-        }
+        performShiftKeyNavigation(router, event)
       }
     }
 
     function handleKeyUp(event: KeyboardEvent) {
       console.info(`Key up for ${event.code} (${event.key})`)
 
-      setIsKeyShiftPressed(event.shiftKey)
-      setIsKeyOptionPressed(event.altKey)
+      setIsShiftPressed(event.shiftKey)
+      setIsOptionPressed(event.altKey)
 
       switch (event.code) {
-      case 'KeyC':
-        setIsKeyCPressed(false)
+      case GLOBALS.PAGES.getShortcutKeyCode(GLOBALS.PAGES.CALIBRATE):
+        setIsCalibrateRevealed(false)
         break
-      case 'KeyS':
-        setIsKeySPressed(false)
+      case GLOBALS.PAGES.getShortcutKeyCode(GLOBALS.PAGES.SETTINGS):
+        setIsSettingsRevealed(false)
         break
       }
     }
@@ -80,11 +64,11 @@ export function HomeLinkCards() {
     }
   }, [router])
 
-  const hiddenCardsShown = (isKeyOptionPressed)
+  const hiddenCardsShown = (isOptionPressed)
     ? 2
-    : Number(isKeyCPressed) + Number(isKeySPressed)
+    : Number(isCalibrateRevealed) + Number(isSettingsRevealed)
 
-  const showKeyShortcut = (isKeyShiftPressed || isKeyOptionPressed)
+  const showKeyShortcut = (isShiftPressed || isOptionPressed)
 
   return (
     <div className='mb-20 sm:mb-10 grid grid-cols-1 md:grid-cols-2 w-full max-w-3xl gap-6 mt-2'>
@@ -92,7 +76,6 @@ export function HomeLinkCards() {
       <PageLinkCard
         page={GLOBALS.PAGES.PLACE}
         icon={Crosshair2Icon}
-        keyShortcut={['Shift', 'P']}
         showKeyShortcut={showKeyShortcut}
         className={
           (hiddenCardsShown & 1)
@@ -101,22 +84,22 @@ export function HomeLinkCards() {
         }
       />
 
-      {(isKeyCPressed || isKeyOptionPressed) && <PageLinkCard page={GLOBALS.PAGES.CALIBRATE} icon={MixerHorizontalIcon} keyShortcut={['Shift', 'C']} showKeyShortcut={showKeyShortcut} />}
-      {(isKeySPressed || isKeyOptionPressed) && <PageLinkCard page={GLOBALS.PAGES.SETTINGS} icon={GearIcon} keyShortcut={['Shift', 'S']} showKeyShortcut={showKeyShortcut} />}
+      {(isCalibrateRevealed || isOptionPressed) && <PageLinkCard page={GLOBALS.PAGES.CALIBRATE} icon={MixerHorizontalIcon} showKeyShortcut={showKeyShortcut} />}
+      {(isSettingsRevealed || isOptionPressed) && <PageLinkCard page={GLOBALS.PAGES.SETTINGS} icon={GearIcon} showKeyShortcut={showKeyShortcut} />}
 
-      <PageLinkCard page={GLOBALS.PAGES.LEARN} icon={RocketIcon} keyShortcut={['Shift', 'L']} showKeyShortcut={showKeyShortcut} />
-      <PageLinkCard page={GLOBALS.PAGES.PROJECT} icon={IdCardIcon} keyShortcut={['Shift', 'J']} showKeyShortcut={showKeyShortcut} />
+      <PageLinkCard page={GLOBALS.PAGES.LEARN} icon={RocketIcon} showKeyShortcut={showKeyShortcut} />
+      <PageLinkCard page={GLOBALS.PAGES.PROJECT} icon={IdCardIcon} showKeyShortcut={showKeyShortcut} />
 
     </div>
   )
 }
 
-type PageLinkCardProps = Pick<React.ComponentProps<typeof LinkCard>, 'icon' | 'keyShortcut' | 'showKeyShortcut' | 'className'> & {
+type PageLinkCardProps = Pick<React.ComponentProps<typeof LinkCard>, 'icon' | 'showKeyShortcut' | 'className'> & {
   page: GLOBALS.Page;
 }
 
-function PageLinkCard({ page, icon, keyShortcut, showKeyShortcut, className }: PageLinkCardProps) {
+function PageLinkCard({ page, icon, showKeyShortcut, className }: PageLinkCardProps) {
   return (
-    <LinkCard href={page.path} title={page.name} description={page.description + '.'} icon={icon} keyShortcut={keyShortcut} showKeyShortcut={showKeyShortcut} className={cn('w-full', className)} />
+    <LinkCard href={page.path} title={page.name} description={page.description + '.'} icon={icon} keyShortcut={['Shift', page.shortcutKey]} showKeyShortcut={showKeyShortcut} className={cn('w-full', className)} />
   )
 }

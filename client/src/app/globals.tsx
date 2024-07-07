@@ -5,6 +5,7 @@ export type Page = {
   path: string;
   name: string;
   description: string;
+  shortcutKey: string;
 };
 
 const HOME_NAME = 'Home'
@@ -20,35 +21,44 @@ export const PAGES = {
       description: `${page.description}.`,
     }
   },
+  getShortcutKeyCode(page: Page) {
+    return 'Key' + page.shortcutKey
+  },
   HOME: {
     path: '/',
     name: HOME_NAME,
     description: 'A pick-and-place for rapid prototyping',
+    shortcutKey: 'H',
   },
   PLACE: {
     path: '/place',
     name: 'Place',
     description: 'Position with precision',
+    shortcutKey: 'P',
   },
   CALIBRATE: {
     path: '/calibrate',
     name: 'Calibrate',
     description: 'Measure twice, place once',
+    shortcutKey: 'C',
   },
   SETTINGS: {
     path: '/settings',
     name: 'Settings',
     description: 'Set your stage',
+    shortcutKey: 'S',
   },
   LEARN: {
     path: '/learn',
     name: 'Learn',
     description: 'Meet your match',
+    shortcutKey: 'L',
   },
   PROJECT: {
     path: '/project',
     name: 'Project',
     description: 'Explore the lore',
+    shortcutKey: 'J',
   },
 } as const
 

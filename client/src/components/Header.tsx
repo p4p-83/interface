@@ -39,6 +39,31 @@ function HeaderTitle() {
   )
 }
 
+export function performShiftKeyNavigation(router: ReturnType<typeof useRouter>, event: KeyboardEvent) {
+  if (!event.shiftKey) return
+
+  switch (event.code) {
+  case GLOBALS.PAGES.getShortcutKeyCode(GLOBALS.PAGES.HOME):
+    router.push(GLOBALS.PAGES.HOME.path)
+    break
+  case GLOBALS.PAGES.getShortcutKeyCode(GLOBALS.PAGES.PLACE):
+    router.push(GLOBALS.PAGES.PLACE.path)
+    break
+  case GLOBALS.PAGES.getShortcutKeyCode(GLOBALS.PAGES.CALIBRATE):
+    router.push(GLOBALS.PAGES.CALIBRATE.path)
+    break
+  case GLOBALS.PAGES.getShortcutKeyCode(GLOBALS.PAGES.SETTINGS):
+    router.push(GLOBALS.PAGES.SETTINGS.path)
+    break
+  case GLOBALS.PAGES.getShortcutKeyCode(GLOBALS.PAGES.LEARN):
+    router.push(GLOBALS.PAGES.LEARN.path)
+    break
+  case GLOBALS.PAGES.getShortcutKeyCode(GLOBALS.PAGES.PROJECT):
+    router.push(GLOBALS.PAGES.PROJECT.path)
+    break
+  }
+}
+
 function NavigationMain() {
   const router = useRouter()
 
@@ -49,30 +74,7 @@ function NavigationMain() {
       console.info(`Key down for ${event.code} (${event.key})`)
 
       setIsKeyShiftPressed(event.shiftKey)
-
-      if (event.shiftKey) {
-        // Immediate Shift-key navigation
-        switch (event.code) {
-        case 'KeyH':
-          router.push(GLOBALS.PAGES.HOME.path)
-          break
-        case 'KeyP':
-          router.push(GLOBALS.PAGES.PLACE.path)
-          break
-        case 'KeyC':
-          router.push(GLOBALS.PAGES.CALIBRATE.path)
-          break
-        case 'KeyS':
-          router.push(GLOBALS.PAGES.SETTINGS.path)
-          break
-        case 'KeyL':
-          router.push(GLOBALS.PAGES.LEARN.path)
-          break
-        case 'KeyJ':
-          router.push(GLOBALS.PAGES.PROJECT.path)
-          break
-        }
-      }
+      performShiftKeyNavigation(router, event)
     }
 
     function handleKeyUp(event: KeyboardEvent) {
@@ -92,10 +94,10 @@ function NavigationMain() {
   return (
     <nav className='hidden sm:inline-flex flex-row items-center justify-between align-middle gap-x-0.5 lg:gap-x-5'>
 
-      <NavigationItem href={GLOBALS.PAGES.HOME.path} label={GLOBALS.PAGES.HOME.name} keyShortcut='H' showKeyShortcut={isKeyShiftPressed} />
-      <NavigationItem href={GLOBALS.PAGES.PLACE.path} label={GLOBALS.PAGES.PLACE.name} keyShortcut='P' showKeyShortcut={isKeyShiftPressed} />
-      <NavigationItem href={GLOBALS.PAGES.LEARN.path} label={GLOBALS.PAGES.LEARN.name} keyShortcut='L' showKeyShortcut={isKeyShiftPressed} />
-      <NavigationItem href={GLOBALS.PAGES.PROJECT.path} label={GLOBALS.PAGES.PROJECT.name} keyShortcut='J' showKeyShortcut={isKeyShiftPressed} />
+      <NavigationItem href={GLOBALS.PAGES.HOME.path} label={GLOBALS.PAGES.HOME.name} shortcutKey={GLOBALS.PAGES.HOME.shortcutKey} showKeyShortcut={isKeyShiftPressed} />
+      <NavigationItem href={GLOBALS.PAGES.PLACE.path} label={GLOBALS.PAGES.PLACE.name} shortcutKey={GLOBALS.PAGES.PLACE.shortcutKey} showKeyShortcut={isKeyShiftPressed} />
+      <NavigationItem href={GLOBALS.PAGES.LEARN.path} label={GLOBALS.PAGES.LEARN.name} shortcutKey={GLOBALS.PAGES.LEARN.shortcutKey} showKeyShortcut={isKeyShiftPressed} />
+      <NavigationItem href={GLOBALS.PAGES.PROJECT.path} label={GLOBALS.PAGES.PROJECT.name} shortcutKey={GLOBALS.PAGES.PROJECT.shortcutKey} showKeyShortcut={isKeyShiftPressed} />
 
       <div className='pl-2 lg:pl-3'>
         <ThemeToggle />
@@ -161,11 +163,11 @@ export function NavigationMobile() {
 type NavigationItemProps = {
   href: string;
   label: string;
-  keyShortcut?: string;
+  shortcutKey?: string;
   showKeyShortcut?: boolean;
 };
 
-function NavigationItem({ href, label, keyShortcut, showKeyShortcut = false }: NavigationItemProps) {
+function NavigationItem({ href, label, shortcutKey, showKeyShortcut = false }: NavigationItemProps) {
   const pathname = usePathname()
 
   let linkStyle = cn(
@@ -204,7 +206,7 @@ function NavigationItem({ href, label, keyShortcut, showKeyShortcut = false }: N
           <TypographyInlineCode>
             <span className='flex flex-row items-center gap-x-0.5 pr-[0.175rem]'>
               <ThickArrowUpIcon className='p-0 m-0' />
-              {keyShortcut}
+              {shortcutKey}
             </span>
           </TypographyInlineCode>
         </div>

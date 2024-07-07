@@ -1,11 +1,13 @@
 import type { Metadata } from 'next'
 import { type ReactNode } from 'react'
+import { ThickArrowUpIcon } from '@radix-ui/react-icons'
 
 import * as GLOBALS from '@/app/globals'
 import { LayoutMain } from '@/components/LayoutMain'
 import { Header } from '@/components/Header'
 import { PageHeading } from '@/components/PageHeading'
 import { ThemeToggleIcon } from '@/components/ThemeToggle'
+import { Badge } from '@/components/ui/badge'
 import {
   TypographyH2,
   TypographyH3,
@@ -143,23 +145,22 @@ function ApplicationInterface() {
             </TypographyP>
             <TypographyList>
               <TypographyListItem>
-                {/* TODO: Globalise these shortcuts */}
-                <GLOBALS.InlineCode.Pages.Home />: By pressing <TypographyInlineCode>Shift</TypographyInlineCode>+<TypographyInlineCode>H</TypographyInlineCode>.
+                <GLOBALS.InlineCode.Pages.Home />: By pressing <TypographyInlineCode>Shift</TypographyInlineCode>+<TypographyInlineCode>{GLOBALS.PAGES.HOME.shortcutKey}</TypographyInlineCode>.
               </TypographyListItem>
               <TypographyListItem>
-                <GLOBALS.InlineCode.Pages.Place />: By pressing <TypographyInlineCode>Shift</TypographyInlineCode>+<TypographyInlineCode>P</TypographyInlineCode>.
+                <GLOBALS.InlineCode.Pages.Place />: By pressing <TypographyInlineCode>Shift</TypographyInlineCode>+<TypographyInlineCode>{GLOBALS.PAGES.PLACE.shortcutKey}</TypographyInlineCode>.
               </TypographyListItem>
               <TypographyListItem>
-                <GLOBALS.InlineCode.Pages.Calibrate />: By pressing <TypographyInlineCode>Shift</TypographyInlineCode>+<TypographyInlineCode>C</TypographyInlineCode>.
+                <GLOBALS.InlineCode.Pages.Calibrate />: By pressing <TypographyInlineCode>Shift</TypographyInlineCode>+<TypographyInlineCode>{GLOBALS.PAGES.CALIBRATE.shortcutKey}</TypographyInlineCode>.
               </TypographyListItem>
               <TypographyListItem>
-                <GLOBALS.InlineCode.Pages.Settings />: By pressing <TypographyInlineCode>Shift</TypographyInlineCode>+<TypographyInlineCode>S</TypographyInlineCode>.
+                <GLOBALS.InlineCode.Pages.Settings />: By pressing <TypographyInlineCode>Shift</TypographyInlineCode>+<TypographyInlineCode>{GLOBALS.PAGES.SETTINGS.shortcutKey}</TypographyInlineCode>.
               </TypographyListItem>
               <TypographyListItem>
-                <GLOBALS.InlineCode.Pages.Learn />: By pressing <TypographyInlineCode>Shift</TypographyInlineCode>+<TypographyInlineCode>L</TypographyInlineCode>.
+                <GLOBALS.InlineCode.Pages.Learn />: By pressing <TypographyInlineCode>Shift</TypographyInlineCode>+<TypographyInlineCode>{GLOBALS.PAGES.LEARN.shortcutKey}</TypographyInlineCode>.
               </TypographyListItem>
               <TypographyListItem>
-                <GLOBALS.InlineCode.Pages.Project />: By pressing <TypographyInlineCode>Shift</TypographyInlineCode>+<TypographyInlineCode>J</TypographyInlineCode>.
+                <GLOBALS.InlineCode.Pages.Project />: By pressing <TypographyInlineCode>Shift</TypographyInlineCode>+<TypographyInlineCode>{GLOBALS.PAGES.PROJECT.shortcutKey}</TypographyInlineCode>.
               </TypographyListItem>
             </TypographyList>
           </AccordionContent>
@@ -262,7 +263,7 @@ function ConstituentHomePage() {
       </TypographyList>
 
       <TypographyP>
-        Alternatively, pressing the <TypographyInlineCode>c</TypographyInlineCode> and/or <TypographyInlineCode>s</TypographyInlineCode> key(s) will selectively reveal the <GLOBALS.InlineCode.Pages.Calibrate /> and/or <GLOBALS.InlineCode.Pages.Settings /> links respectively.
+        Alternatively, pressing the <TypographyInlineCode>{GLOBALS.PAGES.CALIBRATE.shortcutKey.toLowerCase()}</TypographyInlineCode> and/or <TypographyInlineCode>{GLOBALS.PAGES.SETTINGS.shortcutKey.toLowerCase()}</TypographyInlineCode> key(s) will selectively reveal the <GLOBALS.InlineCode.Pages.Calibrate /> and/or <GLOBALS.InlineCode.Pages.Settings /> links respectively.
         This is particularly useful in cases where the <TypographyInlineCode>⌥</TypographyInlineCode>/<TypographyInlineCode>Alt</TypographyInlineCode> modifier key holds special meaning to the browser.
       </TypographyP>
     </>
@@ -273,8 +274,6 @@ function ConstituentHomePage() {
 import placeProgressImage from './place-progress.png'
 import placeErrorImage from './place-error.png'
 import placeSocketImage from './place-socket.png'
-import { Badge } from '@/components/ui/badge'
-import { DoubleArrowRightIcon, KeyboardIcon, ThickArrowUpIcon } from '@radix-ui/react-icons'
 function ConstituentPlacePage() {
   return (
     <>
