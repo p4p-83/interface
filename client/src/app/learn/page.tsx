@@ -205,13 +205,26 @@ function SystemArchitecture() {
 function ApplicationInterface() {
   return (
     <>
-      <TypographyH3>Application Interface</TypographyH3>
 
-      <TypographyH4>Light/Dark Theme</TypographyH4>
-      <TypographyP>
-        This web application implements a global light and dark theme that is responsive to browser preferences by default.
-        You may change this at any time by using the <TypographyInlineCode><ThemeToggleIcon className='align-text-bottom' /></TypographyInlineCode> toggle at the top right-hand corner of the viewport.
-      </TypographyP>
+      <TypographyH3>Application Interface</TypographyH3>
+      <Accordion type='multiple' className='w-full mt-2'>
+
+        <AccordionItem value='theme'>
+          <AccordionTrigger>
+            <span className='flex flex-row gap-2 justify-between items-center w-full pr-2'>
+              <TypographyH4>Light/Dark Theme</TypographyH4>
+              <TypographyInlineCode><ThemeToggleIcon className='align-text-bottom' /></TypographyInlineCode>
+            </span>
+          </AccordionTrigger>
+          <AccordionContent className='text-base'>
+            <TypographyP>
+              This web application implements a global light and dark theme that is responsive to browser preferences by default.
+              You may change this at any time by using the <TypographyInlineCode><ThemeToggleIcon className='align-text-bottom' /></TypographyInlineCode> toggle at the top right-hand corner of the viewport.
+            </TypographyP>
+          </AccordionContent>
+        </AccordionItem>
+
+      </Accordion>
 
     </>
   )
