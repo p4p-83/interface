@@ -191,7 +191,7 @@ function NavigationItem({ href, label, keyShortcut, showKeyShortcut = false }: N
     : ''
 
   const keyShortcutStyle = (showKeyShortcut)
-    ? 'absolute inset-0 flex flex-row justify-center *:py-0'
+    ? 'absolute inset-0 flex flex-row justify-center *:py-[0.125rem] *:mt-[0.0125rem] font-medium text-sm sm:text-base'
     : 'hidden'
 
   return (
@@ -202,8 +202,9 @@ function NavigationItem({ href, label, keyShortcut, showKeyShortcut = false }: N
         </span>
         <div className={keyShortcutStyle}>
           <TypographyInlineCode>
-            <span className='flex flex-row items-center gap-x-0.5 pr-[0.175rem] text-base'>
-              <ThickArrowUpIcon className='p-0 mt-[0.125rem]' />{keyShortcut}
+            <span className='flex flex-row items-center gap-x-0.5 pr-[0.175rem]'>
+              <ThickArrowUpIcon className='p-0 m-0' />
+              {keyShortcut}
             </span>
           </TypographyInlineCode>
         </div>
