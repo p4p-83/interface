@@ -1,11 +1,12 @@
 'use client'
 
 import { useRouter } from 'next/navigation'
-import { useState, useEffect, type ReactNode } from 'react'
+import { useState, useEffect } from 'react'
 import { Crosshair2Icon, MixerHorizontalIcon, GearIcon, RocketIcon, IdCardIcon } from '@radix-ui/react-icons'
 
 import * as GLOBALS from '@/app/globals'
 import { LinkCard } from '@/components/LinkCard'
+import { cn } from '@/lib/utils'
 
 export function HomeLinkCards() {
   const router = useRouter()
@@ -13,12 +14,14 @@ export function HomeLinkCards() {
   const [isKeyCPressed, setIsKeyCPressed] = useState(false)
   const [isKeySPressed, setIsKeySPressed] = useState(false)
   const [isKeyShiftPressed, setIsKeyShiftPressed] = useState(false)
+  const [isKeyOptionPressed, setIsKeyOptionPressed] = useState(false)
 
   useEffect(() => {
     function handleKeyDown(event: KeyboardEvent) {
       console.info(`Key down for ${event.code} (${event.key})`)
 
       setIsKeyShiftPressed(event.shiftKey)
+      setIsKeyOptionPressed(event.altKey)
 
       if (!event.shiftKey) {
         switch (event.code) {
@@ -56,6 +59,7 @@ export function HomeLinkCards() {
       console.info(`Key up for ${event.code} (${event.key})`)
 
       setIsKeyShiftPressed(event.shiftKey)
+      setIsKeyOptionPressed(event.altKey)
 
       switch (event.code) {
       case 'KeyC':
@@ -76,31 +80,43 @@ export function HomeLinkCards() {
     }
   }, [router])
 
-  let primaryCard: ReactNode
-  if (!isKeyCPressed && !isKeySPressed) {
-    primaryCard = (
-      <LinkCard href={GLOBALS.PAGES.PLACE.path} title={GLOBALS.PAGES.PLACE.name} description={`${GLOBALS.PAGES.PLACE.description}.`} icon={Crosshair2Icon} keyShortcut={['Shift', 'P']} showKeyShortcut={isKeyShiftPressed} className='w-full md:col-span-2' />
-    )
-  }
-  else if (isKeyCPressed) {
-    primaryCard = (
-      <LinkCard href={GLOBALS.PAGES.CALIBRATE.path} title={GLOBALS.PAGES.CALIBRATE.name} description={`${GLOBALS.PAGES.CALIBRATE.description}.`} icon={MixerHorizontalIcon} keyShortcut={['Shift', 'C']} showKeyShortcut={isKeyShiftPressed} className='w-full md:col-span-2' />
-    )
-  }
-  else if (isKeySPressed) {
-    primaryCard = (
-      <LinkCard href={GLOBALS.PAGES.SETTINGS.path} title={GLOBALS.PAGES.SETTINGS.name} description={`${GLOBALS.PAGES.SETTINGS.description}.`} icon={GearIcon} keyShortcut={['Shift', 'S']} showKeyShortcut={isKeyShiftPressed} className='w-full md:col-span-2' />
-    )
-  }
+  const hiddenCardsShown = (isKeyOptionPressed)
+    ? 2
+    : Number(isKeyCPressed) + Number(isKeySPressed)
+
+  const showKeyShortcut = (isKeyShiftPressed || isKeyOptionPressed)
 
   return (
     <div className='mb-20 sm:mb-10 grid grid-cols-1 md:grid-cols-2 w-full max-w-3xl gap-6 mt-2'>
 
-      {primaryCard}
+      <PageLinkCard
+        page={GLOBALS.PAGES.PLACE}
+        icon={Crosshair2Icon}
+        keyShortcut={['Shift', 'P']}
+        showKeyShortcut={showKeyShortcut}
+        className={
+          (hiddenCardsShown & 1)
+            ? 'md:col-span-1'
+            : 'md:col-span-2'
+        }
+      />
 
-      <LinkCard href={GLOBALS.PAGES.LEARN.path} title={GLOBALS.PAGES.LEARN.name} description={`${GLOBALS.PAGES.LEARN.description}.`} icon={RocketIcon} keyShortcut={['Shift', 'L']} showKeyShortcut={isKeyShiftPressed} className='w-full' />
-      <LinkCard href={GLOBALS.PAGES.PROJECT.path} title={GLOBALS.PAGES.PROJECT.name} description={`${GLOBALS.PAGES.PROJECT.description}.`} icon={IdCardIcon} keyShortcut={['Shift', 'J']} showKeyShortcut={isKeyShiftPressed} className='w-full' />
+      {(isKeyCPressed || isKeyOptionPressed) && <PageLinkCard page={GLOBALS.PAGES.CALIBRATE} icon={MixerHorizontalIcon} keyShortcut={['Shift', 'C']} showKeyShortcut={showKeyShortcut} />}
+      {(isKeySPressed || isKeyOptionPressed) && <PageLinkCard page={GLOBALS.PAGES.SETTINGS} icon={GearIcon} keyShortcut={['Shift', 'S']} showKeyShortcut={showKeyShortcut} />}
+
+      <PageLinkCard page={GLOBALS.PAGES.LEARN} icon={RocketIcon} keyShortcut={['Shift', 'L']} showKeyShortcut={showKeyShortcut} />
+      <PageLinkCard page={GLOBALS.PAGES.PROJECT} icon={IdCardIcon} keyShortcut={['Shift', 'J']} showKeyShortcut={showKeyShortcut} />
 
     </div>
+  )
+}
+
+type PageLinkCardProps = Pick<React.ComponentProps<typeof LinkCard>, 'icon' | 'keyShortcut' | 'showKeyShortcut' | 'className'> & {
+  page: GLOBALS.Page;
+}
+
+function PageLinkCard({ page, icon, keyShortcut, showKeyShortcut, className }: PageLinkCardProps) {
+  return (
+    <LinkCard href={page.path} title={page.name} description={page.description + '.'} icon={icon} keyShortcut={keyShortcut} showKeyShortcut={showKeyShortcut} className={cn('w-full', className)} />
   )
 }
