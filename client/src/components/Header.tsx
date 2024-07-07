@@ -72,9 +72,9 @@ export function NavigationMobile() {
           </SheetTrigger>
         </div>
 
-        <SheetContent side='left' className='pt-0' noCloseButton>
+        <SheetContent side='left' className='p-0' noCloseButton>
 
-          <div className='flex items-center justify-between gap-4 h-20'>
+          <div className='flex items-center justify-between gap-4 h-20 px-6 border-b shadow'>
 
             <Link href={GLOBALS.PAGES.HOME.path} className='p-2 md:p-4 grow select-none cursor-pointer m-0 inline-flex items-center'>
               <HeaderTitle />
@@ -89,7 +89,7 @@ export function NavigationMobile() {
 
           </div>
 
-          <div className='flex flex-col my-4 pl-6 space-y-3'>
+          <div className='flex flex-col my-6 pl-12 space-y-3'>
             {/* TODO: other links? */}
             {Object.values(GLOBALS.PAGES)
               .filter(page => (page instanceof Object) && ('path' in page))
@@ -114,7 +114,7 @@ function NavigationItem({ href, label }: NavigationItemProps) {
   const pathname = usePathname()
 
   let linkStyle = cn(
-    'py-2 first:pt-0 sm:py-4 sm:first:pt-4 px-0 sm:px-2 lg:px-4',
+    'py-2 sm:py-4 px-0 sm:px-2 lg:px-4',
     'transition-colors',
     'font-medium uppercase text-sm sm:text-base',
     'select-none cursor-pointer'
