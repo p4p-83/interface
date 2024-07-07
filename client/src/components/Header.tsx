@@ -128,11 +128,11 @@ function NavigationItem({ href, label }: NavigationItemProps) {
   }
   // Active link
   else {
-    linkStyle = cn(linkStyle, 'text-primary')
+    linkStyle = cn(linkStyle, 'text-primary-accent')
   }
 
   // Hover effects
-  const hoverStyle = cn('hover:cursor-pointer', 'hover:text-primary/90')
+  const hoverStyle = cn('hover:cursor-pointer', 'hover:text-primary-accent')
 
   return (
     <Link href={href} className={cn(linkStyle, hoverStyle)}>
