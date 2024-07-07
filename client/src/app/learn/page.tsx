@@ -1,5 +1,5 @@
 import type { Metadata } from 'next'
-import { ReactNode } from 'react'
+import { type ReactNode } from 'react'
 
 import * as GLOBALS from '@/app/globals'
 import { LayoutMain } from '@/components/LayoutMain'
@@ -29,7 +29,7 @@ import {
 
 export const metadata: Metadata = GLOBALS.PAGES.getMetadata(GLOBALS.PAGES.LEARN)
 
-export const FRAGMENT_HASHES = {
+export const FRAGMENT_IDS = {
   DATA_NORMALISATION: 'normalisation',
   NEAREST_TARGET: 'nearest-target',
 } as const
@@ -171,9 +171,9 @@ function SystemArchitecture() {
         A <TypographyLink href={GLOBALS.WEB_SOCKET}>WebSocket</TypographyLink> connection is established over TCP and HTTP between the <GLOBALS.InlineCode.GitHub.Controller /> and this <GLOBALS.InlineCode.GitHub.Interface /> web application for a real-time, low-latency, full-duplex data channel, which is used to exchange information and instructions.
       </TypographyP>
 
-      <TypographyP id={FRAGMENT_HASHES.DATA_NORMALISATION}>
-        Numeric data, such as the <TypographyInlineCode>TARGET_DELTAS</TypographyInlineCode> between the present gantry position and the operator&apos;s desired target, is normalised into an absolute, invariant range of <TypographyInlineCode>[0, 65535]</TypographyInlineCode>.
-        This normalisation ensures that the exchanged units are independent of run-time variables—the client viewport, or streamed video dimensions, for instance.
+      <TypographyP>
+        Numeric data, such as the <TypographyInlineCode>TARGET_DELTAS</TypographyInlineCode> between the present gantry position and the operator&apos;s desired target, is <span id={FRAGMENT_IDS.DATA_NORMALISATION}>normalised into an absolute, invariant range of <TypographyInlineCode>[0, 65535]</TypographyInlineCode>.
+        This normalisation ensures that the exchanged units are independent of run-time variables—the client viewport, or streamed video dimensions, for instance</span>.
         The representation range of a <TypographyInlineCode>16-bit</TypographyInlineCode> integer was chosen for performance—by using this range, we can leverage the efficiency of protocol buffer <TypographyLink href={GLOBALS.PROTOCOL_BUFFERS.VARINTS}>varints</TypographyLink>, which is not possible with a <TypographyInlineCode>float</TypographyInlineCode> or <TypographyInlineCode>double</TypographyInlineCode> in the range of <TypographyInlineCode>[0, 1]</TypographyInlineCode>.
       </TypographyP>
 
@@ -196,7 +196,7 @@ function SystemArchitecture() {
       <TypographyH5>Form Validation</TypographyH5>
       - Zod is used for the declaration of form schemas and field validation on the settings page.
 
-      <TypographyH5 id={FRAGMENT_HASHES.NEAREST_TARGET}>Nearest-Target Algorithm</TypographyH5>
+      <TypographyH5 id={FRAGMENT_IDS.NEAREST_TARGET}>Nearest-Target Algorithm</TypographyH5>
 
     </>
   )
@@ -413,7 +413,7 @@ function ConstituentPlacePage() {
 
       <TypographyP>
         The simplest input is a mouse click at any point atop the video feed.
-        The clicked pixel coordinates are processed into pixel deltas <TypographyInlineCode>(Δx, Δy)</TypographyInlineCode> with respect to the centre of the video feed, used as an analogy for the current head position; <TypographyLink href={'#' + FRAGMENT_HASHES.DATA_NORMALISATION}>normalised</TypographyLink>; and sent to the <GLOBALS.InlineCode.GitHub.Controller />, which ultimately translates the <GLOBALS.InlineCode.GitHub.Gantry />.
+        The clicked pixel coordinates are processed into pixel deltas <TypographyInlineCode>(Δx, Δy)</TypographyInlineCode> with respect to the centre of the video feed, used as an analogy for the current head position; <TypographyLink toFragmentId href={FRAGMENT_IDS.DATA_NORMALISATION}>normalised</TypographyLink>; and sent to the <GLOBALS.InlineCode.GitHub.Controller />, which ultimately translates the <GLOBALS.InlineCode.GitHub.Gantry />.
         If the operator clicks within the bounds of a target marker, it is the delta position of that target&apos;s centroid that is transmitted to the <GLOBALS.InlineCode.GitHub.Controller />.
       </TypographyP>
 
@@ -430,7 +430,7 @@ function ConstituentPlacePage() {
       </TypographyList>
 
       <TypographyP>
-        These directional keys—inspired by video games and <TypographyLink href={GLOBALS.VI}><TypographyInlineCode>vi</TypographyInlineCode></TypographyLink>—will select the &lsquo;best fit&rsquo; target marker in the specified direction, as determined by our <TypographyLink href={'#' + FRAGMENT_HASHES.NEAREST_TARGET}>weighted nearest-target algorithm</TypographyLink>.
+        These directional keys—inspired by video games and <TypographyLink href={GLOBALS.VI}><TypographyInlineCode>vi</TypographyInlineCode></TypographyLink>—will select the &lsquo;best fit&rsquo; target marker in the specified direction, as determined by our <TypographyLink toFragmentId href={FRAGMENT_IDS.NEAREST_TARGET}>weighted nearest-target algorithm</TypographyLink>.
         This selected target marker is indicated by the temporary target indicator, which becomes the zero-reference for subsequent directional key presses.
         This allows the operator to input a series of directional keys to quickly pounce to a desired target, all without lifting their fingers from the keyboard—a design directly inspired by <TypographyInlineCode>vi</TypographyInlineCode>-based text editors.
         Once a target marker is pounced to, two additional keys become valid:

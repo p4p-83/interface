@@ -133,14 +133,25 @@ export function TypographyMuted({ children, className }: TypographyProps & Style
 
 type TypographyLinkProps = TypographyProps & {
   href: string;
+  toFragmentId?: boolean;
 }
 
-export function TypographyLink({ children, href }: TypographyLinkProps) {
-  return (
-    <Link href={href} className='font-medium text-primary-accent underline underline-offset-4' >
-      {children}
-    </Link>
-  )
+export function TypographyLink({ children, href, toFragmentId = false }: TypographyLinkProps) {
+  const className = 'font-medium text-primary-accent underline underline-offset-4'
+
+  return (toFragmentId)
+    ? (
+      // ! Use a native anchor tag so that :target selectors work correctly
+      // ! See https://github.com/vercel/next.js/issues/51346
+      <a href={'#' + href} className={className}>
+        {children}
+      </a>
+    )
+    : (
+      <Link href={href} className={className}>
+        {children}
+      </Link>
+    )
 }
 
 export function TypographyImage({ src, alt }: ImageProps) {

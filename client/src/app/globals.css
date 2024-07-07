@@ -77,4 +77,17 @@
   h5 {
     @apply tracking-tight sm:tracking-normal;
   }
+
+  p,
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  span {
+    @apply target:bg-primary-accent/20 dark:target:bg-primary-accent/50;
+    @apply target:border-primary-accent/20 dark:target:border-primary-accent/50;
+    @apply target:bg-clip-content;
+    @apply target:border-y-2 target:border-x-4;
+  }
 }
