@@ -147,13 +147,18 @@ function ConstituentPages() {
           <ConstituentPlacePage />
         </PageAccordionItem>
 
-        {/* <PageAccordionItem page={GLOBALS.PAGES.CALIBRATE}>
-          <ConstituentCalibratePage />
+        <PageAccordionItem page={GLOBALS.PAGES.CALIBRATE}>
+          <TypographyBlockquote>
+            A work in progress!
+          </TypographyBlockquote>
         </PageAccordionItem>
 
         <PageAccordionItem page={GLOBALS.PAGES.SETTINGS}>
-          <ConstituentSettingsPage />
-        </PageAccordionItem> */}
+          {/* TODO: */}
+          <TypographyBlockquote>
+            A work in progress!
+          </TypographyBlockquote>
+        </PageAccordionItem>
 
       </Accordion>
     </>
@@ -567,6 +572,7 @@ function SystemArchitecture() {
               A <TypographyLink href={GLOBALS.WEB_SOCKET}>WebSocket</TypographyLink> connection is established over TCP and HTTP between the <GLOBALS.InlineCode.GitHub.Controller /> and this <GLOBALS.InlineCode.GitHub.Interface /> web application for a real-time, low-latency, full-duplex data channel, which is used to exchange information and instructions.
             </TypographyP>
 
+            {/* TODO: the anchor doesn't work within this accordion... */}
             <TypographyP>
               Numeric data, such as the <TypographyInlineCode>TARGET_DELTAS</TypographyInlineCode> between the present gantry position and the operator&apos;s desired target, is <span id={FRAGMENT_IDS.DATA_NORMALISATION}>normalised into an absolute, invariant range of <TypographyInlineCode>[0, 65535]</TypographyInlineCode>.
                 This normalisation ensures that the exchanged units are independent of run-time variables—the client viewport, or streamed video dimensions, for instance</span>.
@@ -578,6 +584,10 @@ function SystemArchitecture() {
         <AccordionItem value='userInterface'>
           <AccordionTrigger><TypographyH4>User Interface</TypographyH4></AccordionTrigger>
           <AccordionContent>
+            <TypographyBlockquote>
+              A work in progress!
+            </TypographyBlockquote>
+
             <TypographyP>
               {/* TODO: refer to software CV */}
               {/* TODO: document languages */}
