@@ -86,7 +86,7 @@ export function HomeLinkCards() {
   }
 
   return (
-    <div className='mb-auto md:mb-0 pb-10 grid grid-cols-1 md:grid-cols-2 w-full max-w-3xl gap-4 sm:gap-6 mt-2'>
+    <div className='mb-20 sm:mb-10 grid grid-cols-1 md:grid-cols-2 w-full max-w-3xl gap-6 mt-2'>
 
       {primaryCard}
 
