@@ -14,7 +14,7 @@ import { cn } from '@/lib/utils'
 
 function HeaderTitle() {
   return (
-    <h2 className='flex flex-row gap-2 justify-start items-center text-xl md:text-2xl md:text-[1.75rem] font-extrabold underline decoration-primary'>
+    <h2 className='flex flex-row gap-2 justify-start items-center text-xl md:text-2xl md:text-[1.75rem] font-extrabold underline decoration-primary underline-offset-2 decoration-[3px]'>
       <Crosshair2Icon className='p-0 h-4 md:h-5 w-4 md:w-5 shrink-0 stroke-[0.5]' stroke='currentColor' />
       <span>p4p-83/interface</span>
     </h2>
