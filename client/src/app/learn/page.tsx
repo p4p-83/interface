@@ -50,7 +50,7 @@ export default function Learn() {
             We hope that, in time, this page may serve as a one-stop-shop towards the discovery of the operating principles behind, and features comprising, our pick-and-place machine.
             <br />
             <br />
-            ~ <TypographyLink href={GLOBALS.EXTERAL_URLS.PERSON.JAMES}>James Bao</TypographyLink> and <TypographyLink href={GLOBALS.EXTERAL_URLS.PERSON.SAM}>Sam Skinner</TypographyLink>
+            ~ <TypographyLink href={GLOBALS.JAMES}>James Bao</TypographyLink> and <TypographyLink href={GLOBALS.SAM}>Sam Skinner</TypographyLink>
           </TypographyBlockquote>
 
           <ApplicationInterface />
@@ -86,38 +86,26 @@ function SystemArchitecture() {
       <TypographyList>
 
         <TypographyListItem>
-          <TypographyLink href={GLOBALS.EXTERAL_URLS.PROJECT.GITHUB.GANTRY.URL}>
-            <TypographyInlineCode>{GLOBALS.EXTERAL_URLS.PROJECT.GITHUB.GANTRY.NAME}</TypographyInlineCode>
-          </TypographyLink>
-          : The stateless, low-level machine control of our stepper motors, vacuum nozzle, and limit switches.
+          <GLOBALS.Links.GitHub.Gantry />: The stateless, low-level machine control of our stepper motors, vacuum nozzle, and limit switches.
         </TypographyListItem>
 
         <TypographyListItem>
-          <TypographyLink href={GLOBALS.EXTERAL_URLS.PROJECT.GITHUB.VISION.URL}>
-            <TypographyInlineCode>{GLOBALS.EXTERAL_URLS.PROJECT.GITHUB.VISION.NAME}</TypographyInlineCode>
-          </TypographyLink>
-          : The machine vision that makes our machine intelligent.
+          <GLOBALS.Links.GitHub.Vision />: The machine vision that makes our machine intelligent.
         </TypographyListItem>
 
         <TypographyListItem>
-          <TypographyLink href={GLOBALS.EXTERAL_URLS.PROJECT.GITHUB.CONTROLLER.URL}>
-            <TypographyInlineCode>{GLOBALS.EXTERAL_URLS.PROJECT.GITHUB.CONTROLLER.NAME}</TypographyInlineCode>
-          </TypographyLink>
-          : The heart of our system, serving as the command & control that conducts the orchestra.
+          <GLOBALS.Links.GitHub.Controller />: The heart of our system, serving as the command & control that conducts the orchestra.
         </TypographyListItem>
 
         <TypographyListItem>
-          <TypographyLink href={GLOBALS.EXTERAL_URLS.PROJECT.GITHUB.INTERFACE.URL}>
-            <TypographyInlineCode>{GLOBALS.EXTERAL_URLS.PROJECT.GITHUB.INTERFACE.NAME}</TypographyInlineCode>
-          </TypographyLink>
-          : This web application; the user interface of our pick-and-place machine.
+          <GLOBALS.Links.GitHub.Interface />: This web application; the user interface of our pick-and-place machine.
         </TypographyListItem>
 
       </TypographyList>
 
       <TypographyP>
-        The <TypographyInlineCode>{GLOBALS.EXTERAL_URLS.PROJECT.GITHUB.GANTRY.NAME}</TypographyInlineCode>, <TypographyInlineCode>{GLOBALS.EXTERAL_URLS.PROJECT.GITHUB.VISION.NAME}</TypographyInlineCode>, and <TypographyInlineCode>{GLOBALS.EXTERAL_URLS.PROJECT.GITHUB.CONTROLLER.NAME}</TypographyInlineCode> each run on a single Raspberry Pi 5.
-        This <TypographyInlineCode>{GLOBALS.EXTERAL_URLS.PROJECT.GITHUB.INTERFACE.NAME}</TypographyInlineCode> web application is served by the Raspberry Pi to a client browser, which may be the operator's own device; a University computer; or a web browser running on the same Raspberry Pi.
+        The <GLOBALS.InlineCode.GitHub.Gantry />, <GLOBALS.InlineCode.GitHub.Vision />, and <GLOBALS.InlineCode.GitHub.Controller /> each run on a single Raspberry Pi 5.
+        This <GLOBALS.InlineCode.GitHub.Interface /> web application is served by the Raspberry Pi to a client browser, which may be the operator&apos;s own device; a University computer; or a web browser running on the same Raspberry Pi.
       </TypographyP>
 
       <TypographyP>
@@ -140,7 +128,7 @@ function SystemArchitecture() {
         {/* TODO: */}
         - Why?
         For the user to operate a real-time pick-and-place, they necessarily require a real-time video feed.
-        This video feed is streamed from the <TypographyInlineCode>{GLOBALS.EXTERAL_URLS.PROJECT.GITHUB.CONTROLLER.NAME}</TypographyInlineCode> to this <TypographyInlineCode>{GLOBALS.EXTERAL_URLS.PROJECT.GITHUB.INTERFACE.NAME}</TypographyInlineCode>, where it is displayed to the operator.
+        This video feed is streamed from the <GLOBALS.InlineCode.GitHub.Controller /> to this <GLOBALS.InlineCode.GitHub.Interface />, where it is displayed to the operator.
       </TypographyP>
 
       <TypographyP>
@@ -149,7 +137,7 @@ function SystemArchitecture() {
       </TypographyP>
 
       <TypographyP>
-        Once the H.264 video is streamed into MediaMTX, it is then read via WebRTC by this client <TypographyInlineCode>{GLOBALS.EXTERAL_URLS.PROJECT.GITHUB.INTERFACE.NAME}</TypographyInlineCode>, where the WHEP stream is displayed through an HTML &lt;video&gt; tag on /place.
+        Once the H.264 video is streamed into MediaMTX, it is then read via WebRTC by this client <GLOBALS.InlineCode.GitHub.Interface />, where the WHEP stream is displayed through an HTML &lt;video&gt; tag on /place.
       </TypographyP>
 
       <TypographyH4>Message Passing</TypographyH4>
@@ -164,12 +152,12 @@ function SystemArchitecture() {
         The p4p-83/proto repository additionally contains a script to recompile target language bindings when changes are made.
       </TypographyP>
 
-      <TypographyH5><TypographyInlineCode>{GLOBALS.EXTERAL_URLS.PROJECT.GITHUB.CONTROLLER.NAME}</TypographyInlineCode> to <TypographyInlineCode>{GLOBALS.EXTERAL_URLS.PROJECT.GITHUB.GANTRY.NAME}</TypographyInlineCode></TypographyH5>
+      <TypographyH5><GLOBALS.InlineCode.GitHub.Controller /> to <GLOBALS.InlineCode.GitHub.Gantry /></TypographyH5>
 
 
-      <TypographyH5><TypographyInlineCode>{GLOBALS.EXTERAL_URLS.PROJECT.GITHUB.CONTROLLER.NAME}</TypographyInlineCode> to <TypographyInlineCode>{GLOBALS.EXTERAL_URLS.PROJECT.GITHUB.INTERFACE.NAME}</TypographyInlineCode></TypographyH5>
+      <TypographyH5><GLOBALS.InlineCode.GitHub.Controller /> to <GLOBALS.InlineCode.GitHub.Interface /></TypographyH5>
       <TypographyP>
-        A WebSocket connection is established over TCP and HTTP between the <TypographyInlineCode>{GLOBALS.EXTERAL_URLS.PROJECT.GITHUB.CONTROLLER.NAME}</TypographyInlineCode> and this <TypographyInlineCode>{GLOBALS.EXTERAL_URLS.PROJECT.GITHUB.INTERFACE.NAME}</TypographyInlineCode> web application for a real-time, low-latency, full-duplex data channel, which is used to exchange information and instructions.
+        A WebSocket connection is established over TCP and HTTP between the <GLOBALS.InlineCode.GitHub.Controller /> and this <GLOBALS.InlineCode.GitHub.Interface /> web application for a real-time, low-latency, full-duplex data channel, which is used to exchange information and instructions.
       </TypographyP>
 
       <TypographyP id='normalisation'>
@@ -334,12 +322,12 @@ function ConstituentPlacePage() {
       </TypographyP>
 
       <TypographyP>
-        It comprises of a full screen feed of the real-time WebRTC video stream received from the <TypographyInlineCode>{GLOBALS.EXTERAL_URLS.PROJECT.GITHUB.CONTROLLER.NAME}</TypographyInlineCode>, below an overlay that implements the interactive user interface and heads-up display.
+        It comprises of a full screen feed of the real-time WebRTC video stream received from the <GLOBALS.InlineCode.GitHub.Controller />, below an overlay that implements the interactive user interface and heads-up display.
       </TypographyP>
 
       <TypographyH5>Page Lifecycle</TypographyH5>
       <TypographyP>
-        Upon navigating to /place, the the operator is first shown a dynamic progress bar whilst this <TypographyInlineCode>{GLOBALS.EXTERAL_URLS.PROJECT.GITHUB.INTERFACE.NAME}</TypographyInlineCode> establishes a WebRTC connection to the <TypographyInlineCode>{GLOBALS.EXTERAL_URLS.PROJECT.GITHUB.CONTROLLER.NAME}</TypographyInlineCode> WHEP stream address configured on /settings.
+        Upon navigating to /place, the the operator is first shown a dynamic progress bar whilst this <GLOBALS.InlineCode.GitHub.Interface /> establishes a WebRTC connection to the <GLOBALS.InlineCode.GitHub.Controller /> WHEP stream address configured on /settings.
       </TypographyP>
 
       <TypographyImage
@@ -357,7 +345,7 @@ function ConstituentPlacePage() {
       />
 
       <TypographyP>
-        If instead the connection succeeds, this <TypographyInlineCode>{GLOBALS.EXTERAL_URLS.PROJECT.GITHUB.INTERFACE.NAME}</TypographyInlineCode> subsequently establishes a WebSocket connection to the <TypographyInlineCode>{GLOBALS.EXTERAL_URLS.PROJECT.GITHUB.CONTROLLER.NAME}</TypographyInlineCode> WebSocket address, also configurable via /settings.
+        If instead the connection succeeds, this <GLOBALS.InlineCode.GitHub.Interface /> subsequently establishes a WebSocket connection to the <GLOBALS.InlineCode.GitHub.Controller /> WebSocket address, also configurable via /settings.
         Provided that this too succeeds, the heads-up display is then rendered and overlaid atop the video stream.
       </TypographyP>
 
@@ -396,7 +384,7 @@ function ConstituentPlacePage() {
       </TypographyP>
 
       <TypographyP>
-        The target markers are grey squares drawn atop centroids of interest that are identified by the <TypographyInlineCode>{GLOBALS.EXTERAL_URLS.PROJECT.GITHUB.VISION.NAME}</TypographyInlineCode>, which are transmitted to this <TypographyInlineCode>{GLOBALS.EXTERAL_URLS.PROJECT.GITHUB.INTERFACE.NAME}</TypographyInlineCode> via the <TypographyInlineCode>{GLOBALS.EXTERAL_URLS.PROJECT.GITHUB.CONTROLLER.NAME}</TypographyInlineCode>.
+        The target markers are grey squares drawn atop centroids of interest that are identified by the <GLOBALS.InlineCode.GitHub.Vision />, which are transmitted to this <GLOBALS.InlineCode.GitHub.Interface /> via the <GLOBALS.InlineCode.GitHub.Controller />.
       </TypographyP>
 
       <TypographyH5>User Input</TypographyH5>
@@ -413,8 +401,8 @@ function ConstituentPlacePage() {
 
       <TypographyP>
         The simplest input is a mouse click at any point atop the video feed.
-        The clicked pixel coordinates are processed into pixel deltas <TypographyInlineCode>(Δx, Δy)</TypographyInlineCode> with respect to the centre of the video feed, used as an analogy for the current head position; <TypographyLink href='#normalisation'>normalised</TypographyLink>; and sent to the <TypographyInlineCode>{GLOBALS.EXTERAL_URLS.PROJECT.GITHUB.CONTROLLER.NAME}</TypographyInlineCode>, which ultimately translates the <TypographyInlineCode>{GLOBALS.EXTERAL_URLS.PROJECT.GITHUB.GANTRY.NAME}</TypographyInlineCode>.
-        If the operator clicks within the bounds of a target marker, it is the delta position of that target&apos;s centroid that is transmitted to the <TypographyInlineCode>{GLOBALS.EXTERAL_URLS.PROJECT.GITHUB.CONTROLLER.NAME}</TypographyInlineCode>.
+        The clicked pixel coordinates are processed into pixel deltas <TypographyInlineCode>(Δx, Δy)</TypographyInlineCode> with respect to the centre of the video feed, used as an analogy for the current head position; <TypographyLink href='#normalisation'>normalised</TypographyLink>; and sent to the <GLOBALS.InlineCode.GitHub.Controller />, which ultimately translates the <GLOBALS.InlineCode.GitHub.Gantry />.
+        If the operator clicks within the bounds of a target marker, it is the delta position of that target&apos;s centroid that is transmitted to the <GLOBALS.InlineCode.GitHub.Controller />.
       </TypographyP>
 
       <TypographyP>
@@ -445,7 +433,7 @@ function ConstituentPlacePage() {
       </TypographyList>
 
       <TypographyP>
-        These will reset the indicated target to <TypographyInlineCode>(0, 0)</TypographyInlineCode>, or transmit the deltas for the indicated target to the <TypographyInlineCode>{GLOBALS.EXTERAL_URLS.PROJECT.GITHUB.CONTROLLER.NAME}</TypographyInlineCode>.
+        These will reset the indicated target to <TypographyInlineCode>(0, 0)</TypographyInlineCode>, or transmit the deltas for the indicated target to the <GLOBALS.InlineCode.GitHub.Controller />.
       </TypographyP>
 
       <TypographyP>
@@ -453,11 +441,11 @@ function ConstituentPlacePage() {
       </TypographyP>
 
       <TypographyList ordered>
-        <TypographyListItem>the <TypographyInlineCode>{GLOBALS.EXTERAL_URLS.PROJECT.GITHUB.VISION.NAME}</TypographyInlineCode> perfectly identifies all target markers of interest,</TypographyListItem>
-        <TypographyListItem>those target marker positions are transmitted in real-time via the <TypographyInlineCode>{GLOBALS.EXTERAL_URLS.PROJECT.GITHUB.CONTROLLER.NAME}</TypographyInlineCode> to this <TypographyInlineCode>{GLOBALS.EXTERAL_URLS.PROJECT.GITHUB.INTERFACE.NAME}</TypographyInlineCode>,</TypographyListItem>
+        <TypographyListItem>the <GLOBALS.InlineCode.GitHub.Vision /> perfectly identifies all target markers of interest,</TypographyListItem>
+        <TypographyListItem>those target marker positions are transmitted in real-time via the <GLOBALS.InlineCode.GitHub.Controller /> to this <GLOBALS.InlineCode.GitHub.Interface />,</TypographyListItem>
         <TypographyListItem>the weighted nearest-target algorithm is indeed intuitive and fit-for-purpose,</TypographyListItem>
-        <TypographyListItem>the <TypographyInlineCode>{GLOBALS.EXTERAL_URLS.PROJECT.GITHUB.CONTROLLER.NAME}</TypographyInlineCode> correctly translates the <TypographyInlineCode>{GLOBALS.EXTERAL_URLS.PROJECT.GITHUB.GANTRY.NAME}</TypographyInlineCode> to the selected target marker position, and</TypographyListItem>
-        <TypographyListItem>the <TypographyInlineCode>{GLOBALS.EXTERAL_URLS.PROJECT.GITHUB.CONTROLLER.NAME}</TypographyInlineCode> and <TypographyInlineCode>{GLOBALS.EXTERAL_URLS.PROJECT.GITHUB.GANTRY.NAME}</TypographyInlineCode> correctly places the component using the vacuum nozzle,</TypographyListItem>
+        <TypographyListItem>the <GLOBALS.InlineCode.GitHub.Controller /> correctly translates the <GLOBALS.InlineCode.GitHub.Gantry /> to the selected target marker position, and</TypographyListItem>
+        <TypographyListItem>the <GLOBALS.InlineCode.GitHub.Controller /> and <GLOBALS.InlineCode.GitHub.Gantry /> correctly places the component using the vacuum nozzle,</TypographyListItem>
       </TypographyList>
 
       <TypographyP>

@@ -33,10 +33,10 @@ export default function Project() {
           <TypographyH2>Part IV Project #83</TypographyH2>
 
           <TypographyP>
-            <TypographyLink href={GLOBALS.EXTERAL_URLS.PROJECT.MANAGEMENT_SYSTEM}>Part IV Project 2024 #83</TypographyLink> — <TypographyLink href={GLOBALS.EXTERAL_URLS.PERSON.JAMES}>James Bao</TypographyLink> and <TypographyLink href={GLOBALS.EXTERAL_URLS.PERSON.SAM}>Sam Skinner</TypographyLink>, supervised by <TypographyLink href={GLOBALS.EXTERAL_URLS.PERSON.NITISH}>Dr. Nitish Patel</TypographyLink>.
+            <TypographyLink href={GLOBALS.MANAGEMENT_SYSTEM}>Part IV Project 2024 #83</TypographyLink> — <TypographyLink href={GLOBALS.JAMES}>James Bao</TypographyLink> and <TypographyLink href={GLOBALS.SAM}>Sam Skinner</TypographyLink>, supervised by <TypographyLink href={GLOBALS.NITISH}>Dr. Nitish Patel</TypographyLink>.
           </TypographyP>
           <TypographyP>
-            <TypographyLink href={GLOBALS.EXTERAL_URLS.UNIVERSITY.ECSE}>Department of Electrical, Computer, and Software Engineering</TypographyLink>, <TypographyLink href={GLOBALS.EXTERAL_URLS.UNIVERSITY.HOME}>The University of Auckland</TypographyLink>.
+            <TypographyLink href={GLOBALS.UNIVERSITY.ECSE}>Department of Electrical, Computer, and Software Engineering</TypographyLink>, <TypographyLink href={GLOBALS.UNIVERSITY.HOME}>The University of Auckland</TypographyLink>.
           </TypographyP>
 
           <TypographyH3>A pick-and-place for rapid prototyping</TypographyH3>
@@ -96,8 +96,8 @@ export default function Project() {
 
           <TypographyH3>GitHub Organisation</TypographyH3>
           <TypographyP>
-            Our work towards this research project is contained within our GitHub organisation, <TypographyLink href={GLOBALS.EXTERAL_URLS.PROJECT.GITHUB.ORGANISATION.URL}><TypographyInlineCode>{GLOBALS.EXTERAL_URLS.PROJECT.GITHUB.ORGANISATION.NAME}</TypographyInlineCode></TypographyLink>.
-            We have additionally maintained logbooks throughout this project within an Obsidian vault (ie Markdown <TypographyInlineCode>.md</TypographyInlineCode> files), which is version controlled in a repository at <TypographyLink href={GLOBALS.EXTERAL_URLS.PROJECT.GITHUB.DOCS.URL}><TypographyInlineCode>{GLOBALS.EXTERAL_URLS.PROJECT.GITHUB.DOCS.NAME}</TypographyInlineCode></TypographyLink>.
+            Our work towards this research project is contained within our GitHub organisation, <GLOBALS.Links.GitHub.Organisation />.
+            We have additionally maintained logbooks throughout this project within an Obsidian vault (ie Markdown <TypographyInlineCode>.md</TypographyInlineCode> files), which is version controlled in a repository at <GLOBALS.Links.GitHub.Docs />.
           </TypographyP>
 
           <TypographyH3>{GLOBALS.PAGES.LEARN.description}</TypographyH3>
