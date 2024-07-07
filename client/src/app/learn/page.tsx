@@ -106,6 +106,65 @@ function ApplicationInterface() {
           </AccordionContent>
         </AccordionItem>
 
+        <AccordionItem value='keyboardNavigation'>
+          <AccordionTrigger>
+            <span className='flex flex-row gap-2 justify-between items-center w-full pr-2'>
+              <TypographyH4>Keyboard Navigation</TypographyH4>
+              <TypographyInlineCode><ThickArrowUpIcon className='align-text-bottom' /></TypographyInlineCode>
+            </span>
+          </AccordionTrigger>
+          <AccordionContent className='text-base'>
+            <TypographyP>
+              Instant page navigation via the keyboard is implemented on the home page, and all pages that feature the site header element.
+              These pages are:
+            </TypographyP>
+
+            <TypographyList>
+              <TypographyListItem>
+                <GLOBALS.InlineCode.Pages.Home />,
+              </TypographyListItem>
+              <TypographyListItem>
+                <GLOBALS.InlineCode.Pages.Calibrate />,
+              </TypographyListItem>
+              <TypographyListItem>
+                <GLOBALS.InlineCode.Pages.Settings />,
+              </TypographyListItem>
+              <TypographyListItem>
+                <GLOBALS.InlineCode.Pages.Learn />, and
+              </TypographyListItem>
+              <TypographyListItem>
+                <GLOBALS.InlineCode.Pages.Project />.
+              </TypographyListItem>
+            </TypographyList>
+
+            <TypographyP>
+               This keyboard navigation scheme is accessed via the <TypographyInlineCode>Shift</TypographyInlineCode> modifier key.
+              The pages that may be accessed using this scheme are:
+            </TypographyP>
+            <TypographyList>
+              <TypographyListItem>
+                {/* TODO: Globalise these shortcuts */}
+                <GLOBALS.InlineCode.Pages.Home />: By pressing <TypographyInlineCode>Shift</TypographyInlineCode>+<TypographyInlineCode>H</TypographyInlineCode>.
+              </TypographyListItem>
+              <TypographyListItem>
+                <GLOBALS.InlineCode.Pages.Place />: By pressing <TypographyInlineCode>Shift</TypographyInlineCode>+<TypographyInlineCode>P</TypographyInlineCode>.
+              </TypographyListItem>
+              <TypographyListItem>
+                <GLOBALS.InlineCode.Pages.Calibrate />: By pressing <TypographyInlineCode>Shift</TypographyInlineCode>+<TypographyInlineCode>C</TypographyInlineCode>.
+              </TypographyListItem>
+              <TypographyListItem>
+                <GLOBALS.InlineCode.Pages.Settings />: By pressing <TypographyInlineCode>Shift</TypographyInlineCode>+<TypographyInlineCode>S</TypographyInlineCode>.
+              </TypographyListItem>
+              <TypographyListItem>
+                <GLOBALS.InlineCode.Pages.Learn />: By pressing <TypographyInlineCode>Shift</TypographyInlineCode>+<TypographyInlineCode>L</TypographyInlineCode>.
+              </TypographyListItem>
+              <TypographyListItem>
+                <GLOBALS.InlineCode.Pages.Project />: By pressing <TypographyInlineCode>Shift</TypographyInlineCode>+<TypographyInlineCode>J</TypographyInlineCode>.
+              </TypographyListItem>
+            </TypographyList>
+          </AccordionContent>
+        </AccordionItem>
+
       </Accordion>
 
     </>
@@ -206,29 +265,6 @@ function ConstituentHomePage() {
         Alternatively, pressing the <TypographyInlineCode>c</TypographyInlineCode> and/or <TypographyInlineCode>s</TypographyInlineCode> key(s) will selectively reveal the <GLOBALS.InlineCode.Pages.Calibrate /> and/or <GLOBALS.InlineCode.Pages.Settings /> links respectively.
         This is particularly useful in cases where the <TypographyInlineCode>⌥</TypographyInlineCode>/<TypographyInlineCode>Alt</TypographyInlineCode> modifier key holds special meaning to the browser.
       </TypographyP>
-
-      <TypographyH5>Keyboard Navigation</TypographyH5>
-      <TypographyP>
-        The home page additionally implements instant keyboard page navigation using the <TypographyInlineCode>Shift</TypographyInlineCode> modifier key.
-        The pages that may be accessed using this feature are:
-      </TypographyP>
-      <TypographyList>
-        <TypographyListItem>
-          <GLOBALS.InlineCode.Pages.Place />: By pressing <TypographyInlineCode>Shift</TypographyInlineCode>+<TypographyInlineCode>P</TypographyInlineCode>.
-        </TypographyListItem>
-        <TypographyListItem>
-          <GLOBALS.InlineCode.Pages.Calibrate />: By pressing <TypographyInlineCode>Shift</TypographyInlineCode>+<TypographyInlineCode>C</TypographyInlineCode>.
-        </TypographyListItem>
-        <TypographyListItem>
-          <GLOBALS.InlineCode.Pages.Settings />: By pressing <TypographyInlineCode>Shift</TypographyInlineCode>+<TypographyInlineCode>S</TypographyInlineCode>.
-        </TypographyListItem>
-        <TypographyListItem>
-          <GLOBALS.InlineCode.Pages.Learn />: By pressing <TypographyInlineCode>Shift</TypographyInlineCode>+<TypographyInlineCode>L</TypographyInlineCode>.
-        </TypographyListItem>
-        <TypographyListItem>
-          <GLOBALS.InlineCode.Pages.Project />: By pressing <TypographyInlineCode>Shift</TypographyInlineCode>+<TypographyInlineCode>J</TypographyInlineCode>.
-        </TypographyListItem>
-      </TypographyList>
     </>
   )
 }
@@ -238,6 +274,7 @@ import placeProgressImage from './place-progress.png'
 import placeErrorImage from './place-error.png'
 import placeSocketImage from './place-socket.png'
 import { Badge } from '@/components/ui/badge'
+import { DoubleArrowRightIcon, KeyboardIcon, ThickArrowUpIcon } from '@radix-ui/react-icons'
 function ConstituentPlacePage() {
   return (
     <>
