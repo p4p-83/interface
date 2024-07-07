@@ -328,6 +328,9 @@ function ConstituentHomePage() {
         <TypographyListItem>
           <GLOBALS.InlineCode.Pages.Learn />: By pressing <TypographyInlineCode>Shift</TypographyInlineCode>+<TypographyInlineCode>L</TypographyInlineCode>
         </TypographyListItem>
+        <TypographyListItem>
+          <GLOBALS.InlineCode.Pages.Project />: By pressing <TypographyInlineCode>Shift</TypographyInlineCode>+<TypographyInlineCode>J</TypographyInlineCode>
+        </TypographyListItem>
       </TypographyList>
     </>
   )

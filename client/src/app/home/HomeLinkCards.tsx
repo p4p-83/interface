@@ -12,10 +12,13 @@ export function HomeLinkCards() {
 
   const [isKeyCPressed, setIsKeyCPressed] = useState(false)
   const [isKeySPressed, setIsKeySPressed] = useState(false)
+  const [isKeyShiftPressed, setIsKeyShiftPressed] = useState(false)
 
   useEffect(() => {
     function handleKeyDown(event: KeyboardEvent) {
       console.info(`Key down for ${event.code} (${event.key})`)
+
+      setIsKeyShiftPressed(event.shiftKey)
 
       if (!event.shiftKey) {
         switch (event.code) {
@@ -42,12 +45,17 @@ export function HomeLinkCards() {
         case 'KeyL':
           router.push(GLOBALS.PAGES.LEARN.path)
           break
+        case 'KeyL':
+          router.push(GLOBALS.PAGES.PROJECT.path)
+          break
         }
       }
     }
 
     function handleKeyUp(event: KeyboardEvent) {
       console.info(`Key up for ${event.code} (${event.key})`)
+
+      setIsKeyShiftPressed(event.shiftKey)
 
       switch (event.code) {
       case 'KeyC':
@@ -71,17 +79,17 @@ export function HomeLinkCards() {
   let primaryCard: ReactNode
   if (!isKeyCPressed && !isKeySPressed) {
     primaryCard = (
-      <LinkCard href={GLOBALS.PAGES.PLACE.path} title={GLOBALS.PAGES.PLACE.name} description={`${GLOBALS.PAGES.PLACE.description}.`} icon={Crosshair2Icon} className='w-full md:col-span-2' />
+      <LinkCard href={GLOBALS.PAGES.PLACE.path} title={GLOBALS.PAGES.PLACE.name} description={`${GLOBALS.PAGES.PLACE.description}.`} icon={Crosshair2Icon} keyShortcut={['Shift', 'P']} showKeyShortcut={isKeyShiftPressed} className='w-full md:col-span-2' />
     )
   }
   else if (isKeyCPressed) {
     primaryCard = (
-      <LinkCard href={GLOBALS.PAGES.CALIBRATE.path} title={GLOBALS.PAGES.CALIBRATE.name} description={`${GLOBALS.PAGES.CALIBRATE.description}.`} icon={MixerHorizontalIcon} className='w-full md:col-span-2' />
+      <LinkCard href={GLOBALS.PAGES.CALIBRATE.path} title={GLOBALS.PAGES.CALIBRATE.name} description={`${GLOBALS.PAGES.CALIBRATE.description}.`} icon={MixerHorizontalIcon} keyShortcut={['Shift', 'C']} showKeyShortcut={isKeyShiftPressed} className='w-full md:col-span-2' />
     )
   }
   else if (isKeySPressed) {
     primaryCard = (
-      <LinkCard href={GLOBALS.PAGES.SETTINGS.path} title={GLOBALS.PAGES.SETTINGS.name} description={`${GLOBALS.PAGES.SETTINGS.description}.`} icon={GearIcon} className='w-full md:col-span-2' />
+      <LinkCard href={GLOBALS.PAGES.SETTINGS.path} title={GLOBALS.PAGES.SETTINGS.name} description={`${GLOBALS.PAGES.SETTINGS.description}.`} icon={GearIcon} keyShortcut={['Shift', 'S']} showKeyShortcut={isKeyShiftPressed} className='w-full md:col-span-2' />
     )
   }
 
@@ -90,8 +98,8 @@ export function HomeLinkCards() {
 
       {primaryCard}
 
-      <LinkCard href={GLOBALS.PAGES.LEARN.path} title={GLOBALS.PAGES.LEARN.name} description={`${GLOBALS.PAGES.LEARN.description}.`} icon={RocketIcon} className='w-full' />
-      <LinkCard href={GLOBALS.PAGES.PROJECT.path} title={GLOBALS.PAGES.PROJECT.name} description={`${GLOBALS.PAGES.PROJECT.description}.`} icon={IdCardIcon} className='w-full' />
+      <LinkCard href={GLOBALS.PAGES.LEARN.path} title={GLOBALS.PAGES.LEARN.name} description={`${GLOBALS.PAGES.LEARN.description}.`} icon={RocketIcon} keyShortcut={['Shift', 'L']} showKeyShortcut={isKeyShiftPressed} className='w-full' />
+      <LinkCard href={GLOBALS.PAGES.PROJECT.path} title={GLOBALS.PAGES.PROJECT.name} description={`${GLOBALS.PAGES.PROJECT.description}.`} icon={IdCardIcon} keyShortcut={['Shift', 'J']} showKeyShortcut={isKeyShiftPressed} className='w-full' />
 
     </div>
   )
