@@ -13,10 +13,10 @@ import { cn } from '@/lib/utils'
 
 function HeaderTitle() {
   return (
-    <h1 className='flex flex-row gap-2 justify-start items-center text-xl md:text-2xl md:text-[1.75rem] font-extrabold underline decoration-primary'>
-      <Crosshair2Icon className='p-0 h-4 md:h-5 w-4 md:w-5 shrink-0' strokeWidth={0.5} stroke='currentColor' />
+    <h2 className='flex flex-row gap-2 justify-start items-center text-xl md:text-2xl md:text-[1.75rem] font-extrabold underline decoration-primary'>
+      <Crosshair2Icon className='p-0 h-4 md:h-5 w-4 md:w-5 shrink-0 stroke-[0.5]' stroke='currentColor' />
       <span>p4p-83/interface</span>
-    </h1>
+    </h2>
   )
 }
 

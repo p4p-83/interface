@@ -66,4 +66,15 @@
   body {
     @apply bg-background text-foreground;
   }
+
+  h1 {
+    @apply tracking-tighter sm:tracking-normal;
+  }
+
+  h2,
+  h3,
+  h4,
+  h5 {
+    @apply tracking-tight sm:tracking-normal;
+  }
 }
