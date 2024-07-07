@@ -29,6 +29,11 @@ import {
 
 export const metadata: Metadata = GLOBALS.PAGES.getMetadata(GLOBALS.PAGES.LEARN)
 
+export const FRAGMENT_HASHES = {
+  DATA_NORMALISATION: 'normalisation',
+  NEAREST_TARGET: 'nearest-target',
+} as const
+
 export default function Learn() {
   return (
 
@@ -104,7 +109,7 @@ function SystemArchitecture() {
       </TypographyList>
 
       <TypographyP>
-        The <GLOBALS.InlineCode.GitHub.Gantry />, <GLOBALS.InlineCode.GitHub.Vision />, and <GLOBALS.InlineCode.GitHub.Controller /> each run on a single Raspberry Pi 5.
+        The <GLOBALS.InlineCode.GitHub.Gantry />, <GLOBALS.InlineCode.GitHub.Vision />, and <GLOBALS.InlineCode.GitHub.Controller /> each run on a single <TypographyLink href={GLOBALS.RASPBERRY_PI_5}>Raspberry Pi 5</TypographyLink>.
         This <GLOBALS.InlineCode.GitHub.Interface /> web application is served by the Raspberry Pi to a client browser, which may be the operator&apos;s own device; a University computer; or a web browser running on the same Raspberry Pi.
       </TypographyP>
 
@@ -125,19 +130,19 @@ function SystemArchitecture() {
 
       <TypographyH4>Video Streaming</TypographyH4>
       <TypographyP>
-        {/* TODO: */}
-        - Why?
+        {/* TODO: Why? */}
         For the user to operate a real-time pick-and-place, they necessarily require a real-time video feed.
         This video feed is streamed from the <GLOBALS.InlineCode.GitHub.Controller /> to this <GLOBALS.InlineCode.GitHub.Interface />, where it is displayed to the operator.
       </TypographyP>
 
       <TypographyP>
-        A MediaMTX real-time media server is used to stream the real-time video feed from the Raspberry Pi&apos;s camera(s) to this web application over the WebRTC protocol.
-        The video stream is first read from the sensor with the rpicam-vid CLI application built atop libcamera that is distributed as part of Raspberry Pi OS, before being piped through stdin in YUV 4:2:0 to ffmpeg to encode it into H.264 and stream it to MediaMTX via RTSP.
+        A <TypographyLink href={GLOBALS.MEDIA_MTX}>MediaMTX</TypographyLink> real-time media server is used to stream the real-time video feed from the Raspberry Pi&apos;s camera(s) to this web application over the <TypographyLink href={GLOBALS.WEB_RTC}>WebRTC</TypographyLink> protocol.
+        The video stream is first read from the sensor with the <TypographyLink href={GLOBALS.RPI_CAM_VID}><TypographyInlineCode>rpicam-vid</TypographyInlineCode></TypographyLink> CLI application (built atop <TypographyLink href={GLOBALS.LIB_CAMERA}><TypographyInlineCode>libcamera</TypographyInlineCode></TypographyLink>) that is distributed as part of <TypographyLink href={GLOBALS.RASPBERRY_PI_OS}>Raspberry Pi OS</TypographyLink>, before being piped through <TypographyInlineCode>stdin</TypographyInlineCode> to <TypographyLink href={GLOBALS.FFMPEG}><TypographyInlineCode>ffmpeg</TypographyInlineCode></TypographyLink>.
+        It is then transcoded by <TypographyInlineCode>ffmpeg</TypographyInlineCode> from its raw <TypographyLink href={GLOBALS.YUV_420}><TypographyInlineCode>YUV 4:2:0</TypographyInlineCode></TypographyLink> format into <TypographyLink href={GLOBALS.H_264}><TypographyInlineCode>H.264</TypographyInlineCode></TypographyLink>, and streamed to MediaMTX via <TypographyLink href={GLOBALS.RTSP}>RTSP</TypographyLink>.
       </TypographyP>
 
       <TypographyP>
-        Once the H.264 video is streamed into MediaMTX, it is then read via WebRTC by this client <GLOBALS.InlineCode.GitHub.Interface />, where the WHEP stream is displayed through an HTML &lt;video&gt; tag on /place.
+        Once the <TypographyInlineCode>H.264</TypographyInlineCode> video is streamed into MediaMTX, it is then read via WebRTC by this <GLOBALS.InlineCode.GitHub.Interface /> client, where the <TypographyLink href={GLOBALS.WHEP}>WHEP</TypographyLink> stream is displayed through an HTML <TypographyInlineCode>&lt;video&gt;</TypographyInlineCode> tag on <GLOBALS.InlineCode.Pages.Place />.
       </TypographyP>
 
       <TypographyH4>Message Passing</TypographyH4>
@@ -146,25 +151,30 @@ function SystemArchitecture() {
       </TypographyP>
 
       <TypographyP>
-        Protocol Buffers are used to serialise and format the data payloads being exchanged between each component.
-        Protocol Buffers are a language- and platform-agnostic binary serialisation mechanism for structured data, like JSON or XML, but &lsquo;smaller, faster, and simpler&rsquo;.
-        Our .proto language definition files are contained within p4p-83/proto, which is included as a git submodule in our individual component repositories.
-        The p4p-83/proto repository additionally contains a script to recompile target language bindings when changes are made.
+        <TypographyLink href={GLOBALS.PROTOCOL_BUFFERS.HOME}>Protocol Buffers </TypographyLink>are used to serialise and format the data payloads being exchanged between each component.
+        &lsquo;Protobufs&rsquo; are a language- and platform-agnostic binary serialisation mechanism for structured data, like JSON or XML, but <TypographyLink href={GLOBALS.PROTOCOL_BUFFERS.SMALLER_FASTER_SIMPLER}>&lsquo;smaller, faster, and simpler&rsquo;</TypographyLink>.
+        Our <TypographyInlineCode>.proto</TypographyInlineCode> language definition files are contained within <GLOBALS.Links.GitHub.Proto />, itself included as a <TypographyInlineCode>git</TypographyInlineCode> <TypographyLink href={GLOBALS.GIT_SUBMODULES}>submodule </TypographyLink>in our component repositories.
+        The <GLOBALS.InlineCode.GitHub.Proto /> repository also contains a shell script to recompile target language bindings when changes are made.
       </TypographyP>
 
       <TypographyH5><GLOBALS.InlineCode.GitHub.Controller /> to <GLOBALS.InlineCode.GitHub.Gantry /></TypographyH5>
-
+      {/* TODO: */}
+      <TypographyP>
+        <TypographyMuted>
+          This is yet to be properly implemented, but is likely to be a serial port exchanging messages serialised in a protocol buffer.
+          At present, this is a serial port at <TypographyInlineCode>115200</TypographyInlineCode> baud exchanging <TypographyLink href='https://en.wikipedia.org/wiki/G-code'>G-code</TypographyLink>.
+        </TypographyMuted>
+      </TypographyP>
 
       <TypographyH5><GLOBALS.InlineCode.GitHub.Controller /> to <GLOBALS.InlineCode.GitHub.Interface /></TypographyH5>
       <TypographyP>
-        A WebSocket connection is established over TCP and HTTP between the <GLOBALS.InlineCode.GitHub.Controller /> and this <GLOBALS.InlineCode.GitHub.Interface /> web application for a real-time, low-latency, full-duplex data channel, which is used to exchange information and instructions.
+        A <TypographyLink href={GLOBALS.WEB_SOCKET}>WebSocket</TypographyLink> connection is established over TCP and HTTP between the <GLOBALS.InlineCode.GitHub.Controller /> and this <GLOBALS.InlineCode.GitHub.Interface /> web application for a real-time, low-latency, full-duplex data channel, which is used to exchange information and instructions.
       </TypographyP>
 
-      <TypographyP id='normalisation'>
-        Numeric data, such as the `TARGET_DELTAS` between the present gantry position and the operator's desired target, is normalised into an absolute, invariant range of [0, 65535].
-        This normalisation ensures that the units are independent of run-time variables—the client viewport, or streamed video dimensions, for instance.
-        This range was chosen to be the representation range of an unsigned 16-bit integer for performance.
-        By using this range, we can leverage protocol buffer varints https://protobuf.dev/programming-guides/encoding/#varints, which would not be possible had we chosen a `float` or `double` in the range of [0, 1].
+      <TypographyP id={FRAGMENT_HASHES.DATA_NORMALISATION}>
+        Numeric data, such as the <TypographyInlineCode>TARGET_DELTAS</TypographyInlineCode> between the present gantry position and the operator&apos;s desired target, is normalised into an absolute, invariant range of <TypographyInlineCode>[0, 65535]</TypographyInlineCode>.
+        This normalisation ensures that the exchanged units are independent of run-time variables—the client viewport, or streamed video dimensions, for instance.
+        The representation range of a <TypographyInlineCode>16-bit</TypographyInlineCode> integer was chosen for performance—by using this range, we can leverage the efficiency of protocol buffer <TypographyLink href={GLOBALS.PROTOCOL_BUFFERS.VARINTS}>varints</TypographyLink>, which is not possible with a <TypographyInlineCode>float</TypographyInlineCode> or <TypographyInlineCode>double</TypographyInlineCode> in the range of <TypographyInlineCode>[0, 1]</TypographyInlineCode>.
       </TypographyP>
 
       <TypographyH4>User Interface</TypographyH4>
@@ -186,7 +196,7 @@ function SystemArchitecture() {
       <TypographyH5>Form Validation</TypographyH5>
       - Zod is used for the declaration of form schemas and field validation on the settings page.
 
-      <TypographyH5 id='nearest-target'>Nearest-Target Algorithm</TypographyH5>
+      <TypographyH5 id={FRAGMENT_HASHES.NEAREST_TARGET}>Nearest-Target Algorithm</TypographyH5>
 
     </>
   )
@@ -259,31 +269,31 @@ function ConstituentHomePage() {
   return (
     <>
       <TypographyP>
-        The home <TypographyInlineCode>{GLOBALS.PAGES.HOME.path}</TypographyInlineCode> page is the launchpad of our user interface.
+        The home <GLOBALS.InlineCode.Pages.Home /> page is the launchpad of our user interface.
         From there, you can access:
       </TypographyP>
 
       <TypographyList>
         <TypographyListItem>
-          <TypographyInlineCode>{GLOBALS.PAGES.PLACE.path}</TypographyInlineCode>: Operate the pick-and-place machine.
+          <GLOBALS.InlineCode.Pages.Place />: Operate the pick-and-place machine.
         </TypographyListItem>
         <TypographyListItem>
-          <TypographyInlineCode>{GLOBALS.PAGES.CALIBRATE.path}</TypographyInlineCode>: Tune the machine&apos;s operating parameters to improve performance.
+          <GLOBALS.InlineCode.Pages.Calibrate />: Tune the machine&apos;s operating parameters to improve performance.
         </TypographyListItem>
         <TypographyListItem>
-          <TypographyInlineCode>{GLOBALS.PAGES.SETTINGS.path}</TypographyInlineCode>: Configure the system&apos;s interface parameters to reflect deployment changes.
+          <GLOBALS.InlineCode.Pages.Settings />: Configure the system&apos;s interface parameters to reflect deployment changes.
         </TypographyListItem>
         <TypographyListItem>
-          <TypographyInlineCode>{GLOBALS.PAGES.LEARN.path}</TypographyInlineCode>: This page; learn about how to operate and maintain the pick-and-place machine.
+          <GLOBALS.InlineCode.Pages.Learn />: This page; learn about how to operate and maintain the pick-and-place machine.
         </TypographyListItem>
         <TypographyListItem>
-          <TypographyInlineCode>{GLOBALS.PAGES.PROJECT.path}</TypographyInlineCode>: Read about the background motivations of this research project.
+          <GLOBALS.InlineCode.Pages.Project />: Read about the background motivations of this research project.
         </TypographyListItem>
       </TypographyList>
 
       <TypographyP>
         {/* TODO: option modifier */}
-        Note that <TypographyInlineCode>{GLOBALS.PAGES.CALIBRATE.path}</TypographyInlineCode> and <TypographyInlineCode>{GLOBALS.PAGES.SETTINGS.path}</TypographyInlineCode> are implemented as &lsquo;hidden&rsquo; pages, in that they are not visible by default.
+        Note that <GLOBALS.InlineCode.Pages.Calibrate /> and <GLOBALS.InlineCode.Pages.Settings /> are implemented as &lsquo;hidden&rsquo; pages, in that they are not visible by default.
         This design decision is motivated by an intent that they should be scarcely necessary—under regular circumstances, one should not need to access them.
         On the off-chance that they might become necessary, however, they may be &lsquo;activated&rsquo; by pressing the <TypographyInlineCode>c</TypographyInlineCode> or <TypographyInlineCode>s</TypographyInlineCode> key respectively whilst on the home page—which will cause the respective link to appear.
       </TypographyP>
@@ -295,22 +305,23 @@ function ConstituentHomePage() {
       </TypographyP>
       <TypographyList>
         <TypographyListItem>
-          <TypographyInlineCode>{GLOBALS.PAGES.PLACE.path}</TypographyInlineCode>: By pressing <TypographyInlineCode>Shift</TypographyInlineCode>+<TypographyInlineCode>P</TypographyInlineCode>
+          <GLOBALS.InlineCode.Pages.Place />: By pressing <TypographyInlineCode>Shift</TypographyInlineCode>+<TypographyInlineCode>P</TypographyInlineCode>
         </TypographyListItem>
         <TypographyListItem>
-          <TypographyInlineCode>{GLOBALS.PAGES.CALIBRATE.path}</TypographyInlineCode>: By pressing <TypographyInlineCode>Shift</TypographyInlineCode>+<TypographyInlineCode>C</TypographyInlineCode>
+          <GLOBALS.InlineCode.Pages.Calibrate />: By pressing <TypographyInlineCode>Shift</TypographyInlineCode>+<TypographyInlineCode>C</TypographyInlineCode>
         </TypographyListItem>
         <TypographyListItem>
-          <TypographyInlineCode>{GLOBALS.PAGES.SETTINGS.path}</TypographyInlineCode>: By pressing <TypographyInlineCode>Shift</TypographyInlineCode>+<TypographyInlineCode>S</TypographyInlineCode>
+          <GLOBALS.InlineCode.Pages.Settings />: By pressing <TypographyInlineCode>Shift</TypographyInlineCode>+<TypographyInlineCode>S</TypographyInlineCode>
         </TypographyListItem>
         <TypographyListItem>
-          <TypographyInlineCode>{GLOBALS.PAGES.LEARN.path}</TypographyInlineCode>: By pressing <TypographyInlineCode>Shift</TypographyInlineCode>+<TypographyInlineCode>L</TypographyInlineCode>
+          <GLOBALS.InlineCode.Pages.Learn />: By pressing <TypographyInlineCode>Shift</TypographyInlineCode>+<TypographyInlineCode>L</TypographyInlineCode>
         </TypographyListItem>
       </TypographyList>
     </>
   )
 }
 
+// TODO: update images
 import placeProgressImage from './place-progress.png'
 import placeErrorImage from './place-error.png'
 import placeSocketImage from './place-socket.png'
@@ -318,7 +329,7 @@ function ConstituentPlacePage() {
   return (
     <>
       <TypographyP>
-        The <TypographyInlineCode>{GLOBALS.PAGES.PLACE.path}</TypographyInlineCode> page is the centrepiece of our interface.
+        The <GLOBALS.InlineCode.Pages.Place /> page is the centrepiece of our interface.
       </TypographyP>
 
       <TypographyP>
@@ -327,9 +338,10 @@ function ConstituentPlacePage() {
 
       <TypographyH5>Page Lifecycle</TypographyH5>
       <TypographyP>
-        Upon navigating to /place, the the operator is first shown a dynamic progress bar whilst this <GLOBALS.InlineCode.GitHub.Interface /> establishes a WebRTC connection to the <GLOBALS.InlineCode.GitHub.Controller /> WHEP stream address configured on /settings.
+        Upon navigating to <GLOBALS.InlineCode.Pages.Place />, the the operator is first shown a dynamic progress bar whilst this <GLOBALS.InlineCode.GitHub.Interface /> establishes a WebRTC connection to the <GLOBALS.InlineCode.GitHub.Controller />&apos;s WHEP stream address as configured on <GLOBALS.InlineCode.Pages.Settings />.
       </TypographyP>
 
+      {/* TODO: Carousel */}
       <TypographyImage
         src={placeProgressImage}
         alt='/place page progress bar'
@@ -345,7 +357,7 @@ function ConstituentPlacePage() {
       />
 
       <TypographyP>
-        If instead the connection succeeds, this <GLOBALS.InlineCode.GitHub.Interface /> subsequently establishes a WebSocket connection to the <GLOBALS.InlineCode.GitHub.Controller /> WebSocket address, also configurable via /settings.
+        If instead the connection succeeds, this <GLOBALS.InlineCode.GitHub.Interface /> subsequently establishes a WebSocket connection to the <GLOBALS.InlineCode.GitHub.Controller />&apos;s WebSocket address, also configurable via <GLOBALS.InlineCode.Pages.Settings />.
         Provided that this too succeeds, the heads-up display is then rendered and overlaid atop the video stream.
       </TypographyP>
 
@@ -358,7 +370,7 @@ function ConstituentPlacePage() {
       <TypographyP>
         <TypographyMuted>
           The heads-up display is far-from-final.
-          This heading documents its present state.
+          This heading documents its implementation at present.
         </TypographyMuted>
       </TypographyP>
 
@@ -384,30 +396,30 @@ function ConstituentPlacePage() {
       </TypographyP>
 
       <TypographyP>
-        The target markers are grey squares drawn atop centroids of interest that are identified by the <GLOBALS.InlineCode.GitHub.Vision />, which are transmitted to this <GLOBALS.InlineCode.GitHub.Interface /> via the <GLOBALS.InlineCode.GitHub.Controller />.
+        The target markers are grey squares drawn atop any centroids of interest that are identified by the <GLOBALS.InlineCode.GitHub.Vision />, which are transmitted to this <GLOBALS.InlineCode.GitHub.Interface /> via the <GLOBALS.InlineCode.GitHub.Controller />.
       </TypographyP>
 
       <TypographyH5>User Input</TypographyH5>
       <TypographyP>
-        The /place interface has been designed for speed, intuition, and brevity.
+        The <GLOBALS.InlineCode.Pages.Place /> interface has been designed for speed, intuition, and brevity.
         To fulfil these goals, a range of input schemes has been implemented—each tailored for a unique need:
       </TypographyP>
 
       <TypographyList>
         <TypographyListItem>mouse clicks,</TypographyListItem>
         <TypographyListItem>directional key presses, and</TypographyListItem>
-        <TypographyListItem><TypographyInlineCode>Shift</TypographyInlineCode> + directional key presses.</TypographyListItem>
+        <TypographyListItem><TypographyInlineCode>Shift</TypographyInlineCode>-modified directional key presses.</TypographyListItem>
       </TypographyList>
 
       <TypographyP>
         The simplest input is a mouse click at any point atop the video feed.
-        The clicked pixel coordinates are processed into pixel deltas <TypographyInlineCode>(Δx, Δy)</TypographyInlineCode> with respect to the centre of the video feed, used as an analogy for the current head position; <TypographyLink href='#normalisation'>normalised</TypographyLink>; and sent to the <GLOBALS.InlineCode.GitHub.Controller />, which ultimately translates the <GLOBALS.InlineCode.GitHub.Gantry />.
+        The clicked pixel coordinates are processed into pixel deltas <TypographyInlineCode>(Δx, Δy)</TypographyInlineCode> with respect to the centre of the video feed, used as an analogy for the current head position; <TypographyLink href={'#' + FRAGMENT_HASHES.DATA_NORMALISATION}>normalised</TypographyLink>; and sent to the <GLOBALS.InlineCode.GitHub.Controller />, which ultimately translates the <GLOBALS.InlineCode.GitHub.Gantry />.
         If the operator clicks within the bounds of a target marker, it is the delta position of that target&apos;s centroid that is transmitted to the <GLOBALS.InlineCode.GitHub.Controller />.
       </TypographyP>
 
       <TypographyP>
         More advanced—but more efficient—operator inputs may be made via key presses, captured and handled by the overlay.
-        The primary key input scheme uses directional keys without modifiers, where directional keys are:
+        The primary key input scheme uses directional keys without modifiers, where valid directional keys are:
       </TypographyP>
 
       <TypographyList>
@@ -418,11 +430,10 @@ function ConstituentPlacePage() {
       </TypographyList>
 
       <TypographyP>
-        These directional keys—inspired by video games and <TypographyInlineCode>vi</TypographyInlineCode>—will select the &lsquo;best fit&rsquo; target marker in the specified direction, as determined by our <TypographyLink href='#nearest-target'>weighted nearest-target algorithm</TypographyLink>.
+        These directional keys—inspired by video games and <TypographyLink href={GLOBALS.VI}><TypographyInlineCode>vi</TypographyInlineCode></TypographyLink>—will select the &lsquo;best fit&rsquo; target marker in the specified direction, as determined by our <TypographyLink href={'#' + FRAGMENT_HASHES.NEAREST_TARGET}>weighted nearest-target algorithm</TypographyLink>.
         This selected target marker is indicated by the temporary target indicator, which becomes the zero-reference for subsequent directional key presses.
-        This allows the operator to input a series of directional keys to quickly pounce to a desired target, all without lifting their fingers from the keyboard—a design directly inspired by <TypographyInlineCode>vi</TypographyInlineCode>-type editors.
+        This allows the operator to input a series of directional keys to quickly pounce to a desired target, all without lifting their fingers from the keyboard—a design directly inspired by <TypographyInlineCode>vi</TypographyInlineCode>-based text editors.
         Once a target marker is pounced to, two additional keys become valid:
-        {/* TODO: what is the wording people use to justify vim? */}
       </TypographyP>
 
       {/* TODO: document 3 July images */}
@@ -433,7 +444,7 @@ function ConstituentPlacePage() {
       </TypographyList>
 
       <TypographyP>
-        These will reset the indicated target to <TypographyInlineCode>(0, 0)</TypographyInlineCode>, or transmit the deltas for the indicated target to the <GLOBALS.InlineCode.GitHub.Controller />.
+        These will reset the indicated target to <TypographyInlineCode>(0, 0)</TypographyInlineCode> at the centre of the video feed, or transmit the deltas for the indicated target to the <GLOBALS.InlineCode.GitHub.Controller />.
       </TypographyP>
 
       <TypographyP>
@@ -442,7 +453,7 @@ function ConstituentPlacePage() {
 
       <TypographyList ordered>
         <TypographyListItem>the <GLOBALS.InlineCode.GitHub.Vision /> perfectly identifies all target markers of interest,</TypographyListItem>
-        <TypographyListItem>those target marker positions are transmitted in real-time via the <GLOBALS.InlineCode.GitHub.Controller /> to this <GLOBALS.InlineCode.GitHub.Interface />,</TypographyListItem>
+        <TypographyListItem>those target marker centroids are transmitted in real-time via the <GLOBALS.InlineCode.GitHub.Controller /> to this <GLOBALS.InlineCode.GitHub.Interface />,</TypographyListItem>
         <TypographyListItem>the weighted nearest-target algorithm is indeed intuitive and fit-for-purpose,</TypographyListItem>
         <TypographyListItem>the <GLOBALS.InlineCode.GitHub.Controller /> correctly translates the <GLOBALS.InlineCode.GitHub.Gantry /> to the selected target marker position, and</TypographyListItem>
         <TypographyListItem>the <GLOBALS.InlineCode.GitHub.Controller /> and <GLOBALS.InlineCode.GitHub.Gantry /> correctly places the component using the vacuum nozzle,</TypographyListItem>
@@ -450,7 +461,7 @@ function ConstituentPlacePage() {
 
       <TypographyP>
         we realise that a manual override mechanism is likely to be necessary.
-        To this end, a secondary input scheme is implemented using the <TypographyInlineCode>Shift</TypographyInlineCode> modifier key, where <TypographyInlineCode>Shift</TypographyInlineCode> + the same directional inputs will always produce a fixed step in that direction provided a gantry limit is not exceeded.
+        To this end, a secondary input scheme is implemented using the <TypographyInlineCode>Shift</TypographyInlineCode> modifier key, where a combination of <TypographyInlineCode>Shift</TypographyInlineCode> with the same directional inputs will always produce a fixed step in that direction—provided that a gantry limit is not exceeded.
         <TypographyMuted>
           {' '}The fixed step is currently an &lsquo;arbitrary&rsquo; delta corresponding to 1% of the video feed.
           This will eventually be configurable to a value in metric distance units.
@@ -466,7 +477,7 @@ function ConstituentPlacePage() {
 
       <TypographyMuted>
         <TypographyList>
-          <TypographyListItem>1, 2, 3, 4, etc. for parts bins or programmable saved positions</TypographyListItem>
+          <TypographyListItem><TypographyInlineCode>1</TypographyInlineCode>, <TypographyInlineCode>2</TypographyInlineCode>, <TypographyInlineCode>3</TypographyInlineCode>, <TypographyInlineCode>4</TypographyInlineCode>, etc. to pounce to hard-coded parts bins, and/or programmable saved positions.</TypographyListItem>
         </TypographyList>
       </TypographyMuted>
 
@@ -476,7 +487,7 @@ function ConstituentPlacePage() {
       </TypographyP>
 
       <TypographyList>
-        <TypographyListItem>Swipe with two fingers trackpad to the right, if applicable;</TypographyListItem>
+        <TypographyListItem>Swipe with two fingers to the right with the trackpad, if applicable;</TypographyListItem>
         <TypographyListItem><TypographyInlineCode>⌘</TypographyInlineCode>+<TypographyInlineCode>[</TypographyInlineCode> on macOS, or <TypographyInlineCode>Alt</TypographyInlineCode>+<TypographyInlineCode>←</TypographyInlineCode> on Windows or Linux; or</TypographyListItem>
         <TypographyListItem>Use the browser&apos;s &lsquo;go back&rsquo; navigation button.</TypographyListItem>
       </TypographyList>

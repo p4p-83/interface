@@ -83,6 +83,10 @@ export const GITHUB = {
     NAME: 'p4p-83/interface',
     URL: 'https://github.com/p4p-83/interface',
   },
+  PROTO: {
+    NAME: 'p4p-83/protobufs',
+    URL: 'https://github.com/p4p-83/protobufs',
+  },
 } as const
 
 export const UNIVERSITY = {
@@ -90,11 +94,39 @@ export const UNIVERSITY = {
   ECSE: 'https://www.auckland.ac.nz/en/engineering/about-the-faculty/electrical-computer-and-software-engineering.html',
 } as const
 
+export const MEDIA_MTX = 'https://github.com/bluenviron/mediamtx'
+export const WEB_RTC = 'https://webrtc.org/'
+export const RPI_CAM_VID = 'https://www.raspberrypi.com/documentation/computers/camera_software.html#rpicam-vid'
+export const LIB_CAMERA = 'https://libcamera.org/'
+export const RASPBERRY_PI_5 = 'https://www.raspberrypi.com/products/raspberry-pi-5/'
+export const RASPBERRY_PI_OS = 'https://www.raspberrypi.com/documentation/computers/os.html'
+export const YUV_420 = 'https://en.wikipedia.org/wiki/Y%E2%80%B2UV'
+export const H_264 = 'https://en.wikipedia.org/wiki/Advanced_Video_Coding'
+export const FFMPEG = 'https://ffmpeg.org/'
+export const RTSP = 'https://en.wikipedia.org/wiki/Real-Time_Streaming_Protocol'
+export const WHEP = 'https://www.ietf.org/archive/id/draft-murillo-whep-03.html'
+export const PROTOCOL_BUFFERS = {
+  HOME: 'https://protobuf.dev/',
+  SMALLER_FASTER_SIMPLER: 'https://protobuf.dev/#what-are-protocol-buffers',
+  VARINTS: 'https://protobuf.dev/programming-guides/encoding/#varints',
+} as const
+export const GIT_SUBMODULES = 'https://git-scm.com/book/en/v2/Git-Tools-Submodules'
+export const WEB_SOCKET = 'https://en.wikipedia.org/wiki/WebSocket'
+export const VI = 'https://en.wikipedia.org/wiki/Vi_(text_editor)'
+
 /* Components */
 
 // * I don't love this; it's not very DRY.
 // * But, it saves having to repeat even more downstream...
 export const InlineCode = {
+  Pages: {
+    Home: () => <TypographyInlineCode>{PAGES.HOME.path}</TypographyInlineCode>,
+    Place: () => <TypographyInlineCode>{PAGES.PLACE.path}</TypographyInlineCode>,
+    Calibrate: () => <TypographyInlineCode>{PAGES.CALIBRATE.path}</TypographyInlineCode>,
+    Settings: () => <TypographyInlineCode>{PAGES.SETTINGS.path}</TypographyInlineCode>,
+    Learn: () => <TypographyInlineCode>{PAGES.LEARN.path}</TypographyInlineCode>,
+    Project: () => <TypographyInlineCode>{PAGES.PROJECT.path}</TypographyInlineCode>,
+  },
   GitHub: {
     Organisation: () => <TypographyInlineCode>{GITHUB.ORGANISATION.NAME}</TypographyInlineCode>,
     Docs: () => <TypographyInlineCode>{GITHUB.DOCS.NAME}</TypographyInlineCode>,
@@ -102,6 +134,7 @@ export const InlineCode = {
     Vision: () => <TypographyInlineCode>{GITHUB.VISION.NAME}</TypographyInlineCode>,
     Controller: () => <TypographyInlineCode>{GITHUB.CONTROLLER.NAME}</TypographyInlineCode>,
     Interface: () => <TypographyInlineCode>{GITHUB.INTERFACE.NAME}</TypographyInlineCode>,
+    Proto: () => <TypographyInlineCode>{GITHUB.PROTO.NAME}</TypographyInlineCode>,
   },
 } as const
 
@@ -113,5 +146,6 @@ export const Links = {
     Vision: () => <TypographyLink href={GITHUB.VISION.URL}><InlineCode.GitHub.Vision /></TypographyLink>,
     Controller: () => <TypographyLink href={GITHUB.CONTROLLER.URL}><InlineCode.GitHub.Controller /></TypographyLink>,
     Interface: () => <TypographyLink href={GITHUB.INTERFACE.URL}><InlineCode.GitHub.Interface /></TypographyLink>,
+    Proto: () => <TypographyLink href={GITHUB.PROTO.URL}><InlineCode.GitHub.Proto /></TypographyLink>,
   },
 } as const
