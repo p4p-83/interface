@@ -48,7 +48,7 @@ export function HomeLinkCards() {
         case 'KeyL':
           router.push(GLOBALS.PAGES.LEARN.path)
           break
-        case 'KeyL':
+        case 'KeyJ':
           router.push(GLOBALS.PAGES.PROJECT.path)
           break
         }
