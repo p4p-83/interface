@@ -28,9 +28,9 @@ import {
 } from '@/components/ui/typography'
 import {
   Accordion,
-  AccordionContent,
   AccordionItem,
   AccordionTrigger,
+  AccordionContent,
 } from '@/components/ui/accordion'
 
 export const metadata: Metadata = GLOBALS.PAGES.getMetadata(GLOBALS.PAGES.LEARN)
@@ -483,7 +483,7 @@ function SystemArchitecture() {
               </span>
             </TypographyTableDataCell>
             <TypographyTableDataCell>
-            This web application; the user interface of our pick-and-place machine.
+              This web application; the user interface of our pick-and-place machine.
             </TypographyTableDataCell>
           </TypographyTableRow>
         </TypographyTableBody>
@@ -500,85 +500,107 @@ function SystemArchitecture() {
         The overarching focus is on these system behaviours and interactions—consequently, many of the following headings necessarily cross component boundaries.
       </TypographyP>
 
-      <TypographyH4>Gantry Control</TypographyH4>
-      <TypographyBlockquote>
-        A work in progress!
-      </TypographyBlockquote>
+      <Accordion type='multiple' className='w-full mt-2'>
+        <AccordionItem value='gantryControl'>
+          <AccordionTrigger><TypographyH4>Gantry Control</TypographyH4></AccordionTrigger>
+          <AccordionContent>
+            <TypographyBlockquote>
+              A work in progress!
+            </TypographyBlockquote>
+          </AccordionContent>
+        </AccordionItem>
 
-      <TypographyH4>Machine Vision</TypographyH4>
-      <TypographyBlockquote>
-        A work in progress!
-      </TypographyBlockquote>
+        <AccordionItem value='machineVision'>
+          <AccordionTrigger><TypographyH4>Machine Vision</TypographyH4></AccordionTrigger>
+          <AccordionContent>
+            <TypographyBlockquote>
+              A work in progress!
+            </TypographyBlockquote>
+          </AccordionContent>
+        </AccordionItem>
 
-      <TypographyH4>Video Streaming</TypographyH4>
-      <TypographyP>
-        Any operator of a real-time pick-and-place necessarily requires a real-time video feed.
-        This video feed is streamed from the <GLOBALS.InlineCode.GitHub.Controller /> to this <GLOBALS.InlineCode.GitHub.Interface />, where it is displayed to the operator.
-      </TypographyP>
+        <AccordionItem value='videoStreaming'>
+          <AccordionTrigger><TypographyH4>Video Streaming</TypographyH4></AccordionTrigger>
+          <AccordionContent>
+            <TypographyP>
+              Any operator of a real-time pick-and-place necessarily requires a real-time video feed.
+              This video feed is streamed from the <GLOBALS.InlineCode.GitHub.Controller /> to this <GLOBALS.InlineCode.GitHub.Interface />, where it is displayed to the operator.
+            </TypographyP>
 
-      <TypographyP>
-        A <TypographyLink href={GLOBALS.MEDIA_MTX}>MediaMTX</TypographyLink> real-time media server is used to stream the real-time video feed from the Raspberry Pi&apos;s camera(s) to this web application over the <TypographyLink href={GLOBALS.WEB_RTC}>WebRTC</TypographyLink> protocol.
-        The video stream is first read from the sensor with the <TypographyLink href={GLOBALS.RPI_CAM_VID}><TypographyInlineCode>rpicam-vid</TypographyInlineCode></TypographyLink> CLI application (built atop <TypographyLink href={GLOBALS.LIB_CAMERA}><TypographyInlineCode>libcamera</TypographyInlineCode></TypographyLink>) that is distributed as part of <TypographyLink href={GLOBALS.RASPBERRY_PI_OS}>Raspberry Pi OS</TypographyLink>, before being piped through <TypographyInlineCode>stdin</TypographyInlineCode> to <TypographyLink href={GLOBALS.FFMPEG}><TypographyInlineCode>ffmpeg</TypographyInlineCode></TypographyLink>.
-        It is then transcoded by <TypographyInlineCode>ffmpeg</TypographyInlineCode> from its raw <TypographyLink href={GLOBALS.YUV_420}><TypographyInlineCode>YUV 4:2:0</TypographyInlineCode></TypographyLink> format into <TypographyLink href={GLOBALS.H_264}><TypographyInlineCode>H.264</TypographyInlineCode></TypographyLink>, and streamed to MediaMTX via <TypographyLink href={GLOBALS.RTSP}>RTSP</TypographyLink>.
-      </TypographyP>
+            <TypographyP>
+              A <TypographyLink href={GLOBALS.MEDIA_MTX}>MediaMTX</TypographyLink> real-time media server is used to stream the real-time video feed from the Raspberry Pi&apos;s camera(s) to this web application over the <TypographyLink href={GLOBALS.WEB_RTC}>WebRTC</TypographyLink> protocol.
+              The video stream is first read from the sensor with the <TypographyLink href={GLOBALS.RPI_CAM_VID}><TypographyInlineCode>rpicam-vid</TypographyInlineCode></TypographyLink> CLI application (built atop <TypographyLink href={GLOBALS.LIB_CAMERA}><TypographyInlineCode>libcamera</TypographyInlineCode></TypographyLink>) that is distributed as part of <TypographyLink href={GLOBALS.RASPBERRY_PI_OS}>Raspberry Pi OS</TypographyLink>, before being piped through <TypographyInlineCode>stdin</TypographyInlineCode> to <TypographyLink href={GLOBALS.FFMPEG}><TypographyInlineCode>ffmpeg</TypographyInlineCode></TypographyLink>.
+              It is then transcoded by <TypographyInlineCode>ffmpeg</TypographyInlineCode> from its raw <TypographyLink href={GLOBALS.YUV_420}><TypographyInlineCode>YUV 4:2:0</TypographyInlineCode></TypographyLink> format into <TypographyLink href={GLOBALS.H_264}><TypographyInlineCode>H.264</TypographyInlineCode></TypographyLink>, and streamed to MediaMTX via <TypographyLink href={GLOBALS.RTSP}>RTSP</TypographyLink>.
+            </TypographyP>
 
-      <TypographyP>
-        Once the <TypographyInlineCode>H.264</TypographyInlineCode> video is streamed into MediaMTX, it is then read via WebRTC by this <GLOBALS.InlineCode.GitHub.Interface /> client, where the <TypographyLink href={GLOBALS.WHEP}>WHEP</TypographyLink> stream is displayed through an HTML <TypographyInlineCode>&lt;video&gt;</TypographyInlineCode> tag on <GLOBALS.InlineCode.Pages.Place />.
-      </TypographyP>
+            <TypographyP>
+              Once the <TypographyInlineCode>H.264</TypographyInlineCode> video is streamed into MediaMTX, it is then read via WebRTC by this <GLOBALS.InlineCode.GitHub.Interface /> client, where the <TypographyLink href={GLOBALS.WHEP}>WHEP</TypographyLink> stream is displayed through an HTML <TypographyInlineCode>&lt;video&gt;</TypographyInlineCode> tag on <GLOBALS.InlineCode.Pages.Place />.
+            </TypographyP>
+          </AccordionContent>
+        </AccordionItem>
 
-      <TypographyH4>Message Passing</TypographyH4>
-      <TypographyP>
-        As with any system that comprises of distinct components, our distinct components must communicate.
-      </TypographyP>
+        <AccordionItem value='messagePassing'>
+          <AccordionTrigger><TypographyH4>Message Passing</TypographyH4></AccordionTrigger>
+          <AccordionContent>
+            <TypographyP>
+              As with any system that comprises of distinct components, our distinct components must communicate.
+            </TypographyP>
 
-      <TypographyP>
-        <TypographyLink href={GLOBALS.PROTOCOL_BUFFERS.HOME}>Protocol Buffers </TypographyLink>are used to serialise and format the data payloads being exchanged between each component.
-        &lsquo;Protobufs&rsquo; are a language- and platform-agnostic binary serialisation mechanism for structured data, like JSON or XML, but <TypographyLink href={GLOBALS.PROTOCOL_BUFFERS.SMALLER_FASTER_SIMPLER}>&lsquo;smaller, faster, and simpler&rsquo;</TypographyLink>.
-        Our <TypographyInlineCode>.proto</TypographyInlineCode> language definition files are contained within <GLOBALS.Links.GitHub.Proto />, itself included as a <TypographyInlineCode>git</TypographyInlineCode> <TypographyLink href={GLOBALS.GIT_SUBMODULES}>submodule </TypographyLink>in our component repositories.
-        The <GLOBALS.InlineCode.GitHub.Proto /> repository also contains a shell script to recompile target language bindings when changes are made.
-      </TypographyP>
+            <TypographyP>
+              <TypographyLink href={GLOBALS.PROTOCOL_BUFFERS.HOME}>Protocol Buffers </TypographyLink>are used to serialise and format the data payloads being exchanged between each component.
+              &lsquo;Protobufs&rsquo; are a language- and platform-agnostic binary serialisation mechanism for structured data, like JSON or XML, but <TypographyLink href={GLOBALS.PROTOCOL_BUFFERS.SMALLER_FASTER_SIMPLER}>&lsquo;smaller, faster, and simpler&rsquo;</TypographyLink>.
+              Our <TypographyInlineCode>.proto</TypographyInlineCode> language definition files are contained within <GLOBALS.Links.GitHub.Proto />, itself included as a <TypographyInlineCode>git</TypographyInlineCode> <TypographyLink href={GLOBALS.GIT_SUBMODULES}>submodule </TypographyLink>in our component repositories.
+              The <GLOBALS.InlineCode.GitHub.Proto /> repository also contains a shell script to recompile target language bindings when changes are made.
+            </TypographyP>
 
-      <TypographyH5><GLOBALS.InlineCode.GitHub.Controller /> to <GLOBALS.InlineCode.GitHub.Gantry /></TypographyH5>
-      {/* TODO: */}
-      <TypographyP>
-        <TypographyMuted>
-          This is yet to be properly implemented, but is likely to be a serial port exchanging messages serialised in a protocol buffer.
-          At present, this is a serial port at <TypographyInlineCode>115200</TypographyInlineCode> baud exchanging <TypographyLink href='https://en.wikipedia.org/wiki/G-code'>G-code</TypographyLink>.
-        </TypographyMuted>
-      </TypographyP>
+            <TypographyH5>Controller to Gantry</TypographyH5>
+            {/* TODO: */}
+            <TypographyP>
+              <TypographyMuted>
+                This is yet to be properly implemented, but is likely to be a serial port exchanging messages serialised in a protocol buffer.
+                At present, this is a serial port at <TypographyInlineCode>115200</TypographyInlineCode> baud exchanging <TypographyLink href='https://en.wikipedia.org/wiki/G-code'>G-code</TypographyLink>.
+              </TypographyMuted>
+            </TypographyP>
 
-      <TypographyH5><GLOBALS.InlineCode.GitHub.Controller /> to <GLOBALS.InlineCode.GitHub.Interface /></TypographyH5>
-      <TypographyP>
-        A <TypographyLink href={GLOBALS.WEB_SOCKET}>WebSocket</TypographyLink> connection is established over TCP and HTTP between the <GLOBALS.InlineCode.GitHub.Controller /> and this <GLOBALS.InlineCode.GitHub.Interface /> web application for a real-time, low-latency, full-duplex data channel, which is used to exchange information and instructions.
-      </TypographyP>
+            <TypographyH5>Controller to Interface</TypographyH5>
+            <TypographyP>
+              A <TypographyLink href={GLOBALS.WEB_SOCKET}>WebSocket</TypographyLink> connection is established over TCP and HTTP between the <GLOBALS.InlineCode.GitHub.Controller /> and this <GLOBALS.InlineCode.GitHub.Interface /> web application for a real-time, low-latency, full-duplex data channel, which is used to exchange information and instructions.
+            </TypographyP>
 
-      <TypographyP>
-        Numeric data, such as the <TypographyInlineCode>TARGET_DELTAS</TypographyInlineCode> between the present gantry position and the operator&apos;s desired target, is <span id={FRAGMENT_IDS.DATA_NORMALISATION}>normalised into an absolute, invariant range of <TypographyInlineCode>[0, 65535]</TypographyInlineCode>.
-          This normalisation ensures that the exchanged units are independent of run-time variables—the client viewport, or streamed video dimensions, for instance</span>.
-        The representation range of a <TypographyInlineCode>16-bit</TypographyInlineCode> integer was chosen for performance—by using this range, we can leverage the efficiency of protocol buffer <TypographyLink href={GLOBALS.PROTOCOL_BUFFERS.VARINTS}>varints</TypographyLink>, which is not possible with a <TypographyInlineCode>float</TypographyInlineCode> or <TypographyInlineCode>double</TypographyInlineCode> in the range of <TypographyInlineCode>[0, 1]</TypographyInlineCode>.
-      </TypographyP>
+            <TypographyP>
+              Numeric data, such as the <TypographyInlineCode>TARGET_DELTAS</TypographyInlineCode> between the present gantry position and the operator&apos;s desired target, is <span id={FRAGMENT_IDS.DATA_NORMALISATION}>normalised into an absolute, invariant range of <TypographyInlineCode>[0, 65535]</TypographyInlineCode>.
+                This normalisation ensures that the exchanged units are independent of run-time variables—the client viewport, or streamed video dimensions, for instance</span>.
+              The representation range of a <TypographyInlineCode>16-bit</TypographyInlineCode> integer was chosen for performance—by using this range, we can leverage the efficiency of protocol buffer <TypographyLink href={GLOBALS.PROTOCOL_BUFFERS.VARINTS}>varints</TypographyLink>, which is not possible with a <TypographyInlineCode>float</TypographyInlineCode> or <TypographyInlineCode>double</TypographyInlineCode> in the range of <TypographyInlineCode>[0, 1]</TypographyInlineCode>.
+            </TypographyP>
+          </AccordionContent>
+        </AccordionItem>
 
-      <TypographyH4>User Interface</TypographyH4>
-      <TypographyP>
-        {/* TODO: refer to software CV */}
-        {/* TODO: document languages */}
-        - Next.js and React, TypeScript
-        - App Router
-        - Tailwind
-        - shadcn/ui with Radix
-        - sonner
-        - zod
-      </TypographyP>
+        <AccordionItem value='userInterface'>
+          <AccordionTrigger><TypographyH4>User Interface</TypographyH4></AccordionTrigger>
+          <AccordionContent>
+            <TypographyP>
+              {/* TODO: refer to software CV */}
+              {/* TODO: document languages */}
+              - Next.js and React, TypeScript
+              - App Router
+              - Tailwind
+              - shadcn/ui with Radix
+              - sonner
+              - zod
+            </TypographyP>
 
-      <TypographyH5>Data Context</TypographyH5>
-      - A React context is created to distribute... see PR description.
-      - Backed by `window.localStorage` as stringified JSON.
+            <TypographyH5>Data Context</TypographyH5>
+            - A React context is created to distribute... see PR description.
+            - Backed by `window.localStorage` as stringified JSON.
 
-      <TypographyH5>Form Validation</TypographyH5>
-      - Zod is used for the declaration of form schemas and field validation on the settings page.
+            <TypographyH5>Form Validation</TypographyH5>
+            - Zod is used for the declaration of form schemas and field validation on the settings page.
 
-      <TypographyH5 id={FRAGMENT_IDS.NEAREST_TARGET}>Nearest-Target Algorithm</TypographyH5>
+            <TypographyH5 id={FRAGMENT_IDS.NEAREST_TARGET}>Nearest-Target Algorithm</TypographyH5>
+          </AccordionContent>
+        </AccordionItem>
 
+      </Accordion>
     </>
   )
 }
