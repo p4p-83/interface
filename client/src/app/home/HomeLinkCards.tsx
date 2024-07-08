@@ -1,7 +1,7 @@
 'use client'
 
 import { useRouter } from 'next/navigation'
-import { useState } from 'react'
+import { useState, useCallback } from 'react'
 import { Crosshair2Icon, MixerHorizontalIcon, GearIcon, RocketIcon, IdCardIcon } from '@radix-ui/react-icons'
 
 import * as GLOBALS from '@/app/globals'
@@ -17,31 +17,37 @@ export function HomeLinkCards() {
   const [isSettingsRevealed, setIsSettingsRevealed] = useState(false)
 
   const { isShiftPressed, isOptionPressed } = useKeyPresses({
-    onKeyDown: (event) => {
-      if (!event.shiftKey) {
+    onKeyDown: useCallback(
+      (event: KeyboardEvent) => {
+        if (!event.shiftKey) {
+          switch (event.code) {
+          case GLOBALS.PAGES.getShortcutKeyCode(GLOBALS.PAGES.CALIBRATE):
+            setIsCalibrateRevealed(true)
+            break
+          case GLOBALS.PAGES.getShortcutKeyCode(GLOBALS.PAGES.SETTINGS):
+            setIsSettingsRevealed(true)
+            break
+          }
+        }
+        else {
+          performShiftKeyNavigation(router, event)
+        }
+      },
+      [router]
+    ),
+    onKeyUp: useCallback(
+      (event: KeyboardEvent) => {
         switch (event.code) {
         case GLOBALS.PAGES.getShortcutKeyCode(GLOBALS.PAGES.CALIBRATE):
-          setIsCalibrateRevealed(true)
+          setIsCalibrateRevealed(false)
           break
         case GLOBALS.PAGES.getShortcutKeyCode(GLOBALS.PAGES.SETTINGS):
-          setIsSettingsRevealed(true)
+          setIsSettingsRevealed(false)
           break
         }
-      }
-      else {
-        performShiftKeyNavigation(router, event)
-      }
-    },
-    onKeyUp: (event) => {
-      switch (event.code) {
-      case GLOBALS.PAGES.getShortcutKeyCode(GLOBALS.PAGES.CALIBRATE):
-        setIsCalibrateRevealed(false)
-        break
-      case GLOBALS.PAGES.getShortcutKeyCode(GLOBALS.PAGES.SETTINGS):
-        setIsSettingsRevealed(false)
-        break
-      }
-    },
+      },
+      []
+    ),
   })
 
   const hiddenCardsShown = (isOptionPressed)

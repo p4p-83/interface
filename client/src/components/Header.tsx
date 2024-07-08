@@ -2,7 +2,7 @@
 
 import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
-import { useState } from 'react'
+import { useState, useCallback } from 'react'
 import { Cross2Icon, Crosshair2Icon, HamburgerMenuIcon, ThickArrowUpIcon } from '@radix-ui/react-icons'
 
 import * as GLOBALS from '@/app/globals'
@@ -71,7 +71,10 @@ function NavigationMain() {
   const router = useRouter()
 
   const { isShiftPressed, isOptionPressed } = useKeyPresses({
-    onKeyDown: (event) => performShiftKeyNavigation(router, event),
+    onKeyDown: useCallback(
+      (event: KeyboardEvent) => performShiftKeyNavigation(router, event),
+      [router]
+    ),
   })
 
   const showKeyShortcut = (isShiftPressed || isOptionPressed)
