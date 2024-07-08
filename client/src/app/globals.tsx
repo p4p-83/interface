@@ -106,23 +106,33 @@ export const UNIVERSITY = {
 
 export const MEDIA_MTX = 'https://github.com/bluenviron/mediamtx'
 export const WEB_RTC = 'https://webrtc.org/'
-export const RPI_CAM_VID = 'https://www.raspberrypi.com/documentation/computers/camera_software.html#rpicam-vid'
-export const LIB_CAMERA = 'https://libcamera.org/'
+export const RTSP = 'https://en.wikipedia.org/wiki/Real-Time_Streaming_Protocol'
+export const WHEP = 'https://www.ietf.org/archive/id/draft-murillo-whep-03.html'
+
+export const WEB_SOCKET = 'https://en.wikipedia.org/wiki/WebSocket'
+
 export const RASPBERRY_PI_5 = 'https://www.raspberrypi.com/products/raspberry-pi-5/'
 export const RASPBERRY_PI_OS = 'https://www.raspberrypi.com/documentation/computers/os.html'
+export const RPI_CAM_VID = 'https://www.raspberrypi.com/documentation/computers/camera_software.html#rpicam-vid'
+export const LIB_CAMERA = 'https://libcamera.org/'
 export const YUV_420 = 'https://en.wikipedia.org/wiki/Y%E2%80%B2UV'
 export const H_264 = 'https://en.wikipedia.org/wiki/Advanced_Video_Coding'
 export const FFMPEG = 'https://ffmpeg.org/'
-export const RTSP = 'https://en.wikipedia.org/wiki/Real-Time_Streaming_Protocol'
-export const WHEP = 'https://www.ietf.org/archive/id/draft-murillo-whep-03.html'
+
 export const PROTOCOL_BUFFERS = {
   HOME: 'https://protobuf.dev/',
   SMALLER_FASTER_SIMPLER: 'https://protobuf.dev/#what-are-protocol-buffers',
   VARINTS: 'https://protobuf.dev/programming-guides/encoding/#varints',
 } as const
+
 export const GIT_SUBMODULES = 'https://git-scm.com/book/en/v2/Git-Tools-Submodules'
-export const WEB_SOCKET = 'https://en.wikipedia.org/wiki/WebSocket'
-export const VI = 'https://en.wikipedia.org/wiki/Vi_(text_editor)'
+
+export const VIM = {
+  VI: 'https://en.wikipedia.org/wiki/Vi_(text_editor)',
+  EASY_MOTION: 'https://github.com/easymotion/vim-easymotion',
+  HOP: 'https://github.com/phaazon/hop.nvim',
+  POUNCE: 'https://github.com/rlane/pounce.nvim?tab=readme-ov-file',
+}
 
 /* Components */
 

@@ -45,6 +45,7 @@ import {
 export const metadata: Metadata = GLOBALS.PAGES.getMetadata(GLOBALS.PAGES.LEARN)
 
 export const FRAGMENT_IDS = {
+  VIM_PLUGINS: 'vim-plugins',
   DATA_NORMALISATION: 'normalisation',
   NEAREST_TARGET: 'nearest-target',
 } as const
@@ -112,8 +113,8 @@ function ApplicationInterface() {
           </AccordionTrigger>
           <AccordionContent className='text-base'>
             <TypographyP>
-              This web application implements a global light and dark theme that is responsive to browser preferences by default.
-              You may change this at any time by using the <TypographyInlineCode><ThemeToggleIcon className='align-text-bottom' /></TypographyInlineCode> toggle at the top right-hand corner of the viewport.
+              This application implements a global &lsquo;light&rsquo; and &lsquo;dark&rsquo; theme—matching the browser&apos;s appearance preferences by default.
+              You may change this at any time via the <TypographyInlineCode><ThemeToggleIcon className='align-text-bottom' /></TypographyInlineCode> toggle at the top right-hand corner of the viewport.
             </TypographyP>
           </AccordionContent>
         </AccordionItem>
@@ -151,7 +152,7 @@ function ApplicationInterface() {
 
             <TypographyP>
               This keyboard navigation scheme is accessed via the <TypographyInlineCode>Shift</TypographyInlineCode> modifier key.
-              The pages that may be accessed using this scheme are:
+              The pages that may be accessed via this scheme are:
             </TypographyP>
             <TypographyList>
               <TypographyListItem>
@@ -248,22 +249,23 @@ function ConstituentHomePage() {
           <GLOBALS.InlineCode.Pages.Place />: Operate the pick-and-place machine.
         </TypographyListItem>
         <TypographyListItem>
-          <GLOBALS.InlineCode.Pages.Calibrate />: Tune the machine&apos;s operating parameters to improve performance.
+          <GLOBALS.InlineCode.Pages.Calibrate />: Tune the machine&apos;s operating parameters to improve run-time performance.
         </TypographyListItem>
         <TypographyListItem>
-          <GLOBALS.InlineCode.Pages.Settings />: Configure the system&apos;s interface parameters to reflect deployment changes.
+          <GLOBALS.InlineCode.Pages.Settings />: Configure the system&apos;s environment variables to reflect deployment changes.
         </TypographyListItem>
         <TypographyListItem>
-          <GLOBALS.InlineCode.Pages.Learn />: This page; learn about how to operate and maintain the pick-and-place machine.
+          <GLOBALS.InlineCode.Pages.Learn />: This page; learn about the operation and maintenance of the machine.
         </TypographyListItem>
         <TypographyListItem>
-          <GLOBALS.InlineCode.Pages.Project />: Read about the background motivations of this research project.
+          <GLOBALS.InlineCode.Pages.Project />: Discover the background and motivations behind this research project.
         </TypographyListItem>
       </TypographyList>
 
+      <TypographyH5>Hidden Pages</TypographyH5>
       <TypographyP>
         Note that <GLOBALS.InlineCode.Pages.Calibrate /> and <GLOBALS.InlineCode.Pages.Settings /> are implemented as &lsquo;hidden&rsquo; pages, in that they are not visible by default.
-        This design decision is motivated by an intent that they should be scarcely necessary—under regular circumstances, one should not need to access them.
+        This design decision is motivated by an intent that they should be scarcely necessary—under normal circumstances, one should not need to access them.
         On the off-chance that they might become necessary, however, they may be revealed by pressing:
       </TypographyP>
 
@@ -274,7 +276,7 @@ function ConstituentHomePage() {
 
       <TypographyP>
         Alternatively, pressing the <TypographyInlineCode>{GLOBALS.PAGES.CALIBRATE.shortcutKey.toLowerCase()}</TypographyInlineCode> and/or <TypographyInlineCode>{GLOBALS.PAGES.SETTINGS.shortcutKey.toLowerCase()}</TypographyInlineCode> key(s) will selectively reveal the <GLOBALS.InlineCode.Pages.Calibrate /> and/or <GLOBALS.InlineCode.Pages.Settings /> links respectively.
-        This is particularly useful in cases where the <TypographyInlineCode>⌥</TypographyInlineCode>/<TypographyInlineCode>Alt</TypographyInlineCode> modifier key holds special meaning to the browser.
+        This is particularly useful in cases where the <TypographyInlineCode>⌥</TypographyInlineCode>/<TypographyInlineCode>Alt</TypographyInlineCode> modifier key changes the browser&apos;s default click behaviour.
       </TypographyP>
     </>
   )
@@ -292,22 +294,22 @@ function ConstituentPlacePage() {
       </TypographyP>
 
       <TypographyP>
-        It comprises of a full screen feed of the real-time WebRTC video stream received from the <GLOBALS.InlineCode.GitHub.Controller />, below an overlay that implements the interactive user interface and heads-up display.
+        It comprises of a full screen feed of the real-time video stream received from the <GLOBALS.InlineCode.GitHub.Controller />, below an overlay that implements the interactive user interface and heads-up display.
       </TypographyP>
 
       <TypographyH5>Page Lifecycle</TypographyH5>
       <TypographyList ordered>
         <TypographyListItem>
-        Upon navigating to <GLOBALS.InlineCode.Pages.Place />, the the operator is first shown a dynamic progress bar whilst this <GLOBALS.InlineCode.GitHub.Interface /> establishes a WebRTC connection to the <GLOBALS.InlineCode.GitHub.Controller />&apos;s WHEP stream address as configured on <GLOBALS.InlineCode.Pages.Settings />.
+          Upon navigating to <GLOBALS.InlineCode.Pages.Place />, the the operator is first shown a dynamic progress bar whilst this <GLOBALS.InlineCode.GitHub.Interface /> establishes a WebRTC connection to the <GLOBALS.InlineCode.GitHub.Controller />&apos;s WHEP stream address as configured on <GLOBALS.InlineCode.Pages.Settings />.
         </TypographyListItem>
 
         <TypographyListItem>
-        If the connection fails, an error page is displayed with a button to navigate home.
+          If the connection fails, an error page is displayed with a button to navigate home.
         </TypographyListItem>
 
         <TypographyListItem>
-        If instead the connection succeeds, this <GLOBALS.InlineCode.GitHub.Interface /> subsequently establishes a WebSocket connection to the <GLOBALS.InlineCode.GitHub.Controller />&apos;s WebSocket address, also configurable via <GLOBALS.InlineCode.Pages.Settings />.
-        Provided that this too succeeds, the heads-up display is then rendered and overlaid atop the video stream.
+          If the connection succeeds, this <GLOBALS.InlineCode.GitHub.Interface /> subsequently establishes a WebSocket connection to the <GLOBALS.InlineCode.GitHub.Controller />&apos;s WebSocket address, also configurable via <GLOBALS.InlineCode.Pages.Settings />.
+          Provided that this too succeeds, the heads-up display is then rendered and overlaid atop the video stream.
         </TypographyListItem>
       </TypographyList>
 
@@ -317,18 +319,21 @@ function ConstituentPlacePage() {
         <CarouselContent>
           <CarouselItem>
             <TypographyImage
+              className='mt-0'
               src={placeProgressImage}
               alt='/place page progress bar'
             />
           </CarouselItem>
           <CarouselItem>
             <TypographyImage
+              className='mt-0'
               src={placeErrorImage}
               alt='/place video error'
             />
           </CarouselItem>
           <CarouselItem>
             <TypographyImage
+              className='mt-0'
               src={placeSocketImage}
               alt='/place connected WebSocket'
             />
@@ -349,14 +354,14 @@ function ConstituentPlacePage() {
 
       <TypographyP>
         The heads-up display consists of visual elements overlaid atop the video feed.
-        There are four kinds of elements:
+        Presently, there are four kinds of elements:
       </TypographyP>
 
       <TypographyList ordered>
-        <TypographyListItem>A cursor crosshair,</TypographyListItem>
-        <TypographyListItem>A centre indicator,</TypographyListItem>
-        <TypographyListItem>A target indicator, and</TypographyListItem>
-        <TypographyListItem>Target markers.</TypographyListItem>
+        <TypographyListItem>a cursor crosshair,</TypographyListItem>
+        <TypographyListItem>a centre indicator,</TypographyListItem>
+        <TypographyListItem>a target indicator, and</TypographyListItem>
+        <TypographyListItem>target markers.</TypographyListItem>
       </TypographyList>
 
       <TypographyP>
@@ -370,12 +375,15 @@ function ConstituentPlacePage() {
 
       <TypographyP>
         The target markers are grey squares drawn atop any centroids of interest that are identified by the <GLOBALS.InlineCode.GitHub.Vision />, which are transmitted to this <GLOBALS.InlineCode.GitHub.Interface /> via the <GLOBALS.InlineCode.GitHub.Controller />.
+        These act as &lsquo;pounce&rsquo; targets that may be jumped to efficiently, heavily inspired by the likes of <span id={FRAGMENT_IDS.VIM_PLUGINS}>
+          <TypographyLink href={GLOBALS.VIM.EASY_MOTION}><TypographyInlineCode>vim-easymotion</TypographyInlineCode></TypographyLink>, <TypographyLink href={GLOBALS.VIM.HOP}><TypographyInlineCode>hop.nvim</TypographyInlineCode></TypographyLink>, and <TypographyLink href={GLOBALS.VIM.POUNCE}><TypographyInlineCode>pounce.nvim</TypographyInlineCode></TypographyLink>
+        </span>—which James personally uses.
       </TypographyP>
 
       <TypographyH5>User Input</TypographyH5>
       <TypographyP>
         The <GLOBALS.InlineCode.Pages.Place /> interface has been designed for speed, intuition, and brevity.
-        To fulfil these goals, a range of input schemes has been implemented—each tailored for a unique need:
+        To fulfil these goals, a range of input schemes has been implemented, each tailored for a unique need:
       </TypographyP>
 
       <TypographyList>
@@ -385,56 +393,122 @@ function ConstituentPlacePage() {
       </TypographyList>
 
       <TypographyP>
-        The simplest input is a mouse click at any point atop the video feed.
+        The simplest form of input is a mouse click at any point atop the video feed.
         The clicked pixel coordinates are processed into pixel deltas <TypographyInlineCode>(Δx, Δy)</TypographyInlineCode> with respect to the centre of the video feed, used as an analogy for the current head position; <TypographyLink toFragmentId href={FRAGMENT_IDS.DATA_NORMALISATION}>normalised</TypographyLink>; and sent to the <GLOBALS.InlineCode.GitHub.Controller />, which ultimately translates the <GLOBALS.InlineCode.GitHub.Gantry />.
-        If the operator clicks within the bounds of a target marker, it is the delta position of that target&apos;s centroid that is transmitted to the <GLOBALS.InlineCode.GitHub.Controller />.
+        If the operator clicks inside the bounds of a target marker, it is the delta position of that target&apos;s centroid that is transmitted to the <GLOBALS.InlineCode.GitHub.Controller />.
       </TypographyP>
 
       <TypographyP>
-        More advanced—but more efficient—operator inputs may be made via key presses, captured and handled by the overlay.
-        The primary key input scheme uses directional keys without modifiers, where valid directional keys are:
+        More advanced—but more efficient—operator inputs may be made via keyboard key presses, which are captured and handled by the overlay.
+        The primary key input scheme uses directional keys without modifiers, where these valid directional keys are:
       </TypographyP>
 
-      <TypographyList>
-        <TypographyListItem>Up: <TypographyInlineCode>w</TypographyInlineCode>, <TypographyInlineCode>k</TypographyInlineCode>, <TypographyInlineCode>↑</TypographyInlineCode>.</TypographyListItem>
-        <TypographyListItem>Down: <TypographyInlineCode>s</TypographyInlineCode>, <TypographyInlineCode>j</TypographyInlineCode>, <TypographyInlineCode>↓</TypographyInlineCode>.</TypographyListItem>
-        <TypographyListItem>Left: <TypographyInlineCode>a</TypographyInlineCode>, <TypographyInlineCode>h</TypographyInlineCode>, <TypographyInlineCode>←</TypographyInlineCode>.</TypographyListItem>
-        <TypographyListItem>Right: <TypographyInlineCode>d</TypographyInlineCode>, <TypographyInlineCode>l</TypographyInlineCode>, <TypographyInlineCode>→</TypographyInlineCode>.</TypographyListItem>
-      </TypographyList>
+      <TypographyTable>
+        <TypographyTableHead>
+
+          <TypographyTableRow>
+            <TypographyTableHeaderCell>Direction</TypographyTableHeaderCell>
+            <TypographyTableHeaderCell>Directional Keys</TypographyTableHeaderCell>
+          </TypographyTableRow>
+
+        </TypographyTableHead>
+        <TypographyTableBody>
+
+          <TypographyTableRow>
+            <TypographyTableDataCell>Up</TypographyTableDataCell>
+            <TypographyTableDataCell>
+              <TypographyInlineCode>w</TypographyInlineCode>, <TypographyInlineCode>k</TypographyInlineCode>, <TypographyInlineCode>↑</TypographyInlineCode>
+            </TypographyTableDataCell>
+          </TypographyTableRow>
+
+          <TypographyTableRow>
+            <TypographyTableDataCell>Down</TypographyTableDataCell>
+            <TypographyTableDataCell>
+              <TypographyInlineCode>s</TypographyInlineCode>, <TypographyInlineCode>j</TypographyInlineCode>, <TypographyInlineCode>↓</TypographyInlineCode>
+            </TypographyTableDataCell>
+          </TypographyTableRow>
+
+          <TypographyTableRow>
+            <TypographyTableDataCell>Left</TypographyTableDataCell>
+            <TypographyTableDataCell>
+              <TypographyInlineCode>a</TypographyInlineCode>, <TypographyInlineCode>h</TypographyInlineCode>, <TypographyInlineCode>←</TypographyInlineCode>
+            </TypographyTableDataCell>
+          </TypographyTableRow>
+
+          <TypographyTableRow>
+            <TypographyTableDataCell>Right</TypographyTableDataCell>
+            <TypographyTableDataCell>
+              <TypographyInlineCode>d</TypographyInlineCode>, <TypographyInlineCode>l</TypographyInlineCode>, <TypographyInlineCode>→</TypographyInlineCode>
+            </TypographyTableDataCell>
+          </TypographyTableRow>
+
+        </TypographyTableBody>
+      </TypographyTable>
 
       <TypographyP>
-        These directional keys—inspired by video games and <TypographyLink href={GLOBALS.VI}><TypographyInlineCode>vi</TypographyInlineCode></TypographyLink>—will select the &lsquo;best fit&rsquo; target marker in the specified direction, as determined by our <TypographyLink toFragmentId href={FRAGMENT_IDS.NEAREST_TARGET}>weighted nearest-target algorithm</TypographyLink>.
-        This selected target marker is indicated by the temporary target indicator, which becomes the zero-reference for subsequent directional key presses.
-        This allows the operator to input a series of directional keys to quickly pounce to a desired target, all without lifting their fingers from the keyboard—a design directly inspired by <TypographyInlineCode>vi</TypographyInlineCode>-based text editors.
-        Once a target marker is pounced to, two additional keys become valid:
+        {/* TODO: document 3 July images */}
+        These directional keys—inspired by video games and <TypographyLink href={GLOBALS.VIM.VI}><TypographyInlineCode>vi</TypographyInlineCode></TypographyLink>-based text editors—will select the &lsquo;best fit&rsquo; target marker in the specified direction as determined by our <TypographyLink toFragmentId href={FRAGMENT_IDS.NEAREST_TARGET}>weighted nearest-target algorithm</TypographyLink>.
+        This selected target marker is indicated to the operator by the temporary target indicator, which becomes the zero-reference for any subsequent directional key presses.
+        This permits the operator to perform a series of directional key inputs to efficiently pounce to a desired target, all without lifting their fingers from the keyboard—another design inspired by <TypographyInlineCode>vi</TypographyInlineCode>-based text editors and the <TypographyLink href={FRAGMENT_IDS.VIM_PLUGINS} toFragmentId>aforementioned</TypographyLink> (<TypographyInlineCode>n</TypographyInlineCode>)<TypographyInlineCode>vim</TypographyInlineCode> plugins.
       </TypographyP>
 
-      {/* TODO: document 3 July images */}
+      <TypographyP>
+        Once the temporary target indicator is present, two additional actions may be performed:
+      </TypographyP>
+
+      <TypographyTable>
+        <TypographyTableHead>
+
+          <TypographyTableRow>
+            <TypographyTableHeaderCell>Action</TypographyTableHeaderCell>
+            <TypographyTableHeaderCell>Key(s)</TypographyTableHeaderCell>
+            <TypographyTableHeaderCell>Description</TypographyTableHeaderCell>
+          </TypographyTableRow>
+
+        </TypographyTableHead>
+        <TypographyTableBody>
+
+          <TypographyTableRow>
+            <TypographyTableDataCell>Reset indicated target</TypographyTableDataCell>
+            <TypographyTableDataCell>
+              <TypographyInlineCode>r</TypographyInlineCode>
+            </TypographyTableDataCell>
+            <TypographyTableDataCell>
+              Reset the indicated target to <TypographyInlineCode>(0, 0)</TypographyInlineCode> and remove the target indicator from the heads-up display.
+            </TypographyTableDataCell>
+          </TypographyTableRow>
+
+          <TypographyTableRow>
+            <TypographyTableDataCell>Commit indicated target</TypographyTableDataCell>
+            <TypographyTableDataCell>
+              <TypographyInlineCode>␣</TypographyInlineCode> (space)
+            </TypographyTableDataCell>
+            <TypographyTableDataCell>
+              Transmit the deltas for the indicated target to the <GLOBALS.InlineCode.GitHub.Controller />.
+            </TypographyTableDataCell>
+          </TypographyTableRow>
+
+        </TypographyTableBody>
+      </TypographyTable>
+
+      <TypographyP>
+        The primary key input scheme of unmodified directional keys described above instantiates the &lsquo;light computer assistance&rsquo; of our machine, which has been designed to improve the accessibility, productivity, and health of the human operator.
+        Though we certainly hope that this primary input method is intuitive, functional, and reliable, we do recognise that the optimal performance of our system has many dependent variables—some of which are not within our direct influence or control.
+        Consequently, this input scheme necessitates a number of assumptions, including that:
+      </TypographyP>
 
       <TypographyList ordered>
-        <TypographyListItem>Reset indicated target: <TypographyInlineCode>r</TypographyInlineCode>.</TypographyListItem>
-        <TypographyListItem>Commit indicated target: <TypographyInlineCode>␣</TypographyInlineCode> (space).</TypographyListItem>
+        <TypographyListItem>the <GLOBALS.InlineCode.GitHub.Vision /> reliably identifies all target markers, and their centroids, without false positives;</TypographyListItem>
+        <TypographyListItem>those target marker centroids and accompanying video feed are transmitted in real-time via the <GLOBALS.InlineCode.GitHub.Controller /> to this <GLOBALS.InlineCode.GitHub.Interface />;</TypographyListItem>
+        <TypographyListItem>the weighted nearest-target algorithm is indeed intuitive, fit-for-purpose, <em className='italic'>correct</em>, and that all target markers are reachable;</TypographyListItem>
+        <TypographyListItem>the loop delay and round-trip latency of the system is sufficiently low that the system is stable, reactive, and real-time;</TypographyListItem>
+        <TypographyListItem>the <GLOBALS.InlineCode.GitHub.Controller /> repeatably translates the <GLOBALS.InlineCode.GitHub.Gantry /> to the correct position; and</TypographyListItem>
+        <TypographyListItem>the <GLOBALS.InlineCode.GitHub.Controller /> and <GLOBALS.InlineCode.GitHub.Gantry /> repeatably places the component with the vacuum nozzle at the correct position.</TypographyListItem>
       </TypographyList>
 
       <TypographyP>
-        These will reset the indicated target to <TypographyInlineCode>(0, 0)</TypographyInlineCode> at the centre of the video feed, or transmit the deltas for the indicated target to the <GLOBALS.InlineCode.GitHub.Controller />.
-      </TypographyP>
-
-      <TypographyP>
-        Despite the hope that:
-      </TypographyP>
-
-      <TypographyList ordered>
-        <TypographyListItem>the <GLOBALS.InlineCode.GitHub.Vision /> perfectly identifies all target markers of interest,</TypographyListItem>
-        <TypographyListItem>those target marker centroids are transmitted in real-time via the <GLOBALS.InlineCode.GitHub.Controller /> to this <GLOBALS.InlineCode.GitHub.Interface />,</TypographyListItem>
-        <TypographyListItem>the weighted nearest-target algorithm is indeed intuitive and fit-for-purpose,</TypographyListItem>
-        <TypographyListItem>the <GLOBALS.InlineCode.GitHub.Controller /> correctly translates the <GLOBALS.InlineCode.GitHub.Gantry /> to the selected target marker position, and</TypographyListItem>
-        <TypographyListItem>the <GLOBALS.InlineCode.GitHub.Controller /> and <GLOBALS.InlineCode.GitHub.Gantry /> correctly places the component using the vacuum nozzle,</TypographyListItem>
-      </TypographyList>
-
-      <TypographyP>
-        we realise that a manual override mechanism is likely to be necessary.
-        To this end, a secondary input scheme is implemented using the <TypographyInlineCode>Shift</TypographyInlineCode> modifier key, where a combination of <TypographyInlineCode>Shift</TypographyInlineCode> with the same directional inputs will always produce a fixed step in that direction—provided that a gantry limit is not exceeded.
+        Acknowledging these necessary assumptions for machine operation with the primary control scheme, we realise that a fallback, &lsquo;manual&rsquo; override control mechanism is likely to be beneficial.
+        To this end, a secondary input scheme is implemented using the <TypographyInlineCode>Shift</TypographyInlineCode> modifier key, where the combination of <TypographyInlineCode>Shift</TypographyInlineCode> with the same directional inputs will produce a fixed step in the nominated direction—provided that a gantry limit is not exceeded.
         <TypographyMuted>
           {' '}The fixed step is currently an &lsquo;arbitrary&rsquo; delta corresponding to 1% of the video feed.
           This will eventually be configurable to a value in metric distance units.
@@ -444,7 +518,7 @@ function ConstituentPlacePage() {
       <TypographyP>
         <TypographyMuted>
           {/* TODO: read through Logbook / Discord messages for all of these good ideas */}
-          Other ideas that are yet to be implemented include:
+          Some other ideas that are being considered for implementation include:
         </TypographyMuted>
       </TypographyP>
 
@@ -456,13 +530,13 @@ function ConstituentPlacePage() {
 
       <TypographyH5>Navigation</TypographyH5>
       <TypographyP>
-        To return to the home page, the operator should use their browser&apos; native navigation mechanism(s):
+        To return to the home page, the operator should use their browser&apos;s native navigation mechanism(s):
       </TypographyP>
 
       <TypographyList>
-        <TypographyListItem>Swipe with two fingers to the right with the trackpad, if applicable;</TypographyListItem>
+        <TypographyListItem>swipe with two fingers to the right with the trackpad, if applicable;</TypographyListItem>
         <TypographyListItem><TypographyInlineCode>⌘</TypographyInlineCode>+<TypographyInlineCode>[</TypographyInlineCode> on macOS, or <TypographyInlineCode>Alt</TypographyInlineCode>+<TypographyInlineCode>←</TypographyInlineCode> on Windows or Linux; or</TypographyListItem>
-        <TypographyListItem>Use the browser&apos;s &lsquo;go back&rsquo; navigation button.</TypographyListItem>
+        <TypographyListItem>use the browser&apos;s &lsquo;Go back&rsquo; navigation button.</TypographyListItem>
       </TypographyList>
     </>
   )
@@ -474,7 +548,7 @@ function SystemArchitecture() {
       <TypographyH3>System Architecture</TypographyH3>
 
       <TypographyP>
-        Our pick-and-place system comprises a number of distinct components, or modules—each of which serves a unique role towards the successful function of our machine.
+        Our pick-and-place machine comprises a number of distinct components, or modules—each of which serves a unique role towards the successful function of our system.
         These components are:
       </TypographyP>
 
@@ -514,7 +588,7 @@ function SystemArchitecture() {
               </span>
             </TypographyTableDataCell>
             <TypographyTableDataCell>
-              The machine vision that makes our machine intelligent.
+              The machine vision that makes our pick-and-place intelligent.
             </TypographyTableDataCell>
           </TypographyTableRow>
 
@@ -530,7 +604,7 @@ function SystemArchitecture() {
               </span>
             </TypographyTableDataCell>
             <TypographyTableDataCell>
-              The heart of our system, serving as the command & control that conducts the orchestra.
+              The command & control of our system, which serves as the conductor for the orchestra.
             </TypographyTableDataCell>
           </TypographyTableRow>
 
@@ -548,7 +622,7 @@ function SystemArchitecture() {
               </span>
             </TypographyTableDataCell>
             <TypographyTableDataCell>
-              This web application; the user interface of our pick-and-place machine.
+              This web application; the user interface to be used by the operator.
             </TypographyTableDataCell>
           </TypographyTableRow>
         </TypographyTableBody>
@@ -557,11 +631,13 @@ function SystemArchitecture() {
 
       <TypographyP>
         The <GLOBALS.InlineCode.GitHub.Gantry />, <GLOBALS.InlineCode.GitHub.Vision />, and <GLOBALS.InlineCode.GitHub.Controller /> each run on a single <TypographyLink href={GLOBALS.RASPBERRY_PI_5}>Raspberry Pi 5</TypographyLink>.
-        This <GLOBALS.InlineCode.GitHub.Interface /> web application is served by the Raspberry Pi to a client browser, which may be the operator&apos;s own device; a University computer; or a web browser running on the same Raspberry Pi.
+        {/* TODO: */}
+        {' '}<TypographyMuted>This is definitely subject to change.</TypographyMuted>{' '}
+        This <GLOBALS.InlineCode.GitHub.Interface /> web application is served by that same Raspberry Pi to a client browser, which could be the operator&apos;s own device; a University computer; or a web browser running on the same Raspberry Pi.
       </TypographyP>
 
       <TypographyP>
-        In this section, we outline these components, the role they each play, some technical implementation details that pertain, and the interactions between them.
+        In this section, we outline these components, the role(s) that they each play, some technical details that pertain, and the interactions between them.
         The overarching focus is on these system behaviours and interactions—consequently, many of the following headings necessarily cross component boundaries.
       </TypographyP>
 
@@ -593,13 +669,14 @@ function SystemArchitecture() {
             </TypographyP>
 
             <TypographyP>
-              A <TypographyLink href={GLOBALS.MEDIA_MTX}>MediaMTX</TypographyLink> real-time media server is used to stream the real-time video feed from the Raspberry Pi&apos;s camera(s) to this web application over the <TypographyLink href={GLOBALS.WEB_RTC}>WebRTC</TypographyLink> protocol.
-              The video stream is first read from the sensor with the <TypographyLink href={GLOBALS.RPI_CAM_VID}><TypographyInlineCode>rpicam-vid</TypographyInlineCode></TypographyLink> CLI application (built atop <TypographyLink href={GLOBALS.LIB_CAMERA}><TypographyInlineCode>libcamera</TypographyInlineCode></TypographyLink>) that is distributed as part of <TypographyLink href={GLOBALS.RASPBERRY_PI_OS}>Raspberry Pi OS</TypographyLink>, before being piped through <TypographyInlineCode>stdin</TypographyInlineCode> to <TypographyLink href={GLOBALS.FFMPEG}><TypographyInlineCode>ffmpeg</TypographyInlineCode></TypographyLink>.
-              It is then transcoded by <TypographyInlineCode>ffmpeg</TypographyInlineCode> from its raw <TypographyLink href={GLOBALS.YUV_420}><TypographyInlineCode>YUV 4:2:0</TypographyInlineCode></TypographyLink> format into <TypographyLink href={GLOBALS.H_264}><TypographyInlineCode>H.264</TypographyInlineCode></TypographyLink>, and streamed to MediaMTX via <TypographyLink href={GLOBALS.RTSP}>RTSP</TypographyLink>.
+              A <TypographyLink href={GLOBALS.MEDIA_MTX}>MediaMTX</TypographyLink> real-time media server is used to stream real-time video from the Raspberry Pi&apos;s camera(s) to this web application over the <TypographyLink href={GLOBALS.WEB_RTC}>WebRTC</TypographyLink> protocol.
+              The video stream is first read from the camera sensor with the <TypographyLink href={GLOBALS.RPI_CAM_VID}><TypographyInlineCode>rpicam-vid</TypographyInlineCode></TypographyLink> command-line binary (built atop <TypographyLink href={GLOBALS.LIB_CAMERA}><TypographyInlineCode>libcamera</TypographyInlineCode></TypographyLink>) that is distributed as part of <TypographyLink href={GLOBALS.RASPBERRY_PI_OS}>Raspberry Pi OS</TypographyLink>.
+              It is then piped through <TypographyInlineCode>stdin</TypographyInlineCode> to <TypographyLink href={GLOBALS.FFMPEG}><TypographyInlineCode>ffmpeg</TypographyInlineCode></TypographyLink>, which transcodes the video from its raw <TypographyLink href={GLOBALS.YUV_420}><TypographyInlineCode>YUV 4:2:0</TypographyInlineCode></TypographyLink> format into <TypographyLink href={GLOBALS.H_264}><TypographyInlineCode>H.264</TypographyInlineCode></TypographyLink>, and streams it to MediaMTX via <TypographyLink href={GLOBALS.RTSP}>RTSP</TypographyLink>.
             </TypographyP>
 
             <TypographyP>
-              Once the <TypographyInlineCode>H.264</TypographyInlineCode> video is streamed into MediaMTX, it is then read via WebRTC by this <GLOBALS.InlineCode.GitHub.Interface /> client, where the <TypographyLink href={GLOBALS.WHEP}>WHEP</TypographyLink> stream is displayed through an HTML <TypographyInlineCode>&lt;video&gt;</TypographyInlineCode> tag on <GLOBALS.InlineCode.Pages.Place />.
+              Once the <TypographyInlineCode>H.264</TypographyInlineCode> video is streamed into MediaMTX, it can then be read from the server via any of its supported protocols and variants.
+              This <GLOBALS.InlineCode.GitHub.Interface /> client reads the stream via the <TypographyLink href={GLOBALS.WHEP}>WHEP</TypographyLink> variant of the WebRTC protocol, and displays it through an HTML <TypographyInlineCode>&lt;video&gt;</TypographyInlineCode> tag on <GLOBALS.InlineCode.Pages.Place />.
             </TypographyP>
           </AccordionContent>
         </AccordionItem>
@@ -612,9 +689,12 @@ function SystemArchitecture() {
             </TypographyP>
 
             <TypographyP>
-              <TypographyLink href={GLOBALS.PROTOCOL_BUFFERS.HOME}>Protocol Buffers </TypographyLink>are used to serialise and format the data payloads being exchanged between each component.
+              <TypographyLink href={GLOBALS.PROTOCOL_BUFFERS.HOME}>Protocol Buffers</TypographyLink> are used to serialise and format the data payloads exchanged between each component.
               &lsquo;Protobufs&rsquo; are a language- and platform-agnostic binary serialisation mechanism for structured data, like JSON or XML, but <TypographyLink href={GLOBALS.PROTOCOL_BUFFERS.SMALLER_FASTER_SIMPLER}>&lsquo;smaller, faster, and simpler&rsquo;</TypographyLink>.
-              Our <TypographyInlineCode>.proto</TypographyInlineCode> language definition files are contained within <GLOBALS.Links.GitHub.Proto />, itself included as a <TypographyInlineCode>git</TypographyInlineCode> <TypographyLink href={GLOBALS.GIT_SUBMODULES}>submodule </TypographyLink>in our component repositories.
+            </TypographyP>
+
+            <TypographyP>
+              Our <TypographyInlineCode>.proto</TypographyInlineCode> language definition files are contained within the <GLOBALS.Links.GitHub.Proto /> repository, itself included as a <TypographyInlineCode>git</TypographyInlineCode> <TypographyLink href={GLOBALS.GIT_SUBMODULES}>submodule </TypographyLink>in our component repositories.
               The <GLOBALS.InlineCode.GitHub.Proto /> repository also contains a shell script to recompile target language bindings when changes are made.
             </TypographyP>
 
@@ -629,14 +709,15 @@ function SystemArchitecture() {
 
             <TypographyH5>Controller to Interface</TypographyH5>
             <TypographyP>
-              A <TypographyLink href={GLOBALS.WEB_SOCKET}>WebSocket</TypographyLink> connection is established over TCP and HTTP between the <GLOBALS.InlineCode.GitHub.Controller /> and this <GLOBALS.InlineCode.GitHub.Interface /> web application for a real-time, low-latency, full-duplex data channel, which is used to exchange information and instructions.
+              A <TypographyLink href={GLOBALS.WEB_SOCKET}>WebSocket</TypographyLink> connection is established over TCP and HTTP between the <GLOBALS.InlineCode.GitHub.Controller /> and this <GLOBALS.InlineCode.GitHub.Interface /> web application.
+              This provides a real-time, low-latency, full-duplex data channel, which is used to exchange information and instructions.
             </TypographyP>
 
             {/* TODO: the anchor doesn't work within this accordion... */}
             <TypographyP>
-              Numeric data, such as the <TypographyInlineCode>TARGET_DELTAS</TypographyInlineCode> between the present gantry position and the operator&apos;s desired target, is <span id={FRAGMENT_IDS.DATA_NORMALISATION}>normalised into an absolute, invariant range of <TypographyInlineCode>[0, 65535]</TypographyInlineCode>.
+              Numeric data, such as the <TypographyInlineCode>TARGET_DELTAS</TypographyInlineCode> between the present head position and the operator&apos;s desired target, is <span id={FRAGMENT_IDS.DATA_NORMALISATION}>normalised into an absolute, invariant range of <TypographyInlineCode>[0, 65535]</TypographyInlineCode>.
                 This normalisation ensures that the exchanged units are independent of run-time variables—the client viewport, or streamed video dimensions, for instance</span>.
-              The representation range of a <TypographyInlineCode>16-bit</TypographyInlineCode> integer was chosen for performance—by using this range, we can leverage the efficiency of protocol buffer <TypographyLink href={GLOBALS.PROTOCOL_BUFFERS.VARINTS}>varints</TypographyLink>, which is not possible with a <TypographyInlineCode>float</TypographyInlineCode> or <TypographyInlineCode>double</TypographyInlineCode> in the range of <TypographyInlineCode>[0, 1]</TypographyInlineCode>.
+              The representation range of a <TypographyInlineCode>16-bit</TypographyInlineCode> integer was chosen for performance—by using this range, we can leverage the efficiency and other benefits of protocol buffer <TypographyLink href={GLOBALS.PROTOCOL_BUFFERS.VARINTS}>varints</TypographyLink>, which would not be possible if we exchanged a <TypographyInlineCode>float</TypographyInlineCode> or <TypographyInlineCode>double</TypographyInlineCode> in the range of <TypographyInlineCode>[0, 1]</TypographyInlineCode>.
             </TypographyP>
           </AccordionContent>
         </AccordionItem>

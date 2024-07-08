@@ -154,13 +154,13 @@ export function TypographyLink({ children, href, toFragmentId = false }: Typogra
     )
 }
 
-export function TypographyImage({ src, alt }: ImageProps) {
+export function TypographyImage({ src, alt, className }: ImageProps) {
   return (
     <Image
       src={src}
       alt={alt}
       placeholder='blur'
-      className='mt-6'
+      className={cn('mt-6', className)}
       quality={85}
     />
   )
@@ -169,7 +169,7 @@ export function TypographyImage({ src, alt }: ImageProps) {
 export function TypographyTable({ children }: TypographyProps) {
   return (
     <div className="my-6 w-full overflow-y-auto">
-      <table className="w-full">
+      <table className="w-full table-auto">
         {children}
       </table>
     </div>
