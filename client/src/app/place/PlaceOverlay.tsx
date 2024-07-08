@@ -1,4 +1,4 @@
-import { useCallback, useState, type MouseEvent, type KeyboardEvent } from 'react'
+import { useCallback, useRef, useState, type MouseEvent, type KeyboardEvent } from 'react'
 import useWebSocket from 'react-use-websocket'
 import { toast } from 'sonner'
 
@@ -16,11 +16,18 @@ type PlaceOverlayProps = {
 }
 
 export function PlaceOverlay({ socketUrl, overlaySize, circleSize, hideOverlay = false }: PlaceOverlayProps) {
+  const dismissStatusOnUnmount = useRef(false)
 
   const [targetOffset, setTargetOffset] = useState<Position | null>(null)
   const [targetPositionOffsets, setTargetPositionOffsets] = useState<Position[] | null>(null)
 
-  const didUnmount = useDidUnmount()
+  const didUnmount = useDidUnmount({
+    onUnmount: useCallback(() => {
+      if (!dismissStatusOnUnmount.current) return
+      toast.dismiss(ToastIds.SOCKET_STATUS)
+      dismissStatusOnUnmount.current = false
+    }, [dismissStatusOnUnmount]),
+  })
 
   // WebSocket
   const webSocket = useWebSocket(socketUrl,
@@ -31,6 +38,7 @@ export function PlaceOverlay({ socketUrl, overlaySize, circleSize, hideOverlay =
 
         socket.sendHeartbeat(webSocket)
 
+        dismissStatusOnUnmount.current = false
         toast.success('Socket opened!', {
           id: ToastIds.SOCKET_STATUS,
           cancel: DISMISS_BUTTON,
@@ -40,6 +48,7 @@ export function PlaceOverlay({ socketUrl, overlaySize, circleSize, hideOverlay =
 
       onClose: (event) => {
         console.log('Socket closed: ', event)
+        dismissStatusOnUnmount.current = false
         toast.info('Socket closed.', {
           id: ToastIds.SOCKET_STATUS,
           cancel: DISMISS_BUTTON,
@@ -113,6 +122,7 @@ export function PlaceOverlay({ socketUrl, overlaySize, circleSize, hideOverlay =
         if (didUnmount.current) return false
 
         console.log('Socket reconnecting: ', event)
+        dismissStatusOnUnmount.current = true
         toast.loading('Attempting to reconnect...', {
           id: ToastIds.SOCKET_STATUS,
           cancel: DISMISS_BUTTON,
@@ -126,6 +136,7 @@ export function PlaceOverlay({ socketUrl, overlaySize, circleSize, hideOverlay =
       reconnectAttempts: 5,
 
       onReconnectStop: () => {
+        dismissStatusOnUnmount.current = false
         toast.error('Failed to connect to socket!', {
           id: ToastIds.SOCKET_STATUS,
           cancel: DISMISS_BUTTON,
