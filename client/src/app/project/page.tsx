@@ -15,6 +15,7 @@ import {
   TypographyList,
   TypographyListItem,
 } from '@/components/ui/typography'
+import { badgeVariants } from '@/components/ui/badge'
 
 export const metadata: Metadata = GLOBALS.PAGES.getMetadata(GLOBALS.PAGES.PROJECT)
 
@@ -33,13 +34,24 @@ export default function Project() {
           <TypographyH2>Part IV Project #83</TypographyH2>
 
           <TypographyP>
-            <TypographyLink href={GLOBALS.MANAGEMENT_SYSTEM}>Part IV Project 2024 #83</TypographyLink> — <TypographyLink href={GLOBALS.JAMES}>James Bao</TypographyLink> and <TypographyLink href={GLOBALS.SAM}>Sam Skinner</TypographyLink>, supervised by <TypographyLink href={GLOBALS.NITISH}>Dr. Nitish Patel</TypographyLink>.
+            <TypographyLink href={GLOBALS.MANAGEMENT_SYSTEM}>2024 ECSE Project #83</TypographyLink>.
+          </TypographyP>
+          <TypographyP>
+            <TypographyLink href={GLOBALS.JAMES}>James Bao</TypographyLink> and <TypographyLink href={GLOBALS.SAM}>Sam Skinner</TypographyLink>, supervised by <TypographyLink href={GLOBALS.NITISH}>Dr. Nitish Patel</TypographyLink>.
           </TypographyP>
           <TypographyP>
             <TypographyLink href={GLOBALS.UNIVERSITY.ECSE}>Department of Electrical, Computer, and Software Engineering</TypographyLink>, <TypographyLink href={GLOBALS.UNIVERSITY.HOME}>The University of Auckland</TypographyLink>.
           </TypographyP>
 
           <TypographyH3>A pick-and-place for rapid prototyping</TypographyH3>
+          <TypographyP>
+            <span className='flex flex-row gap-2'>
+              <span className={badgeVariants({ variant: 'secondary' })}>Control Systems</span>
+              <span className={badgeVariants({ variant: 'secondary' })}>Embedded Systems</span>
+              <span className={badgeVariants({ variant: 'secondary' })}>Human Computer Interactions</span>
+            </span>
+          </TypographyP>
+
           <TypographyP>
             Modern circuit board designs incorporate surface-mounted electronic components for their smaller sizes and better manufacturability on production lines with industrial pick-and-place machines.
             Unfortunately for a design engineer tasked with prototyping a board, these machines are too slow to programme and require too much overhead to be used when only a handful of boards are needed.
