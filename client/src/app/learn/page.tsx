@@ -67,7 +67,10 @@ export default function Learn() {
             Welcome to our <TypographyLink href={GLOBALS.PAGES.PROJECT.path}>Part IV Project</TypographyLink>!
             <br />
             <br />
-            We hope that, in time, this page may serve as a one-stop-shop towards the discovery of the operating principles behind, and features comprising, our pick-and-place machine.
+            The intent for this page is to serve as a one-stop-shop towards understanding the operating principles and features of our pick-and-place machine.
+            <br />
+            <br />
+            Whether you&apos;re looking to hone your skills—or simply after an in-depth look at our system—we do hope that you&apos;ll find this page to hit just the right spot.
             <br />
             <br />
             ~ <TypographyLink href={GLOBALS.JAMES}>James Bao</TypographyLink> and <TypographyLink href={GLOBALS.SAM}>Sam Skinner</TypographyLink>
