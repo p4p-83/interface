@@ -65,16 +65,22 @@ export default function Learn() {
           <TypographyH2>A pick-and-place for rapid prototyping</TypographyH2>
 
           <TypographyBlockquote>
-            Welcome to our <TypographyLink href={GLOBALS.PAGES.PROJECT.path}>Part IV Project</TypographyLink>!
+            <span>Welcome to our <TypographyLink href={GLOBALS.PAGES.PROJECT.path}>Part IV Project</TypographyLink>!</span>
             <br />
             <br />
-            The intent for this page is to serve as a one-stop-shop towards understanding the operating principles and features of our pick-and-place machine.
+            <span>The intent for this page is to serve as a one-stop-shop towards understanding the operating principles and features of our pick-and-place machine.</span>
             <br />
             <br />
-            Whether you&apos;re looking to hone your skills—or simply after an in-depth look at our system—we do hope that you&apos;ll find this page to hit just the right spot.
+            <span>Whether you&apos;re looking to hone your skills—or simply after an in-depth look at our system—we do hope that you&apos;ll find this page to hit just the right spot.</span>
             <br />
             <br />
-            ~ <TypographyLink href={GLOBALS.JAMES}>James Bao</TypographyLink> and <TypographyLink href={GLOBALS.SAM}>Sam Skinner</TypographyLink>
+            <Separator className='w-1/12 h-0.5' />
+            <br />
+            <TypographyLink href={GLOBALS.JAMES}>James Bao</TypographyLink> and <TypographyLink href={GLOBALS.SAM}>Sam Skinner</TypographyLink>,
+            <br />
+            <span className='leading-10'>
+              <TypographyLink href={GLOBALS.UNIVERSITY.ECSE}>Electrical and Computer Engineering</TypographyLink> @ <TypographyLink href={GLOBALS.UNIVERSITY.HOME}>The University of Auckland</TypographyLink>.
+            </span>
           </TypographyBlockquote>
 
           <ApplicationInterface />
@@ -286,6 +292,7 @@ function ConstituentHomePage() {
 import placeProgressImage from './place-progress.png'
 import placeErrorImage from './place-error.png'
 import placeSocketImage from './place-socket.png'
+import { Separator } from '@/components/ui/separator'
 function ConstituentPlacePage() {
   return (
     <>
