@@ -1,10 +1,10 @@
-import { useRef, useCallback, useEffect, useState, type MouseEvent, type KeyboardEvent } from 'react'
+import { useCallback, useState, type MouseEvent, type KeyboardEvent } from 'react'
 import useWebSocket from 'react-use-websocket'
 import { toast } from 'sonner'
 
-import * as socket from '@/lib/socket'
-
 import { ToastIds, DISMISS_BUTTON } from '@/components/ui/sonner'
+import { useDidUnmount } from '@/hooks/useDidUnmount'
+import * as socket from '@/lib/socket'
 
 import { Size, Position } from './PlaceInterface'
 
@@ -16,18 +16,11 @@ type PlaceOverlayProps = {
 }
 
 export function PlaceOverlay({ socketUrl, overlaySize, circleSize, hideOverlay = false }: PlaceOverlayProps) {
-  const didUnmount = useRef(false)
 
   const [targetOffset, setTargetOffset] = useState<Position | null>(null)
   const [targetPositionOffsets, setTargetPositionOffsets] = useState<Position[] | null>(null)
 
-  // Unmount
-  useEffect(() => {
-    didUnmount.current = false
-    return () => {
-      didUnmount.current = true
-    }
-  }, [])
+  const didUnmount = useDidUnmount()
 
   // WebSocket
   const webSocket = useWebSocket(socketUrl,
