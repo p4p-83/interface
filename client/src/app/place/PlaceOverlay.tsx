@@ -27,7 +27,7 @@ export function PlaceOverlay({ socketUrl, overlaySize, circleSize, hideOverlay =
     {
 
       onOpen: (event) => {
-        console.log(event)
+        console.log('Socket opened: ', event)
 
         socket.sendHeartbeat(webSocket)
 
@@ -39,7 +39,7 @@ export function PlaceOverlay({ socketUrl, overlaySize, circleSize, hideOverlay =
       },
 
       onClose: (event) => {
-        console.log(event)
+        console.log('Socket closed: ', event)
         toast.info('Socket closed.', {
           id: ToastIds.SOCKET_STATUS,
           cancel: DISMISS_BUTTON,
@@ -48,10 +48,10 @@ export function PlaceOverlay({ socketUrl, overlaySize, circleSize, hideOverlay =
       },
 
       onMessage: async (message) => {
-        console.log({ message })
+        console.log('Socket message: ', { message })
 
         const action = await socket.processMessage(message.data)
-        console.log({ action })
+        console.log('Socket action: ', { action })
 
         switch (action.actionType) {
 
@@ -99,7 +99,7 @@ export function PlaceOverlay({ socketUrl, overlaySize, circleSize, hideOverlay =
       },
 
       onError: (error) => {
-        console.error(error)
+        console.error('Socket error: ', error)
         toast.error('Socket error!', {
           id: ToastIds.SOCKET_ERROR,
           cancel: DISMISS_BUTTON,
@@ -112,7 +112,7 @@ export function PlaceOverlay({ socketUrl, overlaySize, circleSize, hideOverlay =
       shouldReconnect: (event) => {
         if (didUnmount.current) return false
 
-        console.log('Reconnecting', event)
+        console.log('Socket reconnecting: ', event)
         toast.loading('Attempting to reconnect...', {
           id: ToastIds.SOCKET_STATUS,
           cancel: DISMISS_BUTTON,

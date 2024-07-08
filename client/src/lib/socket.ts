@@ -104,7 +104,7 @@ export async function processMessage(data: unknown): Promise<Action> {
 }
 
 function sendMessage(webSocket: WebSocketHook, message: pnp.v1.Message) {
-  console.info({ message })
+  console.info('Sending message: ', { message })
   webSocket.sendMessage(message.serializeBinary())
 }
 
