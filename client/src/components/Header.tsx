@@ -2,7 +2,7 @@
 
 import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { Cross2Icon, Crosshair2Icon, HamburgerMenuIcon, ThickArrowUpIcon } from '@radix-ui/react-icons'
 
 import * as GLOBALS from '@/app/globals'
@@ -11,6 +11,7 @@ import { Button } from '@/components/ui/button'
 import { Sheet, SheetContent, SheetTrigger, SheetClose } from '@/components/ui/sheet'
 import { Separator } from '@/components/ui/separator'
 import { TypographyInlineCode } from '@/components/ui/typography'
+import { useKeyPresses } from '@/hooks/useKeyPresses'
 import { cn } from '@/lib/utils'
 
 export function Header() {
@@ -69,32 +70,9 @@ export function performShiftKeyNavigation(router: ReturnType<typeof useRouter>, 
 function NavigationMain() {
   const router = useRouter()
 
-  const [isShiftPressed, setIsShiftPressed] = useState(false)
-  const [isOptionPressed, setIsOptionPressed] = useState(false)
-
-  useEffect(() => {
-    function handleKeyDown(event: KeyboardEvent) {
-      console.info(`Key down for ${event.code} (${event.key})`)
-
-      setIsShiftPressed(event.shiftKey)
-      setIsOptionPressed(event.altKey)
-      performShiftKeyNavigation(router, event)
-    }
-
-    function handleKeyUp(event: KeyboardEvent) {
-      console.info(`Key up for ${event.code} (${event.key})`)
-      setIsShiftPressed(event.shiftKey)
-      setIsOptionPressed(event.altKey)
-    }
-
-    document.addEventListener('keydown', handleKeyDown)
-    document.addEventListener('keyup', handleKeyUp)
-
-    return () => {
-      document.removeEventListener('keydown', handleKeyDown)
-      document.removeEventListener('keyup', handleKeyUp)
-    }
-  }, [router])
+  const { isShiftPressed, isOptionPressed } = useKeyPresses({
+    onKeyDown: (event) => performShiftKeyNavigation(router, event),
+  })
 
   const showKeyShortcut = (isShiftPressed || isOptionPressed)
 

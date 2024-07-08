@@ -1,29 +1,23 @@
 'use client'
 
 import { useRouter } from 'next/navigation'
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { Crosshair2Icon, MixerHorizontalIcon, GearIcon, RocketIcon, IdCardIcon } from '@radix-ui/react-icons'
 
 import * as GLOBALS from '@/app/globals'
 import { performShiftKeyNavigation } from '@/components/Header'
 import { LinkCard } from '@/components/LinkCard'
 import { cn } from '@/lib/utils'
+import { useKeyPresses } from '@/hooks/useKeyPresses'
 
 export function HomeLinkCards() {
   const router = useRouter()
 
   const [isCalibrateRevealed, setIsCalibrateRevealed] = useState(false)
   const [isSettingsRevealed, setIsSettingsRevealed] = useState(false)
-  const [isShiftPressed, setIsShiftPressed] = useState(false)
-  const [isOptionPressed, setIsOptionPressed] = useState(false)
 
-  useEffect(() => {
-    function handleKeyDown(event: KeyboardEvent) {
-      console.info(`Key down for ${event.code} (${event.key})`)
-
-      setIsShiftPressed(event.shiftKey)
-      setIsOptionPressed(event.altKey)
-
+  const { isShiftPressed, isOptionPressed } = useKeyPresses({
+    onKeyDown: (event) => {
       if (!event.shiftKey) {
         switch (event.code) {
         case GLOBALS.PAGES.getShortcutKeyCode(GLOBALS.PAGES.CALIBRATE):
@@ -37,14 +31,8 @@ export function HomeLinkCards() {
       else {
         performShiftKeyNavigation(router, event)
       }
-    }
-
-    function handleKeyUp(event: KeyboardEvent) {
-      console.info(`Key up for ${event.code} (${event.key})`)
-
-      setIsShiftPressed(event.shiftKey)
-      setIsOptionPressed(event.altKey)
-
+    },
+    onKeyUp: (event) => {
       switch (event.code) {
       case GLOBALS.PAGES.getShortcutKeyCode(GLOBALS.PAGES.CALIBRATE):
         setIsCalibrateRevealed(false)
@@ -53,16 +41,8 @@ export function HomeLinkCards() {
         setIsSettingsRevealed(false)
         break
       }
-    }
-
-    document.addEventListener('keydown', handleKeyDown)
-    document.addEventListener('keyup', handleKeyUp)
-
-    return () => {
-      document.removeEventListener('keydown', handleKeyDown)
-      document.removeEventListener('keyup', handleKeyUp)
-    }
-  }, [router])
+    },
+  })
 
   const hiddenCardsShown = (isOptionPressed)
     ? 2
