@@ -69,19 +69,22 @@ export function performShiftKeyNavigation(router: ReturnType<typeof useRouter>, 
 function NavigationMain() {
   const router = useRouter()
 
-  const [isKeyShiftPressed, setIsKeyShiftPressed] = useState(false)
+  const [isShiftPressed, setIsShiftPressed] = useState(false)
+  const [isOptionPressed, setIsOptionPressed] = useState(false)
 
   useEffect(() => {
     function handleKeyDown(event: KeyboardEvent) {
       console.info(`Key down for ${event.code} (${event.key})`)
 
-      setIsKeyShiftPressed(event.shiftKey)
+      setIsShiftPressed(event.shiftKey)
+      setIsOptionPressed(event.altKey)
       performShiftKeyNavigation(router, event)
     }
 
     function handleKeyUp(event: KeyboardEvent) {
       console.info(`Key up for ${event.code} (${event.key})`)
-      setIsKeyShiftPressed(event.shiftKey)
+      setIsShiftPressed(event.shiftKey)
+      setIsOptionPressed(event.altKey)
     }
 
     document.addEventListener('keydown', handleKeyDown)
@@ -93,13 +96,15 @@ function NavigationMain() {
     }
   }, [router])
 
+  const showKeyShortcut = (isShiftPressed || isOptionPressed)
+
   return (
     <nav className='hidden sm:inline-flex flex-row items-center justify-between align-middle gap-x-0.5 lg:gap-x-5'>
 
-      <NavigationItem href={GLOBALS.PAGES.HOME.path} label={GLOBALS.PAGES.HOME.name} shortcutKey={GLOBALS.PAGES.HOME.shortcutKey} showKeyShortcut={isKeyShiftPressed} />
-      <NavigationItem href={GLOBALS.PAGES.PLACE.path} label={GLOBALS.PAGES.PLACE.name} shortcutKey={GLOBALS.PAGES.PLACE.shortcutKey} showKeyShortcut={isKeyShiftPressed} />
-      <NavigationItem href={GLOBALS.PAGES.LEARN.path} label={GLOBALS.PAGES.LEARN.name} shortcutKey={GLOBALS.PAGES.LEARN.shortcutKey} showKeyShortcut={isKeyShiftPressed} />
-      <NavigationItem href={GLOBALS.PAGES.PROJECT.path} label={GLOBALS.PAGES.PROJECT.name} shortcutKey={GLOBALS.PAGES.PROJECT.shortcutKey} showKeyShortcut={isKeyShiftPressed} />
+      <NavigationItem href={GLOBALS.PAGES.HOME.path} label={GLOBALS.PAGES.HOME.name} shortcutKey={GLOBALS.PAGES.HOME.shortcutKey} showKeyShortcut={showKeyShortcut} />
+      <NavigationItem href={GLOBALS.PAGES.PLACE.path} label={GLOBALS.PAGES.PLACE.name} shortcutKey={GLOBALS.PAGES.PLACE.shortcutKey} showKeyShortcut={showKeyShortcut} />
+      <NavigationItem href={GLOBALS.PAGES.LEARN.path} label={GLOBALS.PAGES.LEARN.name} shortcutKey={GLOBALS.PAGES.LEARN.shortcutKey} showKeyShortcut={showKeyShortcut} />
+      <NavigationItem href={GLOBALS.PAGES.PROJECT.path} label={GLOBALS.PAGES.PROJECT.name} shortcutKey={GLOBALS.PAGES.PROJECT.shortcutKey} showKeyShortcut={showKeyShortcut} />
 
       <div className='pl-2 lg:pl-3'>
         <ThemeToggle />
