@@ -42,6 +42,8 @@ function HeaderTitle() {
 export function performShiftKeyNavigation(router: ReturnType<typeof useRouter>, event: KeyboardEvent) {
   if (!event.shiftKey) return
 
+  if (event.altKey || event.ctrlKey || event.metaKey) return
+
   switch (event.code) {
   case GLOBALS.PAGES.getShortcutKeyCode(GLOBALS.PAGES.HOME):
     router.push(GLOBALS.PAGES.HOME.path)
