@@ -5,7 +5,9 @@ type UseKeyPressesProps = {
 	onKeyUp?: (event: KeyboardEvent) => void;
 }
 
-export function useKeyPresses({ onKeyDown, onKeyUp }: UseKeyPressesProps) {
+export function useKeyPresses(props?: UseKeyPressesProps) {
+  const { onKeyDown, onKeyUp } = props ?? {}
+
   const [isShiftPressed, setIsShiftPressed] = useState(false)
   const [isOptionPressed, setIsOptionPressed] = useState(false)
 
