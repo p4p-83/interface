@@ -642,7 +642,7 @@ function SystemArchitecture() {
               </span>
             </TypographyTableDataCell>
             <TypographyTableDataCell>
-              The command & control of our system, which serves as the conductor for the orchestra.
+              The command & control that conducts the orchestra.
             </TypographyTableDataCell>
           </TypographyTableRow>
 
