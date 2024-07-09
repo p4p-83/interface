@@ -288,8 +288,22 @@ function ConstituentHomePage() {
       <ImageCarousel
         images={[
           { light: lightHome, dark: darkHome, caption: 'Home page' },
-          { light: lightHomeCalibrate, dark: darkHomeCalibrate, caption: `Home page with ${GLOBALS.PAGES.CALIBRATE.path} link revealed` },
-          { light: lightHomeShift, dark: darkHomeShift, caption: 'Home page with Shift modifier pressed' },
+          {
+            light: lightHomeCalibrate,
+            dark: darkHomeCalibrate,
+            caption: `Home page with ${GLOBALS.PAGES.CALIBRATE.path} link revealed`,
+            captionElement: (
+              <>Home page with <GLOBALS.InlineCode.Pages.Calibrate /> link revealed</>
+            ),
+          },
+          {
+            light: lightHomeShift,
+            dark: darkHomeShift,
+            caption: 'Home page with Shift modifier pressed',
+            captionElement: (
+              <>Home page with <TypographyInlineCode>Shift</TypographyInlineCode> modifier pressed</>
+            ),
+          },
         ]}
         className='mt-6'
       />

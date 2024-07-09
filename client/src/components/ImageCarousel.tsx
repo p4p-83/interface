@@ -1,7 +1,7 @@
 'use client'
 
 import Image, { type ImageProps } from 'next/image'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, type ReactNode } from 'react'
 
 import {
   Carousel,
@@ -17,6 +17,7 @@ type ImageCarouselImage = {
   light: ImageProps['src'];
   dark: ImageProps['src'];
   caption: string;
+  captionElement?: ReactNode;
 }
 
 type ImageCarouselProps = {
@@ -74,7 +75,7 @@ export function ImageCarousel({ images, className, captionClassName }: ImageCaro
       </Carousel>
 
       <div className={cn('py-4 text-center text-xs sm:text-sm text-muted-foreground', captionClassName)}>
-        {images[current].caption}
+        {images[current].captionElement ?? images[current].caption}
       </div>
 
     </div>
