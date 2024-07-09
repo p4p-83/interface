@@ -61,6 +61,7 @@
 @layer base {
   * {
     @apply border-border;
+    @apply scroll-mt-28 sm:scroll-mt-40;
   }
 
   body {
@@ -85,7 +86,6 @@
   h4,
   h5,
   span {
-    @apply scroll-mt-28 sm:scroll-mt-40;
     @apply target:bg-primary-accent/20 dark:target:bg-primary-accent/50;
     @apply target:border-primary-accent/20 dark:target:border-primary-accent/50;
     @apply target:bg-clip-content;
