@@ -112,7 +112,7 @@ export function PlaceOverlay({ socketUrl, overlaySize, circleSize, hideOverlay =
         toast.error('Socket error!', {
           id: ToastIds.SOCKET_ERROR,
           cancel: DISMISS_BUTTON,
-          duration: Infinity,
+          duration: 6000,
         })
       },
 
@@ -140,7 +140,7 @@ export function PlaceOverlay({ socketUrl, overlaySize, circleSize, hideOverlay =
         toast.error('Failed to connect to socket!', {
           id: ToastIds.SOCKET_STATUS,
           cancel: DISMISS_BUTTON,
-          duration: Infinity,
+          duration: 6000,
           important: true,
         })
       },

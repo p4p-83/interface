@@ -79,7 +79,7 @@ export function WebRtcVideo({ url, setVideoSize, setIsVideoStreaming, setHasVide
       toast.error('Video stream error!', {
         id: ToastIds.VIDEO_ERROR,
         cancel: DISMISS_BUTTON,
-        duration: Infinity,
+        duration: 6000,
       })
     }
 
