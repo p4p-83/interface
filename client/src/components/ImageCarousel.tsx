@@ -14,7 +14,8 @@ import {
 import { cn } from '@/lib/utils'
 
 type ImageCarouselImage = {
-  src: ImageProps['src'];
+  light: ImageProps['src'];
+  dark: ImageProps['src'];
   caption: string;
 }
 
@@ -48,11 +49,19 @@ export function ImageCarousel({ images, className, captionClassName }: ImageCaro
         }}
       >
         <CarouselContent>
-          {images.map(({ src, caption }) => (
+          {images.map(({ light, dark, caption }) => (
             <CarouselItem key={caption}>
               <Image
-                src={src}
+                src={light}
                 alt={caption}
+                className='block dark:hidden'
+                placeholder='blur'
+                quality={85}
+              />
+              <Image
+                src={dark}
+                alt={caption}
+                className='hidden dark:block'
                 placeholder='blur'
                 quality={85}
               />

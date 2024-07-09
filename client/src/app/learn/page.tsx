@@ -282,10 +282,14 @@ function ConstituentHomePage() {
   )
 }
 
-// TODO: update images
-import placeProgressImage from './place-progress.png'
-import placeErrorImage from './place-error.png'
-import placeSocketImage from './place-socket.png'
+import lightPlaceProgress from './lightPlaceProgress.png'
+import lightPlaceError from './lightPlaceError.png'
+import lightPlaceSocketOpened from './lightPlaceSocketOpened.png'
+import lightPlaceHud from './lightPlaceHud.png'
+import darkPlaceProgress from './darkPlaceProgress.png'
+import darkPlaceError from './darkPlaceError.png'
+import darkPlaceSocketOpened from './darkPlaceSocketOpened.png'
+import darkPlaceHud from './darkPlaceHud.png'
 
 function ConstituentPlacePage() {
   return (
@@ -316,9 +320,10 @@ function ConstituentPlacePage() {
 
       <ImageCarousel
         images={[
-          { src: placeProgressImage, caption: '/place progress bar' },
-          { src: placeErrorImage, caption: '/place video error' },
-          { src: placeSocketImage, caption: '/place connected WebSocket' },
+          { light: lightPlaceProgress, dark: darkPlaceProgress, caption: 'Progress bar whilst video stream loads' },
+          { light: lightPlaceError, dark: darkPlaceError, caption: 'Video stream error' },
+          { light: lightPlaceSocketOpened, dark: darkPlaceSocketOpened, caption: 'Successful WebSocket connection with overlaid heads-up display' },
+          { light: lightPlaceHud, dark: darkPlaceHud, caption: 'Heads-up display with purple target indicator' },
         ]}
         captionClassName='pb-0'
       />
