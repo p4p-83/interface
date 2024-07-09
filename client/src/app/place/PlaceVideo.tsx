@@ -1,8 +1,12 @@
 'use client'
 
+import Link from 'next/link'
 import { useState, type HTMLAttributes } from 'react'
 
+import * as GLOBALS from '@/app/globals'
+import { FRAGMENT_IDS as LEARN_FRAGMENT_IDS } from '@/app/learn/fragments'
 import { WebRtcVideo } from '@/components/WebRtcVideo'
+import { Header } from '@/components/Header'
 import { Error } from '@/components/Error'
 import { TypographyInlineCode, TypographyMuted } from '@/components/ui/typography'
 import { cn } from '@/lib/utils'
@@ -11,9 +15,9 @@ import { Size } from './PlaceInterface'
 import { PlaceOverlay } from './PlaceOverlay'
 
 type PlaceVideoProps = HTMLAttributes<HTMLDivElement> & {
-	videoUrl: string;
+  videoUrl: string;
   socketUrl: string;
-}
+};
 
 export function PlaceVideo({ className, videoUrl, socketUrl }: PlaceVideoProps) {
   const [videoSize, setVideoSize] = useState<Size | null>(null)
@@ -22,11 +26,24 @@ export function PlaceVideo({ className, videoUrl, socketUrl }: PlaceVideoProps) 
 
   if (hasVideoErrored) {
     return (
-      <Error className={className}>
-        <TypographyMuted>
-          Failed to stream video from <TypographyInlineCode>{videoUrl}</TypographyInlineCode>.
-        </TypographyMuted>
-      </Error>
+      <>
+        <Header />
+        <Error
+          className={className}
+          homeButtonVariant='outline'
+          additionalButtons={[
+            {
+              key: 'viewDemo',
+              label: (<Link href={GLOBALS.PAGES.LEARN.path + '#' + LEARN_FRAGMENT_IDS.PLACE_DEMO}>View a demo</Link>),
+              asChild: true,
+            },
+          ]}
+        >
+          <TypographyMuted>
+            Failed to stream video from <TypographyInlineCode>{videoUrl}</TypographyInlineCode>.
+          </TypographyMuted>
+        </Error>
+      </>
     )
   }
 

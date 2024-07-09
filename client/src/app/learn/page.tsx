@@ -209,6 +209,7 @@ function ConstituentPages() {
       <TypographyH3>Constituent Pages</TypographyH3>
       <Accordion type='multiple' className='w-full mt-2' fragmentIdsMap={{
         [FRAGMENT_IDS.VIM_PLUGINS]: GLOBALS.PAGES.PLACE.path,
+        [FRAGMENT_IDS.PLACE_DEMO]: GLOBALS.PAGES.PLACE.path,
       }}>
 
         <PageAccordionItem page={GLOBALS.PAGES.HOME}>
@@ -329,18 +330,20 @@ function ConstituentPlacePage() {
         It comprises of a full screen feed of the real-time video stream received from the <GLOBALS.InlineCode.GitHub.Controller />, below an overlay that implements the interactive user interface and heads-up display.
       </TypographyP>
 
-      <TypographyVideo
-        video={{
-          light: './lightPlaceDemo.mp4',
-          dark: './darkPlaceDemo.mp4',
-        }}
-        loop
-        caption={`A full demonstration of the ${GLOBALS.PAGES.PLACE.path} page`}
-        captionElement={
-          <>A full demonstration of the <GLOBALS.InlineCode.Pages.Place /> page</>
-        }
-        captionClassName='pb-0'
-      />
+      <div id={FRAGMENT_IDS.PLACE_DEMO}>
+        <TypographyVideo
+          video={{
+            light: './lightPlaceDemo.mp4',
+            dark: './darkPlaceDemo.mp4',
+          }}
+          loop
+          caption={`A full demonstration of the ${GLOBALS.PAGES.PLACE.path} page`}
+          captionElement={
+            <>A full demonstration of the <GLOBALS.InlineCode.Pages.Place /> page</>
+          }
+          captionClassName='pb-0'
+        />
+      </div>
 
       <TypographyH5>Page Lifecycle</TypographyH5>
       <TypographyList ordered>
