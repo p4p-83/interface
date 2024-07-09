@@ -35,7 +35,7 @@ function HeaderTitle() {
   return (
     <h2 className='flex flex-row gap-2 justify-start items-center text-xl md:text-2xl md:text-[1.75rem] font-extrabold underline decoration-primary underline-offset-2 decoration-[3px]'>
       <Crosshair2Icon className='p-0 h-4 md:h-5 w-4 md:w-5 shrink-0 stroke-[0.5]' stroke='currentColor' />
-      <span>p4p-83/interface</span>
+      <span>{GLOBALS.GITHUB.INTERFACE.NAME}</span>
     </h2>
   )
 }
@@ -133,7 +133,6 @@ export function NavigationMobile() {
           <Separator />
 
           <div className='flex flex-col my-6 pl-6 space-y-3'>
-            {/* TODO: other links? */}
             {Object.values(GLOBALS.PAGES)
               .filter(page => (page instanceof Object) && ('path' in page))
               .map(page => (
