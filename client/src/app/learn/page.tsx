@@ -211,7 +211,9 @@ function ConstituentPages() {
   return (
     <>
       <TypographyH3>Constituent Pages</TypographyH3>
-      <Accordion type='multiple' className='w-full mt-2'>
+      <Accordion type='multiple' className='w-full mt-2' fragmentIdsMap={{
+        [FRAGMENT_IDS.VIM_PLUGINS]: GLOBALS.PAGES.PLACE.path,
+      }}>
 
         <PageAccordionItem page={GLOBALS.PAGES.HOME}>
           <ConstituentHomePage />
@@ -681,7 +683,10 @@ function SystemArchitecture() {
         The overarching focus is on these system behaviours and interactions—consequently, many of the following headings necessarily cross component boundaries.
       </TypographyP>
 
-      <Accordion type='multiple' className='w-full mt-2'>
+      <Accordion type='multiple' className='w-full mt-2' fragmentIdsMap={{
+        [FRAGMENT_IDS.DATA_NORMALISATION]: 'messagePassing',
+        [FRAGMENT_IDS.NEAREST_TARGET]: 'userInterface',
+      }}>
         <AccordionItem value='gantryControl'>
           <AccordionTrigger><TypographyH4>Gantry Control</TypographyH4></AccordionTrigger>
           <AccordionContent>
@@ -753,7 +758,6 @@ function SystemArchitecture() {
               This provides a real-time, low-latency, full-duplex data channel, which is used to exchange information and instructions.
             </TypographyP>
 
-            {/* TODO: the anchor doesn't work within this accordion... */}
             <TypographyP>
               Numeric data, such as the <TypographyInlineCode>TARGET_DELTAS</TypographyInlineCode> between the present head position and the operator&apos;s desired target, is <span id={FRAGMENT_IDS.DATA_NORMALISATION}>normalised into an absolute, invariant range of <TypographyInlineCode>[0, 65535]</TypographyInlineCode>.
                 This normalisation ensures that the exchanged units are independent of run-time variables—the client viewport, or streamed video dimensions, for instance</span>.

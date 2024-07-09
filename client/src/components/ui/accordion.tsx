@@ -4,9 +4,54 @@ import * as React from 'react'
 import * as AccordionPrimitive from '@radix-ui/react-accordion'
 import { ChevronDownIcon } from '@radix-ui/react-icons'
 
+import { useHash } from '@/hooks/useHash'
 import { cn } from '@/lib/utils'
 
-const Accordion = AccordionPrimitive.Root
+type AccordionProps = React.ComponentPropsWithoutRef<typeof AccordionPrimitive.Root> & {
+  /** A map of fragmentId -> itemValue */
+  fragmentIdsMap?: Record<string, string>;
+}
+
+const Accordion = React.forwardRef<
+  React.ElementRef<typeof AccordionPrimitive.Root>,
+  AccordionProps
+>(({ fragmentIdsMap, ...props }, ref) => {
+  const [value, setValue] = React.useState<string | undefined>()
+  const [values, setValues] = React.useState<string[]>([])
+
+  // Expand an AccordionItem if it contains the target fragment
+  const fragmentId = useHash().substring(1)
+
+  React.useLayoutEffect(() => {
+    if (!fragmentIdsMap?.[fragmentId]) return
+
+    setValue(fragmentIdsMap[fragmentId])
+    setValues((previousValues) => [...previousValues, fragmentIdsMap[fragmentId]])
+
+  }, [setValue, setValues, fragmentIdsMap, fragmentId])
+
+  React.useEffect(() => {
+    if (!fragmentIdsMap?.[fragmentId]) return
+
+    window.setTimeout(() => {
+      document.querySelector('#' + fragmentId)?.scrollIntoView({ behavior: 'auto' })
+    }, 250)
+
+  }, [fragmentIdsMap, fragmentId])
+
+  return (props.type === 'single')
+    ? (
+      <AccordionPrimitive.Root ref={ref} value={value} onValueChange={setValue}
+        {...props}
+      />
+    )
+    : (
+      <AccordionPrimitive.Root ref={ref} value={values} onValueChange={setValues}
+        {...props}
+      />
+    )
+})
+Accordion.displayName = 'Accordion'
 
 const AccordionItem = React.forwardRef<
   React.ElementRef<typeof AccordionPrimitive.Item>,
