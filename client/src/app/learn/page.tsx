@@ -16,6 +16,7 @@ import {
   TypographyP,
   TypographyBlockquote,
   TypographyInlineCode,
+  TypographyKeyInput,
   TypographyLink,
   TypographyList,
   TypographyListItem,
@@ -110,13 +111,13 @@ function ApplicationInterface() {
           <AccordionTrigger>
             <span className='flex flex-row gap-2 justify-between items-center w-full pr-2'>
               <TypographyH4>Light/Dark Theme</TypographyH4>
-              <TypographyInlineCode><ThemeToggleIcon className='align-text-bottom' /></TypographyInlineCode>
+              <TypographyKeyInput><ThemeToggleIcon className='align-text-bottom' /></TypographyKeyInput>
             </span>
           </AccordionTrigger>
           <AccordionContent className='text-base'>
             <TypographyP>
               This application implements a global &lsquo;light&rsquo; and &lsquo;dark&rsquo; theme—matching the browser&apos;s appearance preferences by default.
-              You may change this at any time via the <TypographyInlineCode><ThemeToggleIcon className='align-text-bottom' /></TypographyInlineCode> toggle at the top right-hand corner of the viewport.
+              You may change this at any time via the <TypographyKeyInput><ThemeToggleIcon className='align-text-bottom' /></TypographyKeyInput> toggle at the top right-hand corner of the viewport.
             </TypographyP>
           </AccordionContent>
         </AccordionItem>
@@ -125,7 +126,7 @@ function ApplicationInterface() {
           <AccordionTrigger>
             <span className='flex flex-row gap-2 justify-between items-center w-full pr-2'>
               <TypographyH4>Keyboard Navigation</TypographyH4>
-              <TypographyInlineCode><ThickArrowUpIcon className='align-text-bottom' /></TypographyInlineCode>
+              <TypographyKeyInput><ThickArrowUpIcon className='align-text-bottom' /></TypographyKeyInput>
             </span>
           </AccordionTrigger>
           <AccordionContent className='text-base'>
@@ -153,27 +154,27 @@ function ApplicationInterface() {
             </TypographyList>
 
             <TypographyP>
-              This keyboard navigation scheme is accessed via the <TypographyInlineCode>Shift</TypographyInlineCode> modifier key.
+              This keyboard navigation scheme is accessed via the <TypographyKeyInput>Shift</TypographyKeyInput> modifier key.
               The pages that may be accessed via this scheme are:
             </TypographyP>
             <TypographyList>
               <TypographyListItem>
-                <GLOBALS.InlineCode.Pages.Home />: By pressing <TypographyInlineCode>Shift</TypographyInlineCode>+<TypographyInlineCode>{GLOBALS.PAGES.HOME.shortcutKey}</TypographyInlineCode>.
+                <GLOBALS.InlineCode.Pages.Home />: By pressing <TypographyKeyInput>Shift</TypographyKeyInput>+<TypographyKeyInput>{GLOBALS.PAGES.HOME.shortcutKey}</TypographyKeyInput>.
               </TypographyListItem>
               <TypographyListItem>
-                <GLOBALS.InlineCode.Pages.Place />: By pressing <TypographyInlineCode>Shift</TypographyInlineCode>+<TypographyInlineCode>{GLOBALS.PAGES.PLACE.shortcutKey}</TypographyInlineCode>.
+                <GLOBALS.InlineCode.Pages.Place />: By pressing <TypographyKeyInput>Shift</TypographyKeyInput>+<TypographyKeyInput>{GLOBALS.PAGES.PLACE.shortcutKey}</TypographyKeyInput>.
               </TypographyListItem>
               <TypographyListItem>
-                <GLOBALS.InlineCode.Pages.Calibrate />: By pressing <TypographyInlineCode>Shift</TypographyInlineCode>+<TypographyInlineCode>{GLOBALS.PAGES.CALIBRATE.shortcutKey}</TypographyInlineCode>.
+                <GLOBALS.InlineCode.Pages.Calibrate />: By pressing <TypographyKeyInput>Shift</TypographyKeyInput>+<TypographyKeyInput>{GLOBALS.PAGES.CALIBRATE.shortcutKey}</TypographyKeyInput>.
               </TypographyListItem>
               <TypographyListItem>
-                <GLOBALS.InlineCode.Pages.Settings />: By pressing <TypographyInlineCode>Shift</TypographyInlineCode>+<TypographyInlineCode>{GLOBALS.PAGES.SETTINGS.shortcutKey}</TypographyInlineCode>.
+                <GLOBALS.InlineCode.Pages.Settings />: By pressing <TypographyKeyInput>Shift</TypographyKeyInput>+<TypographyKeyInput>{GLOBALS.PAGES.SETTINGS.shortcutKey}</TypographyKeyInput>.
               </TypographyListItem>
               <TypographyListItem>
-                <GLOBALS.InlineCode.Pages.Learn />: By pressing <TypographyInlineCode>Shift</TypographyInlineCode>+<TypographyInlineCode>{GLOBALS.PAGES.LEARN.shortcutKey}</TypographyInlineCode>.
+                <GLOBALS.InlineCode.Pages.Learn />: By pressing <TypographyKeyInput>Shift</TypographyKeyInput>+<TypographyKeyInput>{GLOBALS.PAGES.LEARN.shortcutKey}</TypographyKeyInput>.
               </TypographyListItem>
               <TypographyListItem>
-                <GLOBALS.InlineCode.Pages.Project />: By pressing <TypographyInlineCode>Shift</TypographyInlineCode>+<TypographyInlineCode>{GLOBALS.PAGES.PROJECT.shortcutKey}</TypographyInlineCode>.
+                <GLOBALS.InlineCode.Pages.Project />: By pressing <TypographyKeyInput>Shift</TypographyKeyInput>+<TypographyKeyInput>{GLOBALS.PAGES.PROJECT.shortcutKey}</TypographyKeyInput>.
               </TypographyListItem>
             </TypographyList>
           </AccordionContent>
@@ -275,13 +276,13 @@ function ConstituentHomePage() {
       </TypographyP>
 
       <TypographyList>
-        <TypographyListItem><TypographyInlineCode>⌥</TypographyInlineCode> on macOS, or</TypographyListItem>
-        <TypographyListItem><TypographyInlineCode>Alt</TypographyInlineCode> on Windows/Linux.</TypographyListItem>
+        <TypographyListItem><TypographyKeyInput>⌥</TypographyKeyInput> on macOS, or</TypographyListItem>
+        <TypographyListItem><TypographyKeyInput>Alt</TypographyKeyInput> on Windows/Linux.</TypographyListItem>
       </TypographyList>
 
       <TypographyP>
-        Alternatively, pressing the <TypographyInlineCode>{GLOBALS.PAGES.CALIBRATE.shortcutKey.toLowerCase()}</TypographyInlineCode> and/or <TypographyInlineCode>{GLOBALS.PAGES.SETTINGS.shortcutKey.toLowerCase()}</TypographyInlineCode> key(s) will selectively reveal the <GLOBALS.InlineCode.Pages.Calibrate /> and/or <GLOBALS.InlineCode.Pages.Settings /> links respectively.
-        This is particularly useful in cases where the <TypographyInlineCode>⌥</TypographyInlineCode>/<TypographyInlineCode>Alt</TypographyInlineCode> modifier key changes the browser&apos;s default click behaviour.
+        Alternatively, pressing the <TypographyKeyInput>{GLOBALS.PAGES.CALIBRATE.shortcutKey.toLowerCase()}</TypographyKeyInput> and/or <TypographyKeyInput>{GLOBALS.PAGES.SETTINGS.shortcutKey.toLowerCase()}</TypographyKeyInput> key(s) will selectively reveal the <GLOBALS.InlineCode.Pages.Calibrate /> and/or <GLOBALS.InlineCode.Pages.Settings /> links respectively.
+        This is particularly useful in cases where the <TypographyKeyInput>⌥</TypographyKeyInput>/<TypographyKeyInput>Alt</TypographyKeyInput> modifier key changes the browser&apos;s default click behaviour.
       </TypographyP>
 
       <ImageCarousel
@@ -300,7 +301,7 @@ function ConstituentHomePage() {
             dark: darkHomeShift,
             caption: `${GLOBALS.PAGES.HOME.name} page with Shift modifier pressed`,
             captionElement: (
-              <>{GLOBALS.PAGES.HOME.name} page with <TypographyInlineCode>Shift</TypographyInlineCode> modifier pressed</>
+              <>{GLOBALS.PAGES.HOME.name} page with <TypographyKeyInput>Shift</TypographyKeyInput> modifier pressed</>
             ),
           },
         ]}
@@ -414,7 +415,7 @@ function ConstituentPlacePage() {
       <TypographyList>
         <TypographyListItem>mouse clicks,</TypographyListItem>
         <TypographyListItem>directional key presses, and</TypographyListItem>
-        <TypographyListItem><TypographyInlineCode>Shift</TypographyInlineCode>-modified directional key presses.</TypographyListItem>
+        <TypographyListItem><TypographyKeyInput>Shift</TypographyKeyInput>-modified directional key presses.</TypographyListItem>
       </TypographyList>
 
       <TypographyP>
@@ -442,28 +443,28 @@ function ConstituentPlacePage() {
           <TypographyTableRow>
             <TypographyTableDataCell>Up</TypographyTableDataCell>
             <TypographyTableDataCell>
-              <TypographyInlineCode>w</TypographyInlineCode>, <TypographyInlineCode>k</TypographyInlineCode>, <TypographyInlineCode>↑</TypographyInlineCode>
+              <TypographyKeyInput>w</TypographyKeyInput>, <TypographyKeyInput>k</TypographyKeyInput>, <TypographyKeyInput>↑</TypographyKeyInput>
             </TypographyTableDataCell>
           </TypographyTableRow>
 
           <TypographyTableRow>
             <TypographyTableDataCell>Down</TypographyTableDataCell>
             <TypographyTableDataCell>
-              <TypographyInlineCode>s</TypographyInlineCode>, <TypographyInlineCode>j</TypographyInlineCode>, <TypographyInlineCode>↓</TypographyInlineCode>
+              <TypographyKeyInput>s</TypographyKeyInput>, <TypographyKeyInput>j</TypographyKeyInput>, <TypographyKeyInput>↓</TypographyKeyInput>
             </TypographyTableDataCell>
           </TypographyTableRow>
 
           <TypographyTableRow>
             <TypographyTableDataCell>Left</TypographyTableDataCell>
             <TypographyTableDataCell>
-              <TypographyInlineCode>a</TypographyInlineCode>, <TypographyInlineCode>h</TypographyInlineCode>, <TypographyInlineCode>←</TypographyInlineCode>
+              <TypographyKeyInput>a</TypographyKeyInput>, <TypographyKeyInput>h</TypographyKeyInput>, <TypographyKeyInput>←</TypographyKeyInput>
             </TypographyTableDataCell>
           </TypographyTableRow>
 
           <TypographyTableRow>
             <TypographyTableDataCell>Right</TypographyTableDataCell>
             <TypographyTableDataCell>
-              <TypographyInlineCode>d</TypographyInlineCode>, <TypographyInlineCode>l</TypographyInlineCode>, <TypographyInlineCode>→</TypographyInlineCode>
+              <TypographyKeyInput>d</TypographyKeyInput>, <TypographyKeyInput>l</TypographyKeyInput>, <TypographyKeyInput>→</TypographyKeyInput>
             </TypographyTableDataCell>
           </TypographyTableRow>
 
@@ -496,7 +497,7 @@ function ConstituentPlacePage() {
           <TypographyTableRow>
             <TypographyTableDataCell>Reset indicated target</TypographyTableDataCell>
             <TypographyTableDataCell>
-              <TypographyInlineCode>r</TypographyInlineCode>
+              <TypographyKeyInput>r</TypographyKeyInput>
             </TypographyTableDataCell>
             <TypographyTableDataCell>
               Reset the indicated target to <TypographyInlineCode>(0, 0)</TypographyInlineCode> and remove the target indicator from the heads-up display.
@@ -506,7 +507,7 @@ function ConstituentPlacePage() {
           <TypographyTableRow>
             <TypographyTableDataCell>Commit indicated target</TypographyTableDataCell>
             <TypographyTableDataCell>
-              <TypographyInlineCode>␣</TypographyInlineCode> (space)
+              <TypographyKeyInput>␣</TypographyKeyInput> (space)
             </TypographyTableDataCell>
             <TypographyTableDataCell>
               Transmit the deltas for the indicated target to the <GLOBALS.InlineCode.GitHub.Controller />.
@@ -533,7 +534,7 @@ function ConstituentPlacePage() {
 
       <TypographyP>
         Acknowledging these necessary assumptions for machine operation with the primary control scheme, we realise that a fallback, &lsquo;manual&rsquo; override control mechanism is likely to be beneficial.
-        To this end, a secondary input scheme is implemented using the <TypographyInlineCode>Shift</TypographyInlineCode> modifier key, where the combination of <TypographyInlineCode>Shift</TypographyInlineCode> with the same directional inputs will produce a fixed step in the nominated direction—provided that a gantry limit is not exceeded.
+        To this end, a secondary input scheme is implemented using the <TypographyKeyInput>Shift</TypographyKeyInput> modifier key, where the combination of <TypographyKeyInput>Shift</TypographyKeyInput> with the same directional inputs will produce a fixed step in the nominated direction—provided that a gantry limit is not exceeded.
         <TypographyMuted>
           {' '}The fixed step is currently an &lsquo;arbitrary&rsquo; delta corresponding to 1% of the video feed.
           This will eventually be configurable to a value in metric distance units.
@@ -549,7 +550,7 @@ function ConstituentPlacePage() {
 
       <TypographyMuted>
         <TypographyList>
-          <TypographyListItem><TypographyInlineCode>1</TypographyInlineCode>, <TypographyInlineCode>2</TypographyInlineCode>, <TypographyInlineCode>3</TypographyInlineCode>, <TypographyInlineCode>4</TypographyInlineCode>, etc. to pounce to hard-coded parts bins, and/or programmable saved positions.</TypographyListItem>
+          <TypographyListItem><TypographyKeyInput>1</TypographyKeyInput>, <TypographyKeyInput>2</TypographyKeyInput>, <TypographyKeyInput>3</TypographyKeyInput>, <TypographyKeyInput>4</TypographyKeyInput>, etc. to pounce to hard-coded parts bins, and/or programmable saved positions.</TypographyListItem>
         </TypographyList>
       </TypographyMuted>
 
@@ -560,7 +561,7 @@ function ConstituentPlacePage() {
 
       <TypographyList>
         <TypographyListItem>swipe with two fingers to the right with the trackpad, if applicable;</TypographyListItem>
-        <TypographyListItem><TypographyInlineCode>⌘</TypographyInlineCode>+<TypographyInlineCode>[</TypographyInlineCode> on macOS, or <TypographyInlineCode>Alt</TypographyInlineCode>+<TypographyInlineCode>←</TypographyInlineCode> on Windows or Linux; or</TypographyListItem>
+        <TypographyListItem><TypographyKeyInput>⌘</TypographyKeyInput>+<TypographyKeyInput>[</TypographyKeyInput> on macOS, or <TypographyKeyInput>Alt</TypographyKeyInput>+<TypographyKeyInput>←</TypographyKeyInput> on Windows or Linux; or</TypographyListItem>
         <TypographyListItem>use the browser&apos;s &lsquo;Go back&rsquo; navigation button.</TypographyListItem>
       </TypographyList>
     </>

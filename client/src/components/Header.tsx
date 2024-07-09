@@ -10,7 +10,7 @@ import { ThemeToggle } from '@/components/ThemeToggle'
 import { Button } from '@/components/ui/button'
 import { Sheet, SheetContent, SheetTrigger, SheetClose } from '@/components/ui/sheet'
 import { Separator } from '@/components/ui/separator'
-import { TypographyInlineCode } from '@/components/ui/typography'
+import { TypographyKeyInput } from '@/components/ui/typography'
 import { useKeyPresses } from '@/hooks/useKeyPresses'
 import { cn } from '@/lib/utils'
 
@@ -191,12 +191,12 @@ function NavigationItem({ href, label, shortcutKey, showKeyShortcut = false }: N
           {label}
         </span>
         <div className={keyShortcutStyle}>
-          <TypographyInlineCode>
+          <TypographyKeyInput>
             <span className='flex flex-row items-center gap-x-0.5 pr-[0.175rem]'>
               <ThickArrowUpIcon className='p-0 m-0' />
               {shortcutKey}
             </span>
-          </TypographyInlineCode>
+          </TypographyKeyInput>
         </div>
       </Link>
     </div>

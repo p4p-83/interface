@@ -99,6 +99,14 @@ export function TypographyInlineCode({ children }: TypographyProps) {
   )
 }
 
+export function TypographyKeyInput({ children }: TypographyProps) {
+  return (
+    <kbd className='relative rounded bg-secondary/40 border border-b-2 shadow-sm px-[0.3rem] py-[0.2rem] font-mono text-xs sm:text-sm'>
+      {children}
+    </kbd>
+  )
+}
+
 export function TypographyLead({ children }: TypographyProps) {
   return (
     <span className='text-lg sm:text-xl text-muted-foreground'>

@@ -8,7 +8,7 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card'
-import { TypographyInlineCode } from '@/components/ui/typography'
+import { TypographyKeyInput } from '@/components/ui/typography'
 
 type LinkCardProps = HTMLAttributes<HTMLAnchorElement> & {
   href: string;
@@ -32,9 +32,9 @@ export function LinkCard({ className, href, title, description, icon: Icon, keyS
               <span className='flex flex-row gap-0.5 ml-auto items-baseline normal-case font-semibold'>
                 {keyShortcut.map(key => (
                   <Fragment key={href + key}>
-                    <TypographyInlineCode>
+                    <TypographyKeyInput>
                       {key}
-                    </TypographyInlineCode>
+                    </TypographyKeyInput>
                     <span className='last:hidden text-base font-medium'>+</span>
                   </Fragment>
                 ))}
