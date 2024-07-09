@@ -236,6 +236,12 @@ function ConstituentPages() {
   )
 }
 
+import lightHome from './lightHome.png'
+import lightHomeCalibrate from './lightHomeCalibrate.png'
+import lightHomeShift from './lightHomeShift.png'
+import darkHome from './darkHome.png'
+import darkHomeCalibrate from './darkHomeCalibrate.png'
+import darkHomeShift from './darkHomeShift.png'
 function ConstituentHomePage() {
   return (
     <>
@@ -278,6 +284,16 @@ function ConstituentHomePage() {
         Alternatively, pressing the <TypographyInlineCode>{GLOBALS.PAGES.CALIBRATE.shortcutKey.toLowerCase()}</TypographyInlineCode> and/or <TypographyInlineCode>{GLOBALS.PAGES.SETTINGS.shortcutKey.toLowerCase()}</TypographyInlineCode> key(s) will selectively reveal the <GLOBALS.InlineCode.Pages.Calibrate /> and/or <GLOBALS.InlineCode.Pages.Settings /> links respectively.
         This is particularly useful in cases where the <TypographyInlineCode>⌥</TypographyInlineCode>/<TypographyInlineCode>Alt</TypographyInlineCode> modifier key changes the browser&apos;s default click behaviour.
       </TypographyP>
+
+      <ImageCarousel
+        images={[
+          { light: lightHome, dark: darkHome, caption: 'Home page' },
+          { light: lightHomeCalibrate, dark: darkHomeCalibrate, caption: `Home page with ${GLOBALS.PAGES.CALIBRATE.path} link revealed` },
+          { light: lightHomeShift, dark: darkHomeShift, caption: 'Home page with Shift modifier pressed' },
+        ]}
+        className='mt-6'
+      />
+
     </>
   )
 }
@@ -290,7 +306,6 @@ import darkPlaceProgress from './darkPlaceProgress.png'
 import darkPlaceError from './darkPlaceError.png'
 import darkPlaceSocketOpened from './darkPlaceSocketOpened.png'
 import darkPlaceHud from './darkPlaceHud.png'
-
 function ConstituentPlacePage() {
   return (
     <>
