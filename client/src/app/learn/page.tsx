@@ -39,13 +39,9 @@ import {
 } from '@/components/ui/accordion'
 import { Separator } from '@/components/ui/separator'
 
-export const metadata: Metadata = GLOBALS.PAGES.getMetadata(GLOBALS.PAGES.LEARN)
+import { FRAGMENT_IDS } from './fragments'
 
-export const FRAGMENT_IDS = {
-  VIM_PLUGINS: 'vim-plugins',
-  DATA_NORMALISATION: 'normalisation',
-  NEAREST_TARGET: 'nearest-target',
-} as const
+export const metadata: Metadata = GLOBALS.PAGES.getMetadata(GLOBALS.PAGES.LEARN)
 
 export default function Learn() {
   return (
