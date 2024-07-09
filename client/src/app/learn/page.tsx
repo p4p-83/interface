@@ -586,7 +586,7 @@ function SystemArchitecture() {
       <TypographyH3>System Architecture</TypographyH3>
 
       <TypographyP>
-        Our pick-and-place machine comprises a number of distinct components, or modules—each of which serves a unique role towards the successful function of our system.
+        Our pick-and-place machine comprises of four distinct components, or modules—each of which serves an important role towards the successful function of our system.
         These components are:
       </TypographyP>
 
@@ -642,7 +642,7 @@ function SystemArchitecture() {
               </span>
             </TypographyTableDataCell>
             <TypographyTableDataCell>
-              The command & control that conducts the orchestra.
+              The command & control that conducts the entire orchestra.
             </TypographyTableDataCell>
           </TypographyTableRow>
 
