@@ -34,7 +34,11 @@ const Accordion = React.forwardRef<
     if (!fragmentIdsMap?.[fragmentId]) return
 
     window.setTimeout(() => {
-      document.querySelector('#' + fragmentId)?.scrollIntoView({ behavior: 'auto' })
+      const element = document.querySelector('#' + fragmentId)
+      if (!(element instanceof HTMLElement)) return
+
+      element.scrollIntoView({ behavior: 'auto' })
+      element.dataset.target = 'true'
     }, 250)
 
   }, [fragmentIdsMap, fragmentId])

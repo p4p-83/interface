@@ -89,5 +89,9 @@
     @apply target:border-primary-accent/20 dark:target:border-primary-accent/50;
     @apply target:bg-clip-content;
     @apply target:border-y-2 target:border-x-4;
+    @apply data-target:bg-primary-accent/20 dark:data-target:bg-primary-accent/50;
+    @apply data-target:border-primary-accent/20 dark:data-target:border-primary-accent/50;
+    @apply data-target:bg-clip-content;
+    @apply data-target:border-y-2 data-target:border-x-4;
   }
 }
