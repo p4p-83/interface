@@ -37,12 +37,16 @@ export function PlaceVideo({ className, videoUrl, socketUrl }: PlaceVideoProps) 
               key: 'configureSettings',
               size: 'icon',
               variant: 'outline',
-              label: (<Link href={GLOBALS.PAGES.SETTINGS.path}><GearIcon className='h-[1.2rem] w-[1.2rem]' /></Link>),
+              label: (
+                <Link href={GLOBALS.PAGES.SETTINGS.path}><GearIcon className='h-[1.2rem] w-[1.2rem]' /></Link>
+              ),
               asChild: true,
             },
             {
               key: 'viewDemo',
-              label: (<Link href={GLOBALS.PAGES.LEARN.path + '#' + LEARN_FRAGMENT_IDS.PLACE_DEMO}>View a demo</Link>),
+              label: (
+                <Link href={GLOBALS.PAGES.LEARN.path + '#' + LEARN_FRAGMENT_IDS.PLACE_DEMO}>View a demo</Link>
+              ),
               asChild: true,
             },
           ]}
