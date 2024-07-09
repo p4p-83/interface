@@ -322,7 +322,7 @@ export function TypographyTableRow({ children }: TypographyProps) {
 
 export function TypographyTableHeaderCell({ children }: TypographyProps) {
   return (
-    <th className='border px-4 py-2 text-left font-bold tracking-tight [&[align=center]]:text-center [&[align=right]]:text-right'>
+    <th className='border px-4 py-2 text-sm sm:text-base text-left font-bold tracking-tight [&[align=center]]:text-center [&[align=right]]:text-right'>
       {children}
     </th>
   )
@@ -330,7 +330,7 @@ export function TypographyTableHeaderCell({ children }: TypographyProps) {
 
 export function TypographyTableDataCell({ children }: TypographyProps) {
   return (
-    <td className='border px-4 py-2 text-left [&[align=center]]:text-center [&[align=right]]:text-right'>
+    <td className='border px-4 py-2 text-sm sm:text-base text-left [&[align=center]]:text-center [&[align=right]]:text-right'>
       {children}
     </td>
   )
