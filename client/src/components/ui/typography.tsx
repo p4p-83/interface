@@ -243,7 +243,7 @@ export function TypographyVideo({ video, loop = false, caption, captionElement, 
           loop={loop}
           preload='auto'
           src={video.light}
-          className={cn('mt-6 block dark:hidden', className)}
+          className={cn('mt-6 w-full block dark:hidden', className)}
         >
           <source src={video.light} type='video/mp4' />
         </video>
@@ -253,7 +253,7 @@ export function TypographyVideo({ video, loop = false, caption, captionElement, 
           loop={loop}
           preload='auto'
           src={video.dark}
-          className={cn('mt-6 hidden dark:block', className)}
+          className={cn('mt-6 w-full hidden dark:block', className)}
         >
           <source src={video.dark} type='video/mp4' />
         </video>
@@ -261,7 +261,7 @@ export function TypographyVideo({ video, loop = false, caption, captionElement, 
       </>
     )
     : (
-      <video controls loop={loop} preload='auto' className={cn('mt-6', className)}>
+      <video controls loop={loop} preload='auto' className={cn('mt-6 w-full', className)}>
         <source src={video} type='video/mp4' />
       </video>
     )
