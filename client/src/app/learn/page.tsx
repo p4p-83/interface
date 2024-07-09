@@ -7,6 +7,7 @@ import { LayoutMain } from '@/components/LayoutMain'
 import { Header } from '@/components/Header'
 import { PageHeading } from '@/components/PageHeading'
 import { ThemeToggleIcon } from '@/components/ThemeToggle'
+import { ImageCarousel } from '@/components/ImageCarousel'
 import { Badge } from '@/components/ui/badge'
 import {
   TypographyH2,
@@ -19,7 +20,6 @@ import {
   TypographyList,
   TypographyListItem,
   TypographyH5,
-  TypographyImage,
   TypographyMuted,
   TypographyTable,
   TypographyTableHead,
@@ -34,13 +34,7 @@ import {
   AccordionTrigger,
   AccordionContent,
 } from '@/components/ui/accordion'
-import {
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
-} from '@/components/ui/carousel'
+import { Separator } from '@/components/ui/separator'
 
 export const metadata: Metadata = GLOBALS.PAGES.getMetadata(GLOBALS.PAGES.LEARN)
 
@@ -292,7 +286,7 @@ function ConstituentHomePage() {
 import placeProgressImage from './place-progress.png'
 import placeErrorImage from './place-error.png'
 import placeSocketImage from './place-socket.png'
-import { Separator } from '@/components/ui/separator'
+
 function ConstituentPlacePage() {
   return (
     <>
@@ -320,36 +314,14 @@ function ConstituentPlacePage() {
         </TypographyListItem>
       </TypographyList>
 
-      <Carousel className='w-full' opts={{
-        loop: true,
-      }}>
-        <CarouselContent>
-          <CarouselItem>
-            <TypographyImage
-              className='mt-0'
-              src={placeProgressImage}
-              alt='/place page progress bar'
-            />
-          </CarouselItem>
-          <CarouselItem>
-            <TypographyImage
-              className='mt-0'
-              src={placeErrorImage}
-              alt='/place video error'
-            />
-          </CarouselItem>
-          <CarouselItem>
-            <TypographyImage
-              className='mt-0'
-              src={placeSocketImage}
-              alt='/place connected WebSocket'
-            />
-          </CarouselItem>
-        </CarouselContent>
-
-        <CarouselPrevious />
-        <CarouselNext />
-      </Carousel>
+      <ImageCarousel
+        images={[
+          { src: placeProgressImage, caption: '/place progress bar' },
+          { src: placeErrorImage, caption: '/place video error' },
+          { src: placeSocketImage, caption: '/place connected WebSocket' },
+        ]}
+        captionClassName='pb-0'
+      />
 
       <TypographyH5>Heads-Up Display</TypographyH5>
       <TypographyP>
