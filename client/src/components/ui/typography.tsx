@@ -241,7 +241,14 @@ type TypographyVideoProps = {
   captionClassName?: string;
 }
 
-export function TypographyVideo({ video, loop = false, caption, captionElement, className, captionClassName }: TypographyVideoProps) {
+export function TypographyVideo({
+  video,
+  loop = false,
+  caption,
+  captionElement,
+  className,
+  captionClassName,
+}: TypographyVideoProps) {
   const videoElement = (video instanceof Object)
     ? (
       <>
