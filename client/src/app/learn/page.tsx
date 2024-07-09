@@ -28,6 +28,7 @@ import {
   TypographyTableHeaderCell,
   TypographyTableDataCell,
   TypographyImage,
+  TypographyVideo,
 } from '@/components/ui/typography'
 import {
   Accordion,
@@ -328,6 +329,19 @@ function ConstituentPlacePage() {
       <TypographyP>
         It comprises of a full screen feed of the real-time video stream received from the <GLOBALS.InlineCode.GitHub.Controller />, below an overlay that implements the interactive user interface and heads-up display.
       </TypographyP>
+
+      <TypographyVideo
+        video={{
+          light: './lightPlaceDemo.mp4',
+          dark: './darkPlaceDemo.mp4',
+        }}
+        loop
+        caption={`A full demonstration of the ${GLOBALS.PAGES.PLACE.path} page`}
+        captionElement={
+          <>A full demonstration of the <GLOBALS.InlineCode.Pages.Place /> page</>
+        }
+        captionClassName='pb-0'
+      />
 
       <TypographyH5>Page Lifecycle</TypographyH5>
       <TypographyList ordered>

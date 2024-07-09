@@ -163,7 +163,7 @@ type TypographyImageProps = {
 }
 
 export function TypographyImage({ image, caption, captionElement, className, captionClassName }: TypographyImageProps) {
-  const ImageElement = ((image instanceof Object) && ('light' in image))
+  const imageElement = ((image instanceof Object) && ('light' in image))
     ? (
       <>
         <Image
@@ -194,14 +194,86 @@ export function TypographyImage({ image, caption, captionElement, className, cap
 
   return (
     <>
-      {ImageElement}
-      <div className={cn('py-4 text-center', captionClassName)}>
-        <TypographySmall>
-          <TypographyMuted>
-            {captionElement ?? caption}
-          </TypographyMuted>
-        </TypographySmall>
-      </div>
+      {imageElement}
+      <TypographyImageCaption
+        caption={caption}
+        captionElement={captionElement}
+        className={captionClassName}
+      />
+    </>
+  )
+}
+
+type TypographyImageCaptionProps = Pick<TypographyImageProps, 'caption' | 'captionElement'> & {
+  className?: string;
+}
+
+function TypographyImageCaption({ caption, captionElement, className }: TypographyImageCaptionProps) {
+  return (
+    <div className={cn('py-4 text-center', className)}>
+      <TypographySmall>
+        <TypographyMuted>
+          {captionElement ?? caption}
+        </TypographyMuted>
+      </TypographySmall>
+    </div>
+  )
+}
+
+
+type TypographyVideoProps = {
+  video: string | {
+    light: string;
+    dark: string;
+  };
+  loop?: boolean;
+  caption: string;
+  captionElement?: ReactNode;
+  className?: string;
+  captionClassName?: string;
+}
+
+export function TypographyVideo({ video, loop = false, caption, captionElement, className, captionClassName }: TypographyVideoProps) {
+  const videoElement = (video instanceof Object)
+    ? (
+      <>
+
+        <video
+          controls
+          loop={loop}
+          preload='auto'
+          src={video.light}
+          className={cn('mt-6 block dark:hidden', className)}
+        >
+          <source src={video.light} type='video/mp4' />
+        </video>
+
+        <video
+          controls
+          loop={loop}
+          preload='auto'
+          src={video.dark}
+          className={cn('mt-6 hidden dark:block', className)}
+        >
+          <source src={video.dark} type='video/mp4' />
+        </video>
+
+      </>
+    )
+    : (
+      <video controls loop={loop} preload='auto' className={cn('mt-6', className)}>
+        <source src={video} type='video/mp4' />
+      </video>
+    )
+
+  return (
+    <>
+      {videoElement}
+      <TypographyImageCaption
+        caption={caption}
+        captionElement={captionElement}
+        className={captionClassName}
+      />
     </>
   )
 }
