@@ -21,6 +21,7 @@ const Accordion = React.forwardRef<
 
   // Expand an AccordionItem if it contains the target fragment
   const fragmentId = useHash().substring(1)
+  const [lastScrolledTo, setLastScrolledTo] = React.useState('')
 
   React.useLayoutEffect(() => {
     if (!fragmentIdsMap?.[fragmentId]) return
@@ -30,27 +31,27 @@ const Accordion = React.forwardRef<
 
   }, [setValue, setValues, fragmentIdsMap, fragmentId])
 
-  React.useEffect(() => {
-    if (!fragmentIdsMap?.[fragmentId]) return
+  function navigateToHash() {
+    if ((lastScrolledTo === fragmentId) || (!fragmentIdsMap?.[fragmentId])) {
+      return
+    }
 
-    window.setTimeout(() => {
-      const element = document.querySelector('#' + fragmentId)
-      if (!(element instanceof HTMLElement)) return
+    const element = document.querySelector('#' + fragmentId)
+    if (!(element instanceof HTMLElement)) return
 
-      element.scrollIntoView({ behavior: 'auto' })
-      element.dataset.target = 'true'
-    }, 250)
-
-  }, [fragmentIdsMap, fragmentId])
+    element.scrollIntoView({ behavior: 'auto' })
+    element.dataset.target = 'true'
+    setLastScrolledTo(fragmentId)
+  }
 
   return (props.type === 'single')
     ? (
-      <AccordionPrimitive.Root ref={ref} value={value} onValueChange={setValue}
+      <AccordionPrimitive.Root ref={ref} value={value} onValueChange={setValue} onAnimationEnd={navigateToHash}
         {...props}
       />
     )
     : (
-      <AccordionPrimitive.Root ref={ref} value={values} onValueChange={setValues}
+      <AccordionPrimitive.Root ref={ref} value={values} onValueChange={setValues} onAnimationEnd={navigateToHash}
         {...props}
       />
     )
