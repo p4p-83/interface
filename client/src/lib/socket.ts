@@ -69,6 +69,7 @@ export async function processMessage(data: unknown): Promise<Action> {
         messageType: decodedMessage.tag,
         rawPayload,
         payload: decodedMessage.positions.offsets.map(denormalisePosition),
+        silent: true,
       }
 
     case pnp.v1.Message.Tags.HEARTBEAT:
