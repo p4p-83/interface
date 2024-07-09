@@ -36,6 +36,7 @@ type WebRtcVideoProps = {
 
 export function WebRtcVideo({ url, setVideoSize, setIsVideoStreaming, setHasVideoErrored }: WebRtcVideoProps) {
   const videoRef = useRef<HTMLVideoElement>(null)
+  const errorRef = useRef(false)
   const intervalRef = useRef<number | null>(null)
   const intervalNRef = useRef(1)
 
@@ -76,11 +77,13 @@ export function WebRtcVideo({ url, setVideoSize, setIsVideoStreaming, setHasVide
       setIsVideoStreaming?.(false)
       setHasVideoErrored?.(true)
 
+      if (errorRef.current) return
       toast.error('Video stream error!', {
         id: ToastIds.VIDEO_ERROR,
         cancel: DISMISS_BUTTON,
         duration: 6000,
       })
+      errorRef.current = true
     }
 
     // Notify error if host is unreachable
