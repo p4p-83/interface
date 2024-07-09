@@ -21,10 +21,10 @@ export function HomeLinkCards() {
       (event: KeyboardEvent) => {
         if (!event.shiftKey) {
           switch (event.code) {
-          case GLOBALS.PAGES.getShortcutKeyCode(GLOBALS.PAGES.CALIBRATE):
+          case GLOBALS.PAGES.CALIBRATE.shortcutKeyCode:
             setIsCalibrateRevealed(true)
             break
-          case GLOBALS.PAGES.getShortcutKeyCode(GLOBALS.PAGES.SETTINGS):
+          case GLOBALS.PAGES.SETTINGS.shortcutKeyCode:
             setIsSettingsRevealed(true)
             break
           }
@@ -38,10 +38,10 @@ export function HomeLinkCards() {
     onKeyUp: useCallback(
       (event: KeyboardEvent) => {
         switch (event.code) {
-        case GLOBALS.PAGES.getShortcutKeyCode(GLOBALS.PAGES.CALIBRATE):
+        case GLOBALS.PAGES.CALIBRATE.shortcutKeyCode:
           setIsCalibrateRevealed(false)
           break
-        case GLOBALS.PAGES.getShortcutKeyCode(GLOBALS.PAGES.SETTINGS):
+        case GLOBALS.PAGES.SETTINGS.shortcutKeyCode:
           setIsSettingsRevealed(false)
           break
         }

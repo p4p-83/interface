@@ -21,44 +21,47 @@ export const PAGES = {
       description: `${page.description}.`,
     }
   },
-  getShortcutKeyCode(page: Page) {
-    return 'Key' + page.shortcutKey
-  },
   HOME: {
     path: '/',
     name: HOME_NAME,
     description: 'A pick-and-place for rapid prototyping',
     shortcutKey: 'H',
+    shortcutKeyCode: 'KeyH',
   },
   PLACE: {
     path: '/place',
     name: 'Place',
     description: 'Position with precision',
     shortcutKey: 'P',
+    shortcutKeyCode: 'KeyP',
   },
   CALIBRATE: {
     path: '/calibrate',
     name: 'Calibrate',
     description: 'Measure twice, place once',
     shortcutKey: 'C',
+    shortcutKeyCode: 'KeyC',
   },
   SETTINGS: {
     path: '/settings',
     name: 'Settings',
     description: 'Set your stage',
     shortcutKey: 'S',
+    shortcutKeyCode: 'KeyS',
   },
   LEARN: {
     path: '/learn',
     name: 'Learn',
     description: 'Meet your match',
     shortcutKey: 'L',
+    shortcutKeyCode: 'KeyL',
   },
   PROJECT: {
     path: '/project',
     name: 'Project',
     description: 'Explore the lore',
     shortcutKey: 'J',
+    shortcutKeyCode: 'KeyJ',
   },
 } as const
 

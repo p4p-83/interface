@@ -46,22 +46,22 @@ export function performShiftKeyNavigation(router: ReturnType<typeof useRouter>, 
   if (event.altKey || event.ctrlKey || event.metaKey) return
 
   switch (event.code) {
-  case GLOBALS.PAGES.getShortcutKeyCode(GLOBALS.PAGES.HOME):
+  case GLOBALS.PAGES.HOME.shortcutKeyCode:
     router.push(GLOBALS.PAGES.HOME.path)
     break
-  case GLOBALS.PAGES.getShortcutKeyCode(GLOBALS.PAGES.PLACE):
+  case GLOBALS.PAGES.PLACE.shortcutKeyCode:
     router.push(GLOBALS.PAGES.PLACE.path)
     break
-  case GLOBALS.PAGES.getShortcutKeyCode(GLOBALS.PAGES.CALIBRATE):
+  case GLOBALS.PAGES.CALIBRATE.shortcutKeyCode:
     router.push(GLOBALS.PAGES.CALIBRATE.path)
     break
-  case GLOBALS.PAGES.getShortcutKeyCode(GLOBALS.PAGES.SETTINGS):
+  case GLOBALS.PAGES.SETTINGS.shortcutKeyCode:
     router.push(GLOBALS.PAGES.SETTINGS.path)
     break
-  case GLOBALS.PAGES.getShortcutKeyCode(GLOBALS.PAGES.LEARN):
+  case GLOBALS.PAGES.LEARN.shortcutKeyCode:
     router.push(GLOBALS.PAGES.LEARN.path)
     break
-  case GLOBALS.PAGES.getShortcutKeyCode(GLOBALS.PAGES.PROJECT):
+  case GLOBALS.PAGES.PROJECT.shortcutKeyCode:
     router.push(GLOBALS.PAGES.PROJECT.path)
     break
   }
