@@ -20,8 +20,9 @@ const PROGRESS_BAR = {
   VIDEO_LOADED_METADATA: 85,
   VIDEO_LOADED_DATA: 99.99,
   // Interval increments
-  INCREMENT: 0.5,
-  INCREMENT_INTERVAL_MS: 50,
+  // ? https://www.desmos.com/calculator/4pelacztnu
+  getIncrement: (n: number) => (50 / (n + 100)),
+  INCREMENT_INTERVAL_MS: 25,
   // Delay before hiding
   LOADED_DELAY_MS: 325,
 } as const
@@ -31,11 +32,12 @@ type WebRtcVideoProps = {
   setVideoSize?: Dispatch<SetStateAction<Size | null>>;
   setIsVideoStreaming?: Dispatch<SetStateAction<boolean>>;
   setHasVideoErrored?: Dispatch<SetStateAction<boolean>>;
-}
+};
 
 export function WebRtcVideo({ url, setVideoSize, setIsVideoStreaming, setHasVideoErrored }: WebRtcVideoProps) {
   const videoRef = useRef<HTMLVideoElement>(null)
   const intervalRef = useRef<number | null>(null)
+  const intervalNRef = useRef(1)
 
   const [loadProgress, setLoadProgress] = useState<number>(PROGRESS_BAR.INITIAL)
   const [loadProgressGrowthStop, setLoadProgressGrowthStop] = useState<number>(PROGRESS_BAR.INITIAL)
@@ -59,7 +61,10 @@ export function WebRtcVideo({ url, setVideoSize, setIsVideoStreaming, setHasVide
     setLoadProgressGrowthStop(PROGRESS_BAR.PLAYER_LOADED)
 
     player.load(new URL(url))
-      .then(() => setLoadProgress(PROGRESS_BAR.PLAYER_LOADED))
+      .then(() => {
+        setLoadProgress(PROGRESS_BAR.PLAYER_LOADED)
+        setLoadProgressGrowthStop(PROGRESS_BAR.VIDEO_LOAD_START)
+      })
 
     function handleConnectError(error?: unknown) {
       console.error('Connect error: ', error)
@@ -79,7 +84,7 @@ export function WebRtcVideo({ url, setVideoSize, setIsVideoStreaming, setHasVide
     }
 
     // Notify error if origin is unreachable
-    fetch(new URL(url).origin)
+    fetch(new URL(url).origin, { method: 'HEAD' })
       .then(console.log)
       .catch(handleConnectError)
 
@@ -192,9 +197,11 @@ export function WebRtcVideo({ url, setVideoSize, setIsVideoStreaming, setHasVide
 
   // Growing progress bar
   useEffect(() => {
+    intervalNRef.current = 1
+
     intervalRef.current = window.setInterval(() => {
       setLoadProgress((previousProgress) => {
-        const incremented = (previousProgress + PROGRESS_BAR.INCREMENT)
+        const incremented = (previousProgress + PROGRESS_BAR.getIncrement(intervalNRef.current++))
 
         if (incremented >= loadProgressGrowthStop) {
           (intervalRef.current) && clearInterval(intervalRef.current)
@@ -213,7 +220,7 @@ export function WebRtcVideo({ url, setVideoSize, setIsVideoStreaming, setHasVide
   return (
     <>
       {(loadProgress !== PROGRESS_BAR.FINAL) && (
-        <Progress value={loadProgress} className='absolute max-w-[50%]'/>
+        <Progress value={loadProgress} className='absolute max-w-[50%]' />
       )}
 
       <video
