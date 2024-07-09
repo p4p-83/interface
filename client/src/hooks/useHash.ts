@@ -12,10 +12,11 @@ export function useHash() {
   const [hash, setHash] = useState(getHash())
   const [isClient, setIsClient] = useState(false)
 
-  const hashChangeHandler = useCallback(() => setHash(getHash()), [])
+  const hashChangeHandler = useCallback(() => setHash(getHash()), [setHash])
 
   useEffect(() => {
     setIsClient(true)
+    hashChangeHandler()
     window.addEventListener('hashchange', hashChangeHandler)
     return () => {
       window.removeEventListener('hashchange', hashChangeHandler)
