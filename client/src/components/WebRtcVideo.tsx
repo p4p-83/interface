@@ -83,9 +83,19 @@ export function WebRtcVideo({ url, setVideoSize, setIsVideoStreaming, setHasVide
       })
     }
 
-    // Notify error if origin is unreachable
-    fetch(new URL(url).origin, { method: 'HEAD' })
-      .then(console.log)
+    // Notify error if host is unreachable
+    fetch(url.replace('/whep', ''), {
+      method: 'GET',
+      priority: 'low',
+    })
+      .then(response => {
+        if (response.ok) {
+          console.log('Host is reachable', response)
+        }
+        else {
+          console.log('Host is not reachable', response)
+        }
+      })
       .catch(handleConnectError)
 
     player.on('peer-connection-failed', handleConnectError)
