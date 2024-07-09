@@ -2,6 +2,7 @@
 
 import Link from 'next/link'
 import { useState, type HTMLAttributes } from 'react'
+import { GearIcon } from '@radix-ui/react-icons'
 
 import * as GLOBALS from '@/app/globals'
 import { FRAGMENT_IDS as LEARN_FRAGMENT_IDS } from '@/app/learn/fragments'
@@ -32,6 +33,13 @@ export function PlaceVideo({ className, videoUrl, socketUrl }: PlaceVideoProps) 
           className={className}
           homeButtonVariant='outline'
           additionalButtons={[
+            {
+              key: 'configureSettings',
+              size: 'icon',
+              variant: 'outline',
+              label: (<Link href={GLOBALS.PAGES.SETTINGS.path}><GearIcon className='h-[1.2rem] w-[1.2rem]' /></Link>),
+              asChild: true,
+            },
             {
               key: 'viewDemo',
               label: (<Link href={GLOBALS.PAGES.LEARN.path + '#' + LEARN_FRAGMENT_IDS.PLACE_DEMO}>View a demo</Link>),
