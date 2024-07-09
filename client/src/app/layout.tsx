@@ -16,7 +16,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang='en' suppressHydrationWarning>
-      <body className={cn(ubuntu.className, 'bg-background text-foreground')}>
+      <body className={cn(ubuntu.className, 'bg-background text-foreground scroll-smooth')}>
 
         <ThemeProvider
           attribute='class'
