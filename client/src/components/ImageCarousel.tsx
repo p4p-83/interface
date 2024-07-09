@@ -11,6 +11,7 @@ import {
   CarouselPrevious,
   type CarouselApi,
 } from '@/components/ui/carousel'
+import { TypographySmall, TypographyMuted } from '@/components//ui/typography'
 import { cn } from '@/lib/utils'
 
 type ImageCarouselImage = {
@@ -74,8 +75,12 @@ export function ImageCarousel({ images, className, captionClassName }: ImageCaro
         <CarouselNext />
       </Carousel>
 
-      <div className={cn('py-4 text-center text-xs sm:text-sm text-muted-foreground', captionClassName)}>
-        {images[current].captionElement ?? images[current].caption}
+      <div className={cn('py-4 text-center', captionClassName)}>
+        <TypographySmall>
+          <TypographyMuted>
+            {images[current].captionElement ?? images[current].caption}
+          </TypographyMuted>
+        </TypographySmall>
       </div>
 
     </div>

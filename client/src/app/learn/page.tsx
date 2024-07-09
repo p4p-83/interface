@@ -27,6 +27,7 @@ import {
   TypographyTableRow,
   TypographyTableHeaderCell,
   TypographyTableDataCell,
+  TypographyImage,
 } from '@/components/ui/typography'
 import {
   Accordion,
@@ -225,10 +226,7 @@ function ConstituentPages() {
         </PageAccordionItem>
 
         <PageAccordionItem page={GLOBALS.PAGES.SETTINGS}>
-          {/* TODO: */}
-          <TypographyBlockquote>
-            A work in progress!
-          </TypographyBlockquote>
+          <ConstituentSettingsPage />
         </PageAccordionItem>
 
       </Accordion>
@@ -287,21 +285,21 @@ function ConstituentHomePage() {
 
       <ImageCarousel
         images={[
-          { light: lightHome, dark: darkHome, caption: 'Home page' },
+          { light: lightHome, dark: darkHome, caption: `${GLOBALS.PAGES.HOME.name} page` },
           {
             light: lightHomeCalibrate,
             dark: darkHomeCalibrate,
-            caption: `Home page with ${GLOBALS.PAGES.CALIBRATE.path} link revealed`,
+            caption: `${GLOBALS.PAGES.HOME.name} page with ${GLOBALS.PAGES.CALIBRATE.path} link revealed`,
             captionElement: (
-              <>Home page with <GLOBALS.InlineCode.Pages.Calibrate /> link revealed</>
+              <>{GLOBALS.PAGES.HOME.name} page with <GLOBALS.InlineCode.Pages.Calibrate /> link revealed</>
             ),
           },
           {
             light: lightHomeShift,
             dark: darkHomeShift,
-            caption: 'Home page with Shift modifier pressed',
+            caption: `${GLOBALS.PAGES.HOME.name} page with Shift modifier pressed`,
             captionElement: (
-              <>Home page with <TypographyInlineCode>Shift</TypographyInlineCode> modifier pressed</>
+              <>{GLOBALS.PAGES.HOME.name} page with <TypographyInlineCode>Shift</TypographyInlineCode> modifier pressed</>
             ),
           },
         ]}
@@ -552,6 +550,20 @@ function ConstituentPlacePage() {
         <TypographyListItem>use the browser&apos;s &lsquo;Go back&rsquo; navigation button.</TypographyListItem>
       </TypographyList>
     </>
+  )
+}
+
+import lightSettings from './lightSettings.png'
+import darkSettings from './darkSettings.png'
+function ConstituentSettingsPage() {
+  return (
+    <TypographyImage
+      image={{
+        light: lightSettings,
+        dark: darkSettings,
+      }}
+      caption={`${GLOBALS.PAGES.SETTINGS.name} page`}
+    />
   )
 }
 

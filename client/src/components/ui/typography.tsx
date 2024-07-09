@@ -154,15 +154,55 @@ export function TypographyLink({ children, href, toFragmentId = false }: Typogra
     )
 }
 
-export function TypographyImage({ src, alt, className }: ImageProps) {
+type TypographyImageProps = {
+  image: ImageProps['src'] | { light: ImageProps['src']; dark: ImageProps['src']; };
+  caption: string;
+  captionElement?: ReactNode;
+  className?: string;
+  captionClassName?: string;
+}
+
+export function TypographyImage({ image, caption, captionElement, className, captionClassName }: TypographyImageProps) {
+  const ImageElement = ((image instanceof Object) && ('light' in image))
+    ? (
+      <>
+        <Image
+          src={image.light}
+          alt={caption}
+          placeholder='blur'
+          className={cn('mt-6 block dark:hidden', className)}
+          quality={85}
+        />
+        <Image
+          src={image.dark}
+          alt={caption}
+          placeholder='blur'
+          className={cn('mt-6 hidden dark:block', className)}
+          quality={85}
+        />
+      </>
+    )
+    : (
+      <Image
+        src={image}
+        alt={caption}
+        placeholder='blur'
+        className={cn('mt-6', className)}
+        quality={85}
+      />
+    )
+
   return (
-    <Image
-      src={src}
-      alt={alt}
-      placeholder='blur'
-      className={cn('mt-6', className)}
-      quality={85}
-    />
+    <>
+      {ImageElement}
+      <div className={cn('py-4 text-center', captionClassName)}>
+        <TypographySmall>
+          <TypographyMuted>
+            {captionElement ?? caption}
+          </TypographyMuted>
+        </TypographySmall>
+      </div>
+    </>
   )
 }
 
