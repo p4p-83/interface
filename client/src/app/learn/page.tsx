@@ -71,7 +71,7 @@ export default function Learn() {
             <br />
             <TypographyLink href={GLOBALS.JAMES}>James Bao</TypographyLink> and <TypographyLink href={GLOBALS.SAM}>Sam Skinner</TypographyLink>,
             <br />
-            <span className='leading-10'>
+            <span className='my-2 inline-block'>
               <TypographyLink href={GLOBALS.UNIVERSITY.ECSE}>Electrical and Computer Engineering</TypographyLink> @ <TypographyLink href={GLOBALS.UNIVERSITY.HOME}>The University of Auckland</TypographyLink>.
             </span>
           </TypographyBlockquote>
