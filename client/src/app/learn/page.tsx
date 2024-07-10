@@ -608,6 +608,7 @@ function SystemArchitecture() {
             <TypographyTableDataCell><GLOBALS.Links.GitHub.Gantry /></TypographyTableDataCell>
             <TypographyTableDataCell>
               <span className='*:m-0.5'>
+                <Badge variant='outline'>C</Badge>
                 <Badge variant='outline'>C++</Badge>
                 <Badge variant='outline'>Protobufs</Badge>
               </span>
@@ -671,10 +672,18 @@ function SystemArchitecture() {
       </TypographyTable>
 
       <TypographyP>
-        The <GLOBALS.InlineCode.GitHub.Gantry />, <GLOBALS.InlineCode.GitHub.Vision />, and <GLOBALS.InlineCode.GitHub.Controller /> each run on a single <TypographyLink href={GLOBALS.RASPBERRY_PI_5}>Raspberry Pi 5</TypographyLink>.
+        The <GLOBALS.InlineCode.GitHub.Vision /> and <GLOBALS.InlineCode.GitHub.Controller /> both run on a single <TypographyLink href={GLOBALS.RASPBERRY_PI_5}>Raspberry Pi 5</TypographyLink>.
         {/* TODO: */}
         {' '}<TypographyMuted>This is definitely subject to change.</TypographyMuted>{' '}
-        This <GLOBALS.InlineCode.GitHub.Interface /> web application is served by that same Raspberry Pi to a client browser, which could be the operator&apos;s own device; a University computer; or a web browser running on the same Raspberry Pi.
+        The <GLOBALS.InlineCode.GitHub.Gantry /> runs on a <TypographyLink href={GLOBALS.RASPBERRY_PI_PICO}>Raspberry Pi Pico</TypographyLink>, connected to the main Raspberry Pi 5 via USB.
+        This <GLOBALS.InlineCode.GitHub.Interface /> web application is served by the Raspberry Pi 5 to a client browser, which could be the operator&apos;s own device; a University computer; or a web browser running on the same Raspberry Pi.
+      </TypographyP>
+
+      <TypographyP>
+        <TypographyMuted>
+          Note that the <GLOBALS.InlineCode.GitHub.Vision /> is yet to be implemented, and that the <GLOBALS.InlineCode.GitHub.Gantry /> is yet to be completed.
+          The current gantry firmware resides at <GLOBALS.Links.GitHub.GantryOld />, with more details provided <TypographyLink toFragmentId href={FRAGMENT_IDS.GANTRY_OLD}>below</TypographyLink>.
+        </TypographyMuted>
       </TypographyP>
 
       <TypographyP>
@@ -684,6 +693,7 @@ function SystemArchitecture() {
 
       <Accordion type='multiple' className='w-full mt-2' fragmentIdsMap={{
         [FRAGMENT_IDS.DATA_NORMALISATION]: 'messagePassing',
+        [FRAGMENT_IDS.GANTRY_OLD]: 'messagePassing',
         [FRAGMENT_IDS.NEAREST_TARGET]: 'userInterface',
       }}>
         <AccordionItem value='gantryControl'>
@@ -744,7 +754,7 @@ function SystemArchitecture() {
 
             <TypographyH5>Controller to Gantry</TypographyH5>
             {/* TODO: */}
-            <TypographyP>
+            <TypographyP id={FRAGMENT_IDS.GANTRY_OLD}>
               <TypographyMuted>
                 This is yet to be properly implemented, but is likely to be a serial port exchanging messages serialised in a protocol buffer.
                 At present, this is a serial port at <TypographyInlineCode>115200</TypographyInlineCode> baud exchanging <TypographyLink href='https://en.wikipedia.org/wiki/G-code'>G-code</TypographyLink>.

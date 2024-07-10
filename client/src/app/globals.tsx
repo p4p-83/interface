@@ -84,6 +84,10 @@ export const GITHUB = {
     NAME: 'p4p-83/gantry',
     URL: 'https://github.com/p4p-83/gantry',
   },
+  GANTRY_OLD: {
+    NAME: 'p4p-83/gantry-old',
+    URL: 'https://github.com/p4p-83/gantry-old',
+  },
   VISION: {
     NAME: 'p4p-83/vision',
     URL: 'https://github.com/p4p-83/vision',
@@ -115,6 +119,7 @@ export const WHEP = 'https://www.ietf.org/archive/id/draft-murillo-whep-03.html'
 export const WEB_SOCKET = 'https://en.wikipedia.org/wiki/WebSocket'
 
 export const RASPBERRY_PI_5 = 'https://www.raspberrypi.com/products/raspberry-pi-5/'
+export const RASPBERRY_PI_PICO = 'https://www.raspberrypi.com/products/raspberry-pi-pico/'
 export const RASPBERRY_PI_OS = 'https://www.raspberrypi.com/documentation/computers/os.html'
 export const RPI_CAM_VID = 'https://www.raspberrypi.com/documentation/computers/camera_software.html#rpicam-vid'
 export const LIB_CAMERA = 'https://libcamera.org/'
@@ -154,6 +159,7 @@ export const InlineCode = {
     Organisation: () => <TypographyInlineCode>{GITHUB.ORGANISATION.NAME}</TypographyInlineCode>,
     Docs: () => <TypographyInlineCode>{GITHUB.DOCS.NAME}</TypographyInlineCode>,
     Gantry: () => <TypographyInlineCode>{GITHUB.GANTRY.NAME}</TypographyInlineCode>,
+    GantryOld: () => <TypographyInlineCode>{GITHUB.GANTRY_OLD.NAME}</TypographyInlineCode>,
     Vision: () => <TypographyInlineCode>{GITHUB.VISION.NAME}</TypographyInlineCode>,
     Controller: () => <TypographyInlineCode>{GITHUB.CONTROLLER.NAME}</TypographyInlineCode>,
     Interface: () => <TypographyInlineCode>{GITHUB.INTERFACE.NAME}</TypographyInlineCode>,
@@ -166,6 +172,7 @@ export const Links = {
     Organisation: () => <TypographyLink href={GITHUB.ORGANISATION.URL}><InlineCode.GitHub.Organisation /></TypographyLink>,
     Docs: () => <TypographyLink href={GITHUB.DOCS.URL}><InlineCode.GitHub.Docs /></TypographyLink>,
     Gantry: () => <TypographyLink href={GITHUB.GANTRY.URL}><InlineCode.GitHub.Gantry /></TypographyLink>,
+    GantryOld: () => <TypographyLink href={GITHUB.GANTRY_OLD.URL}><InlineCode.GitHub.GantryOld /></TypographyLink>,
     Vision: () => <TypographyLink href={GITHUB.VISION.URL}><InlineCode.GitHub.Vision /></TypographyLink>,
     Controller: () => <TypographyLink href={GITHUB.CONTROLLER.URL}><InlineCode.GitHub.Controller /></TypographyLink>,
     Interface: () => <TypographyLink href={GITHUB.INTERFACE.URL}><InlineCode.GitHub.Interface /></TypographyLink>,
