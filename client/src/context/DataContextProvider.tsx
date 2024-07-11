@@ -17,17 +17,17 @@ type IDataContext = {
   setSettingsData: DataSetter<SettingsData>;
 }
 
-const nullFunction = () => null
+const NULL_FUNCTION = () => null
 
 const defaultValues: IDataContext = {
-  clearAllData: nullFunction,
+  clearAllData: NULL_FUNCTION,
   settingsData: {
     urls: {
       whepVideoUrl: 'http://0.0.0.0:8889/cm3/whep',
       webSocketUrl: 'ws://0.0.0.0:8080',
     },
   },
-  setSettingsData: nullFunction,
+  setSettingsData: NULL_FUNCTION,
 }
 
 export const DataContext = createContext<IDataContext>(defaultValues)
