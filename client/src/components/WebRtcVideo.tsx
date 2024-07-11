@@ -10,6 +10,11 @@ import { cn } from '@/lib/utils'
 
 import { Size } from '@/app/place/PlaceInterface'
 
+type ProgressBarState = {
+  current: number;
+  growthStop: number;
+}
+
 const PROGRESS_BAR = {
   INITIAL: 0,
   FINAL: 100,
@@ -40,8 +45,11 @@ export function WebRtcVideo({ url, setVideoSize, setIsVideoStreaming, setHasVide
   const intervalRef = useRef<number | null>(null)
   const intervalNRef = useRef(1)
 
-  const [loadProgress, setLoadProgress] = useState<number>(PROGRESS_BAR.INITIAL)
-  const [loadProgressGrowthStop, setLoadProgressGrowthStop] = useState<number>(PROGRESS_BAR.INITIAL)
+  // TODO: Pull into own component?
+  const [loadProgress, setLoadProgress] = useState<ProgressBarState>({
+    current: PROGRESS_BAR.INITIAL,
+    growthStop: PROGRESS_BAR.INITIAL,
+  })
 
   // WebRTCPlayer
   useEffect(() => {
@@ -58,20 +66,24 @@ export function WebRtcVideo({ url, setVideoSize, setIsVideoStreaming, setHasVide
       },
     })
 
-    setLoadProgress(PROGRESS_BAR.PLAYER_CONSTRUCTED)
-    setLoadProgressGrowthStop(PROGRESS_BAR.PLAYER_LOADED)
+    setLoadProgress({
+      current: PROGRESS_BAR.PLAYER_CONSTRUCTED,
+      growthStop: PROGRESS_BAR.PLAYER_LOADED,
+    })
 
     player.load(new URL(url))
-      .then(() => {
-        setLoadProgress(PROGRESS_BAR.PLAYER_LOADED)
-        setLoadProgressGrowthStop(PROGRESS_BAR.VIDEO_LOAD_START)
-      })
+      .then(() => setLoadProgress({
+        current: PROGRESS_BAR.PLAYER_LOADED,
+        growthStop: PROGRESS_BAR.VIDEO_LOAD_START,
+      }))
 
     function handleConnectError(error?: unknown) {
       console.error('Connect error: ', error)
 
-      setLoadProgress(PROGRESS_BAR.PLAYER_LOADED)
-      setLoadProgressGrowthStop(PROGRESS_BAR.PLAYER_LOADED);
+      setLoadProgress({
+        current: PROGRESS_BAR.PLAYER_LOADED,
+        growthStop: PROGRESS_BAR.PLAYER_LOADED,
+      });
       (intervalRef.current) && clearInterval(intervalRef.current)
 
       setIsVideoStreaming?.(false)
@@ -179,20 +191,28 @@ export function WebRtcVideo({ url, setVideoSize, setIsVideoStreaming, setHasVide
     const videoElement = videoRef.current
 
     const handleStart = () => {
-      setLoadProgress(PROGRESS_BAR.VIDEO_LOAD_START)
-      setLoadProgressGrowthStop(PROGRESS_BAR.VIDEO_LOADED_METADATA)
+      setLoadProgress({
+        current: PROGRESS_BAR.VIDEO_LOAD_START,
+        growthStop: PROGRESS_BAR.VIDEO_LOADED_METADATA,
+      })
     }
     const handleMetadata = () => {
-      setLoadProgress(PROGRESS_BAR.VIDEO_LOADED_METADATA)
-      setLoadProgressGrowthStop(PROGRESS_BAR.VIDEO_LOADED_DATA)
+      setLoadProgress({
+        current: PROGRESS_BAR.VIDEO_LOADED_METADATA,
+        growthStop: PROGRESS_BAR.VIDEO_LOADED_DATA,
+      })
     }
     const handleData = async () => {
-      setLoadProgress(PROGRESS_BAR.VIDEO_LOADED_DATA)
-      setLoadProgressGrowthStop(PROGRESS_BAR.VIDEO_LOADED_DATA)
+      setLoadProgress({
+        current: PROGRESS_BAR.VIDEO_LOADED_DATA,
+        growthStop: PROGRESS_BAR.VIDEO_LOADED_DATA,
+      })
 
       await new Promise((resolve) => setTimeout(resolve, PROGRESS_BAR.LOADED_DELAY_MS))
-      setLoadProgress(PROGRESS_BAR.FINAL)
-      setLoadProgressGrowthStop(PROGRESS_BAR.FINAL)
+      setLoadProgress({
+        current: PROGRESS_BAR.FINAL,
+        growthStop: PROGRESS_BAR.FINAL,
+      })
       setIsVideoStreaming?.(true)
     }
 
@@ -214,26 +234,29 @@ export function WebRtcVideo({ url, setVideoSize, setIsVideoStreaming, setHasVide
 
     intervalRef.current = window.setInterval(() => {
       setLoadProgress((previousProgress) => {
-        const incremented = (previousProgress + PROGRESS_BAR.getIncrement(intervalNRef.current++))
+        const incremented = (previousProgress.current + PROGRESS_BAR.getIncrement(intervalNRef.current++))
 
-        if (incremented >= loadProgressGrowthStop) {
+        if (incremented >= previousProgress.growthStop) {
           (intervalRef.current) && clearInterval(intervalRef.current)
           return previousProgress
         }
 
-        return incremented
+        return {
+          current: incremented,
+          growthStop: previousProgress.growthStop,
+        }
       })
     }, PROGRESS_BAR.INCREMENT_INTERVAL_MS)
 
     return () => {
       (intervalRef.current) && clearInterval(intervalRef.current)
     }
-  }, [loadProgressGrowthStop])
+  }, [loadProgress.growthStop])
 
   return (
     <>
-      {(loadProgress !== PROGRESS_BAR.FINAL) && (
-        <Progress value={loadProgress} className='absolute max-w-[50%]' />
+      {(loadProgress.current !== PROGRESS_BAR.FINAL) && (
+        <Progress value={loadProgress.current} className='absolute max-w-[50%]' />
       )}
 
       <video
@@ -243,7 +266,7 @@ export function WebRtcVideo({ url, setVideoSize, setIsVideoStreaming, setHasVide
         playsInline
         className={cn(
           'object-contain object-center h-full w-full pointer-events-none',
-          (loadProgress !== PROGRESS_BAR.FINAL) && 'invisible'
+          (loadProgress.current !== PROGRESS_BAR.FINAL) && 'invisible'
         )}
       />
     </>
