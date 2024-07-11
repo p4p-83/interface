@@ -4,16 +4,11 @@ import { useEffect, useState, useRef, type Dispatch, type SetStateAction } from 
 import { WebRTCPlayer } from '@eyevinn/webrtc-player'
 import { toast } from 'sonner'
 
-import { Progress } from '@/components/ui/progress'
+import { Progress, type ProgressState } from '@/components/ui/progress'
 import { ToastIds, DISMISS_BUTTON } from '@/components/ui/sonner'
 import { cn } from '@/lib/utils'
 
 import { Size } from '@/app/place/PlaceInterface'
-
-type ProgressBarState = {
-  current: number;
-  growthStop: number;
-}
 
 const PROGRESS_BAR = {
   INITIAL: 0,
@@ -26,7 +21,7 @@ const PROGRESS_BAR = {
   VIDEO_LOADED_DATA: 99.99,
   // Interval increments
   // ? https://www.desmos.com/calculator/4pelacztnu
-  getIncrement: (n: number) => (50 / (n + 100)),
+  getIncrement: (incrementCount: number) => (50 / (incrementCount + 100)),
   INCREMENT_INTERVAL_MS: 25,
   // Delay before hiding
   LOADED_DELAY_MS: 325,
@@ -42,11 +37,8 @@ type WebRtcVideoProps = {
 export function WebRtcVideo({ url, setVideoSize, setIsVideoStreaming, setHasVideoErrored }: WebRtcVideoProps) {
   const videoRef = useRef<HTMLVideoElement>(null)
   const errorRef = useRef(false)
-  const intervalRef = useRef<number | null>(null)
-  const intervalNRef = useRef(1)
 
-  // TODO: Pull into own component?
-  const [loadProgress, setLoadProgress] = useState<ProgressBarState>({
+  const [loadProgress, setLoadProgress] = useState<ProgressState<true>>({
     current: PROGRESS_BAR.INITIAL,
     growthStop: PROGRESS_BAR.INITIAL,
   })
@@ -83,8 +75,7 @@ export function WebRtcVideo({ url, setVideoSize, setIsVideoStreaming, setHasVide
       setLoadProgress({
         current: PROGRESS_BAR.PLAYER_LOADED,
         growthStop: PROGRESS_BAR.PLAYER_LOADED,
-      });
-      (intervalRef.current) && clearInterval(intervalRef.current)
+      })
 
       setIsVideoStreaming?.(false)
       setHasVideoErrored?.(true)
@@ -228,35 +219,18 @@ export function WebRtcVideo({ url, setVideoSize, setIsVideoStreaming, setHasVide
     }
   }, [videoRef, setIsVideoStreaming])
 
-  // Growing progress bar
-  useEffect(() => {
-    intervalNRef.current = 1
-
-    intervalRef.current = window.setInterval(() => {
-      setLoadProgress((previousProgress) => {
-        const incremented = (previousProgress.current + PROGRESS_BAR.getIncrement(intervalNRef.current++))
-
-        if (incremented >= previousProgress.growthStop) {
-          (intervalRef.current) && clearInterval(intervalRef.current)
-          return previousProgress
-        }
-
-        return {
-          current: incremented,
-          growthStop: previousProgress.growthStop,
-        }
-      })
-    }, PROGRESS_BAR.INCREMENT_INTERVAL_MS)
-
-    return () => {
-      (intervalRef.current) && clearInterval(intervalRef.current)
-    }
-  }, [loadProgress.growthStop])
-
   return (
     <>
       {(loadProgress.current !== PROGRESS_BAR.FINAL) && (
-        <Progress value={loadProgress.current} className='absolute max-w-[50%]' />
+        <Progress
+          value={loadProgress.current}
+          className='absolute max-w-[50%]'
+          grow={true}
+          growthStop={loadProgress.growthStop}
+          setProgress={setLoadProgress}
+          getIncrement={PROGRESS_BAR.getIncrement}
+          growthIntervalMs={(errorRef.current) ? 0 : PROGRESS_BAR.INCREMENT_INTERVAL_MS}
+        />
       )}
 
       <video
