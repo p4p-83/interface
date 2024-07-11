@@ -140,7 +140,23 @@ export const VIM = {
   EASY_MOTION: 'https://github.com/easymotion/vim-easymotion',
   HOP: 'https://github.com/phaazon/hop.nvim',
   POUNCE: 'https://github.com/rlane/pounce.nvim?tab=readme-ov-file',
-}
+} as const
+
+export const TYPESCRIPT = 'https://www.typescriptlang.org/'
+export const NEXT_JS = {
+  HOME: 'https://nextjs.org/',
+  APP: 'https://nextjs.org/docs/app',
+} as const
+export const REACT = {
+  HOME: 'https://react.dev/',
+  CONTEXT: 'https://react.dev/learn/passing-data-deeply-with-context',
+  PROP_DRILLING: 'https://react.dev/learn/passing-data-deeply-with-context#the-problem-with-passing-props',
+  CUSTOM_HOOK: 'https://react.dev/learn/reusing-logic-with-custom-hooks',
+} as const
+export const TAILWIND = 'https://tailwindcss.com/'
+export const SHADCN_UI = 'https://ui.shadcn.com/'
+export const SONNER = 'https://sonner.emilkowal.ski/'
+export const ZOD = 'https://zod.dev/'
 
 /* Components */
 

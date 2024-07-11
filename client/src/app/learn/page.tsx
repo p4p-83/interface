@@ -208,6 +208,7 @@ function ConstituentPages() {
     <>
       <TypographyH3>Constituent Pages</TypographyH3>
       <Accordion type='multiple' className='w-full mt-2' fragmentIdsMap={{
+        [FRAGMENT_IDS.HIDDEN_PAGES]: GLOBALS.PAGES.HOME.path,
         [FRAGMENT_IDS.VIM_PLUGINS]: GLOBALS.PAGES.PLACE.path,
         [FRAGMENT_IDS.PLACE_DEMO]: GLOBALS.PAGES.PLACE.path,
       }}>
@@ -222,7 +223,7 @@ function ConstituentPages() {
 
         <PageAccordionItem page={GLOBALS.PAGES.CALIBRATE}>
           <TypographyBlockquote>
-            A work in progress!
+            <TypographyMuted>A work in progress!</TypographyMuted>
           </TypographyBlockquote>
         </PageAccordionItem>
 
@@ -267,7 +268,7 @@ function ConstituentHomePage() {
         </TypographyListItem>
       </TypographyList>
 
-      <TypographyH5>Hidden Pages</TypographyH5>
+      <TypographyH5 id={FRAGMENT_IDS.HIDDEN_PAGES}>Hidden Pages</TypographyH5>
       <TypographyP>
         Note that <GLOBALS.InlineCode.Pages.Calibrate /> and <GLOBALS.InlineCode.Pages.Settings /> are implemented as &lsquo;hidden&rsquo; pages, in that they are not visible by default.
         This design decision is motivated by an intent that they should be scarcely necessary—under normal circumstances, one should not need to access them.
@@ -473,7 +474,6 @@ function ConstituentPlacePage() {
       </TypographyTable>
 
       <TypographyP>
-        {/* TODO: document 3 July images */}
         These directional keys—inspired by video games and <TypographyLink href={GLOBALS.VIM.VI}><TypographyInlineCode>vi</TypographyInlineCode></TypographyLink>-based text editors—will select the &lsquo;best fit&rsquo; target marker in the specified direction as determined by our <TypographyLink toFragmentId href={FRAGMENT_IDS.NEAREST_TARGET}>weighted nearest-target algorithm</TypographyLink>.
         This selected target marker is indicated to the operator by the temporary target indicator, which becomes the zero-reference for any subsequent directional key presses.
         This permits the operator to perform a series of directional key inputs to efficiently pounce to a desired target, all without lifting their fingers from the keyboard—another design inspired by <TypographyInlineCode>vi</TypographyInlineCode>-based text editors and the <TypographyLink href={FRAGMENT_IDS.VIM_PLUGINS} toFragmentId>aforementioned</TypographyLink> (<TypographyInlineCode>n</TypographyInlineCode>)<TypographyInlineCode>vim</TypographyInlineCode> plugins.
@@ -573,13 +573,37 @@ import lightSettings from './lightSettings.png'
 import darkSettings from './darkSettings.png'
 function ConstituentSettingsPage() {
   return (
-    <TypographyImage
-      image={{
-        light: lightSettings,
-        dark: darkSettings,
-      }}
-      caption={`${GLOBALS.PAGES.SETTINGS.name} page`}
-    />
+    <>
+      <TypographyP>
+        Note that this page is implemented as a <TypographyLink toFragmentId href={FRAGMENT_IDS.HIDDEN_PAGES}>hidden page</TypographyLink>.
+      </TypographyP>
+
+      <TypographyP>
+        The <GLOBALS.InlineCode.Pages.Settings /> page provides the ability for the operator to (re-)configure system environment variables once system components are deployed, without requiring the modification of any source code.
+      </TypographyP>
+
+      <TypographyP>
+        At present, these &lsquo;environment variables&rsquo; are:
+      </TypographyP>
+
+      <TypographyList ordered>
+        <TypographyListItem>the WebRTC WHEP video stream address for the <GLOBALS.InlineCode.GitHub.Controller />, and</TypographyListItem>
+        <TypographyListItem>the WebSocket data channel address for the <GLOBALS.InlineCode.GitHub.Controller />.</TypographyListItem>
+      </TypographyList>
+
+      <TypographyP>
+        The configured data is <TypographyLink toFragmentId href={FRAGMENT_IDS.DATA_CONTEXT}>stored locally in the operator&apos;s browser</TypographyLink> such that it is persisted across sessions.
+        All operator input is <TypographyLink toFragmentId href={FRAGMENT_IDS.VALIDATION}>validated</TypographyLink> before it is saved, minimising the potential for data entry error.
+      </TypographyP>
+
+      <TypographyImage
+        image={{
+          light: lightSettings,
+          dark: darkSettings,
+        }}
+        caption={`${GLOBALS.PAGES.SETTINGS.name} page`}
+      />
+    </>
   )
 }
 
@@ -659,7 +683,7 @@ function SystemArchitecture() {
                 <Badge variant='outline'>React</Badge>
                 <Badge variant='outline'>Tailwind CSS</Badge>
                 <Badge variant='outline'>shadcn/ui</Badge>
-                <Badge variant='outline'>zod</Badge>
+                <Badge variant='outline'>Zod</Badge>
                 <Badge variant='outline'>Protobufs</Badge>
               </span>
             </TypographyTableDataCell>
@@ -695,12 +719,14 @@ function SystemArchitecture() {
         [FRAGMENT_IDS.DATA_NORMALISATION]: 'messagePassing',
         [FRAGMENT_IDS.GANTRY_OLD]: 'messagePassing',
         [FRAGMENT_IDS.NEAREST_TARGET]: 'userInterface',
+        [FRAGMENT_IDS.DATA_CONTEXT]: 'userInterface',
+        [FRAGMENT_IDS.VALIDATION]: 'userInterface',
       }}>
         <AccordionItem value='gantryControl'>
           <AccordionTrigger><TypographyH4>Gantry Control</TypographyH4></AccordionTrigger>
           <AccordionContent>
             <TypographyBlockquote>
-              A work in progress!
+              <TypographyMuted>A work in progress!</TypographyMuted>
             </TypographyBlockquote>
           </AccordionContent>
         </AccordionItem>
@@ -709,7 +735,7 @@ function SystemArchitecture() {
           <AccordionTrigger><TypographyH4>Machine Vision</TypographyH4></AccordionTrigger>
           <AccordionContent>
             <TypographyBlockquote>
-              A work in progress!
+              <TypographyMuted>A work in progress!</TypographyMuted>
             </TypographyBlockquote>
           </AccordionContent>
         </AccordionItem>
@@ -778,29 +804,29 @@ function SystemArchitecture() {
         <AccordionItem value='userInterface'>
           <AccordionTrigger><TypographyH4>User Interface</TypographyH4></AccordionTrigger>
           <AccordionContent>
-            <TypographyBlockquote>
-              A work in progress!
-            </TypographyBlockquote>
-
             <TypographyP>
-              {/* TODO: refer to software CV */}
-              {/* TODO: document languages */}
-              - Next.js and React, TypeScript
-              - App Router
-              - Tailwind
-              - shadcn/ui with Radix
-              - sonner
-              - zod
+              This user interface is a modern, performant, and responsive web application written in <TypographyLink href={GLOBALS.TYPESCRIPT}>TypeScript</TypographyLink>.
+              It is built using <TypographyLink href={GLOBALS.NEXT_JS.HOME}>Next.js</TypographyLink> under its <TypographyLink href={GLOBALS.NEXT_JS.APP}>App Router</TypographyLink> pattern with <TypographyLink href={GLOBALS.REACT.HOME}>React</TypographyLink> functional components.
+              {' '}<TypographyLink href={GLOBALS.TAILWIND}>Tailwind CSS</TypographyLink> is used for styling, and <TypographyLink href={GLOBALS.SHADCN_UI}><TypographyInlineCode>shadcn/ui</TypographyInlineCode></TypographyLink> headless components have been used to create a tailored component library.
             </TypographyP>
 
-            <TypographyH5>Data Context</TypographyH5>
-            - A React context is created to distribute... see PR description.
-            - Backed by `window.localStorage` as stringified JSON.
-
-            <TypographyH5>Form Validation</TypographyH5>
-            - Zod is used for the declaration of form schemas and field validation on the settings page.
-
+            {/* TODO: */}
             <TypographyH5 id={FRAGMENT_IDS.NEAREST_TARGET}>Nearest-Target Algorithm</TypographyH5>
+            <TypographyP>
+              Yes!
+            </TypographyP>
+
+            <TypographyH5 id={FRAGMENT_IDS.DATA_CONTEXT}>Data Context</TypographyH5>
+            <TypographyP>
+              A React <TypographyLink href={GLOBALS.REACT.CONTEXT}>context</TypographyLink> is used to distribute the data configured on <GLOBALS.InlineCode.Pages.Settings /> throughout the application, without devolving to <TypographyLink href={GLOBALS.REACT.PROP_DRILLING}>prop drilling</TypographyLink>.
+              This data is backed into <TypographyInlineCode>window.localStorage</TypographyInlineCode> as stringified JSON through a <TypographyInlineCode>useLocalStorage()</TypographyInlineCode> <TypographyLink href={GLOBALS.REACT.CUSTOM_HOOK}>custom hook</TypographyLink>, such that the data persists locally within the operator&apos;s browser once configured.
+            </TypographyP>
+
+            <TypographyH5 id={FRAGMENT_IDS.VALIDATION}>Form Validation</TypographyH5>
+            <TypographyP>
+              <TypographyLink href={GLOBALS.ZOD}>Zod</TypographyLink> is used on <GLOBALS.InlineCode.Pages.Settings /> for form schema declaration and validation via static type inference.
+              This provides immediate, client-side validation at runtime for the operator&apos;s inputs, helping to ensure that all system environment variables are configured correctly.
+            </TypographyP>
           </AccordionContent>
         </AccordionItem>
 
