@@ -13,7 +13,7 @@ type Styleable<T> = HTMLAttributes<T>;
 
 export function TypographyH1({ children }: TypographyProps) {
   return (
-    <h1 className='text-4xl font-extrabold sm:tracking-tight lg:text-5xl'>
+    <h1 className='text-4xl font-extrabold tracking-tighter sm:tracking-tight lg:text-5xl'>
       {children}
     </h1>
   )
@@ -21,7 +21,7 @@ export function TypographyH1({ children }: TypographyProps) {
 
 export function TypographyH2({ children }: TypographyProps) {
   return (
-    <h2 className='mt-10 border-b pb-2 text-2xl sm:text-3xl font-semibold tracking-tight first:mt-0'>
+    <h2 className='mt-10 border-b pb-2 text-2xl sm:text-3xl font-semibold tracking-tightest sm:tracking-tight first:mt-0'>
       {children}
     </h2>
   )
@@ -29,7 +29,7 @@ export function TypographyH2({ children }: TypographyProps) {
 
 export function TypographyH3({ children }: TypographyProps) {
   return (
-    <h3 className='mt-8 text-xl sm:text-2xl font-semibold tracking-tight first:mt-0'>
+    <h3 className='mt-8 text-xl sm:text-2xl font-semibold tracking-tightest sm:tracking-tight first:mt-0'>
       {children}
     </h3>
   )
@@ -37,7 +37,7 @@ export function TypographyH3({ children }: TypographyProps) {
 
 export function TypographyH4({ children }: TypographyProps) {
   return (
-    <h4 className='mt-6 text-lg sm:text-xl font-semibold tracking-tight first:mt-0'>
+    <h4 className='mt-6 text-lg sm:text-xl font-semibold tracking-tightest sm:tracking-tight first:mt-0'>
       {children}
     </h4>
   )
