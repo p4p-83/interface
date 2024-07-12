@@ -30,6 +30,7 @@ import {
   TypographyTableDataCell,
   TypographyImage,
   TypographyVideo,
+  TypographyItalics,
 } from '@/components/ui/typography'
 import {
   Accordion,
@@ -211,6 +212,7 @@ function ConstituentPages() {
         [FRAGMENT_IDS.HIDDEN_PAGES]: GLOBALS.PAGES.HOME.path,
         [FRAGMENT_IDS.VIM_PLUGINS]: GLOBALS.PAGES.PLACE.path,
         [FRAGMENT_IDS.PLACE_DEMO]: GLOBALS.PAGES.PLACE.path,
+        [FRAGMENT_IDS.NEAREST_TARGET_REACHABLE]: GLOBALS.PAGES.PLACE.path,
       }}>
 
         <PageAccordionItem page={GLOBALS.PAGES.HOME}>
@@ -306,6 +308,7 @@ function ConstituentHomePage() {
           },
         ]}
         className='mt-6'
+        captionClassName='pb-4'
       />
 
     </>
@@ -342,7 +345,6 @@ function ConstituentPlacePage() {
           captionElement={
             <>A full demonstration of the <GLOBALS.InlineCode.Pages.Place /> page</>
           }
-          captionClassName='pb-0'
         />
       </div>
 
@@ -369,7 +371,6 @@ function ConstituentPlacePage() {
           { light: lightPlaceSocketOpened, dark: darkPlaceSocketOpened, caption: 'Successful WebSocket connection with overlaid heads-up display' },
           { light: lightPlaceHud, dark: darkPlaceHud, caption: 'Heads-up display with purple target indicator' },
         ]}
-        captionClassName='pb-0'
       />
 
       <TypographyH5>Heads-Up Display</TypographyH5>
@@ -527,7 +528,7 @@ function ConstituentPlacePage() {
       <TypographyList ordered>
         <TypographyListItem>the <GLOBALS.InlineCode.GitHub.Vision /> reliably identifies all target markers, and their centroids, without false positives;</TypographyListItem>
         <TypographyListItem>those target marker centroids and accompanying video feed are transmitted in real-time via the <GLOBALS.InlineCode.GitHub.Controller /> to this <GLOBALS.InlineCode.GitHub.Interface />;</TypographyListItem>
-        <TypographyListItem>the weighted nearest-target algorithm is indeed intuitive, fit-for-purpose, <em className='italic'>correct</em>, and that all target markers are reachable;</TypographyListItem>
+        <TypographyListItem>the weighted nearest-target algorithm is indeed intuitive, fit-for-purpose, <span id={FRAGMENT_IDS.NEAREST_TARGET_REACHABLE}><TypographyItalics>correct</TypographyItalics>, and that all target markers are reachable</span>;</TypographyListItem>
         <TypographyListItem>the loop delay and round-trip latency of the system is sufficiently low that the system is stable, reactive, and real-time;</TypographyListItem>
         <TypographyListItem>the <GLOBALS.InlineCode.GitHub.Controller /> repeatably translates the <GLOBALS.InlineCode.GitHub.Gantry /> to the correct position; and</TypographyListItem>
         <TypographyListItem>the <GLOBALS.InlineCode.GitHub.Controller /> and <GLOBALS.InlineCode.GitHub.Gantry /> repeatably places the component with the vacuum nozzle at the correct position.</TypographyListItem>
@@ -545,13 +546,18 @@ function ConstituentPlacePage() {
       <TypographyP>
         <TypographyMuted>
           {/* TODO: read through Logbook / Discord messages for all of these good ideas */}
-          Some other ideas that are being considered for implementation include:
+          Some other ideas that are being considered/on the roadmap for implementation include:
         </TypographyMuted>
       </TypographyP>
 
       <TypographyMuted>
         <TypographyList>
           <TypographyListItem><TypographyKeyInput>1</TypographyKeyInput>, <TypographyKeyInput>2</TypographyKeyInput>, <TypographyKeyInput>3</TypographyKeyInput>, <TypographyKeyInput>4</TypographyKeyInput>, etc. to pounce to hard-coded parts bins, and/or programmable saved positions.</TypographyListItem>
+          <TypographyListItem>another modifier key to rotate the search angles from <TypographyInlineCode>{'θ ∈ {0°, 90°, 180°, 270°}'}</TypographyInlineCode> to <TypographyInlineCode>{'θ ∈ {45°, 135°, 225°, 315°}'}</TypographyInlineCode>.</TypographyListItem>
+          <TypographyListItem>displaying the search sectors through guide lines in the heads-up display.</TypographyListItem>
+          <TypographyListItem>ability to change the fixed step distance on-the-fly.</TypographyListItem>
+          <TypographyListItem>ability to break the targets into topological grid squares, and/or the ability to long jump and skip over a number of intermediate targets.</TypographyListItem>
+          <TypographyListItem>ability to change the <TypographyLink toFragmentId href={FRAGMENT_IDS.NEAREST_TARGET}>nearest-target damping value</TypographyLink> through the heads-up display.</TypographyListItem>
         </TypographyList>
       </TypographyMuted>
 
@@ -602,6 +608,7 @@ function ConstituentSettingsPage() {
           dark: darkSettings,
         }}
         caption={`${GLOBALS.PAGES.SETTINGS.name} page`}
+        captionClassName='pb-4'
       />
     </>
   )
@@ -804,33 +811,180 @@ function SystemArchitecture() {
         <AccordionItem value='userInterface'>
           <AccordionTrigger><TypographyH4>User Interface</TypographyH4></AccordionTrigger>
           <AccordionContent>
-            <TypographyP>
-              This user interface is a modern, performant, and responsive web application written in <TypographyLink href={GLOBALS.TYPESCRIPT}>TypeScript</TypographyLink>.
-              It is built using <TypographyLink href={GLOBALS.NEXT_JS.HOME}>Next.js</TypographyLink> under its <TypographyLink href={GLOBALS.NEXT_JS.APP}>App Router</TypographyLink> pattern with <TypographyLink href={GLOBALS.REACT.HOME}>React</TypographyLink> functional components.
-              {' '}<TypographyLink href={GLOBALS.TAILWIND}>Tailwind CSS</TypographyLink> is used for styling, and <TypographyLink href={GLOBALS.SHADCN_UI}><TypographyInlineCode>shadcn/ui</TypographyInlineCode></TypographyLink> headless components have been used to create a tailored component library.
-            </TypographyP>
-
-            {/* TODO: */}
-            <TypographyH5 id={FRAGMENT_IDS.NEAREST_TARGET}>Nearest-Target Algorithm</TypographyH5>
-            <TypographyP>
-              Yes!
-            </TypographyP>
-
-            <TypographyH5 id={FRAGMENT_IDS.DATA_CONTEXT}>Data Context</TypographyH5>
-            <TypographyP>
-              A React <TypographyLink href={GLOBALS.REACT.CONTEXT}>context</TypographyLink> is used to distribute the data configured on <GLOBALS.InlineCode.Pages.Settings /> throughout the application, without devolving to <TypographyLink href={GLOBALS.REACT.PROP_DRILLING}>prop drilling</TypographyLink>.
-              This data is backed into <TypographyInlineCode>window.localStorage</TypographyInlineCode> as stringified JSON through a <TypographyInlineCode>useLocalStorage()</TypographyInlineCode> <TypographyLink href={GLOBALS.REACT.CUSTOM_HOOK}>custom hook</TypographyLink>, such that the data persists locally within the operator&apos;s browser once configured.
-            </TypographyP>
-
-            <TypographyH5 id={FRAGMENT_IDS.VALIDATION}>Form Validation</TypographyH5>
-            <TypographyP>
-              <TypographyLink href={GLOBALS.ZOD}>Zod</TypographyLink> is used on <GLOBALS.InlineCode.Pages.Settings /> for form schema declaration and validation via static type inference.
-              This provides immediate, client-side validation at runtime for the operator&apos;s inputs, helping to ensure that all system environment variables are configured correctly.
-            </TypographyP>
+            <SystemUserInterface />
           </AccordionContent>
         </AccordionItem>
 
       </Accordion>
+    </>
+  )
+}
+
+import targetUnweighted1 from './targetUnweighted1.png'
+import targetUnweighted2 from './targetUnweighted2.png'
+import targetWeightedSimple from './targetWeightedSimple.png'
+import targetWeightedDamped1 from './targetWeightedDamped1.png'
+import targetWeightedDamped2 from './targetWeightedDamped2.png'
+import targetWeightedUnreachable from './targetWeightedUnreachable.png'
+import targetUnweightedVisualisationDots from './targetUnweightedVisualisationDots.png'
+import targetUnweightedVisualisation from './targetUnweightedVisualisation.png'
+import targetWeightedSimpleVisualisation from './targetWeightedSimpleVisualisation.png'
+import targetWeightedDamping0Visualisation from './targetWeightedDamping0Visualisation.png'
+import targetWeightedDamping0p5Visualisation from './targetWeightedDamping0p5Visualisation.png'
+import targetWeightedDamping1p5Visualisation from './targetWeightedDamping1p5Visualisation.png'
+import targetWeightedDamping5Visualisation from './targetWeightedDamping5Visualisation.png'
+import targetWeightedDamping1000Visualisation from './targetWeightedDamping1000Visualisation.png'
+function SystemUserInterface() {
+  return (
+    <>
+      <TypographyP>
+        This user interface is a modern, performant, and responsive web application written in <TypographyLink href={GLOBALS.TYPESCRIPT}>TypeScript</TypographyLink>.
+        It is built using <TypographyLink href={GLOBALS.NEXT_JS.HOME}>Next.js</TypographyLink> under its <TypographyLink href={GLOBALS.NEXT_JS.APP}>App Router</TypographyLink> pattern with <TypographyLink href={GLOBALS.REACT.HOME}>React</TypographyLink> functional components.
+        {' '}<TypographyLink href={GLOBALS.TAILWIND}>Tailwind CSS</TypographyLink> is used for styling, and <TypographyLink href={GLOBALS.SHADCN_UI}><TypographyInlineCode>shadcn/ui</TypographyInlineCode></TypographyLink> headless components have been used to create a tailored component library.
+      </TypographyP>
+
+      {/* TODO: */}
+      <TypographyH5 id={FRAGMENT_IDS.NEAREST_TARGET}>Nearest-Target Algorithm</TypographyH5>
+      <TypographyP>
+        The development of our nearest-target algorithm was guided by a hypothesis that an algorithm which simply selected the mathematical nearest target would not be the most user-friendly algorithm.
+        More precisely, we hypothesised that always selecting whichever polar target <TypographyInlineCode>(rₜ, θₜ)</TypographyInlineCode> positioned within the search sector (eg <TypographyInlineCode>-45° &le; θₛ &le; 45°</TypographyInlineCode>) possessed the least radius <TypographyInlineCode>rₜ</TypographyInlineCode> would <TypographyItalics>not</TypographyItalics> produce an optimal algorithm for our cooperative, human-centric design.
+      </TypographyP>
+
+      <TypographyP>
+        This hypothesis was found to be empirically supported through an initial implementation of such an &lsquo;unweighted&rsquo; algorithm.
+        An illustrative example of this is provided in Figures 1 and 2 below.
+      </TypographyP>
+
+      <TypographyP>
+        In Figure 1, the operator first presents a <TypographyKeyInput>←</TypographyKeyInput> input to pounce to target <TypographyInlineCode>(1)</TypographyInlineCode>.
+        This is as expected, and does not feel unnatural.
+        However, when the operator next presents a <TypographyKeyInput>→</TypographyKeyInput> input, expecting to pounce to target <TypographyInlineCode>(3)</TypographyInlineCode>, the shortest radius from <TypographyInlineCode>(1)</TypographyInlineCode> within the sector of <TypographyInlineCode>-45° &le; θₛ &le; 45°</TypographyInlineCode> is determined to be target <TypographyInlineCode>(2)</TypographyInlineCode>, which does feel unnatural and non-optimal.
+      </TypographyP>
+
+      <TypographyP>
+        Similarly, Figure 2 shows that the unweighted &lsquo;nearest radius&rsquo; algorithm will pounce from target <TypographyInlineCode>(2)</TypographyInlineCode> to target <TypographyInlineCode>(3)</TypographyInlineCode>, rather than the more &lsquo;appropriate&rsquo; <TypographyInlineCode>(4)</TypographyInlineCode>.
+      </TypographyP>
+
+      <ImageCarousel
+        images={[
+          { light: targetUnweighted1, dark: targetUnweighted1, caption: 'Figure 1: Unweighted nearest radius algorithm' },
+          { light: targetUnweighted2, dark: targetUnweighted2, caption: 'Figure 2: Unweighted nearest radius algorithm' },
+        ]}
+        className='mt-6'
+      />
+
+      <TypographyP>
+        From this empirical result, we proceeded to investigate the way in which a &lsquo;weighting&rsquo; function might be applicable to produce an algorithm that could better capture the angle displacement between different targets.
+        To achieve this, we used Julia to visualise the effect of changing radius <TypographyInlineCode>rₜ</TypographyInlineCode> and angle <TypographyInlineCode>θₜ</TypographyInlineCode> with different weighting functions, producing the range of polar plots shown below.
+        We broke the polar plot into four sectors each with a central angle of <TypographyInlineCode>90°</TypographyInlineCode> and centred on a search angle <TypographyInlineCode>{'θₛ ∈ {0°, 90°, 180°, 270°}'}</TypographyInlineCode>, and used a colour gradient to represent the &lsquo;nearness&rsquo; value of each point with respect to <TypographyInlineCode>(0, 0)</TypographyInlineCode>.
+      </TypographyP>
+
+      <TypographyImage
+        image={{
+          light: targetUnweightedVisualisationDots,
+          dark: targetUnweightedVisualisationDots,
+        }}
+        caption='Nearest radius with no weighting. The nearest-target algorithm is evaluated to determine a &lsquo;nearness&rsquo; value for each point in the polar plot.'
+      />
+
+      <TypographyImage
+        image={{
+          light: targetUnweightedVisualisation,
+          dark: targetUnweightedVisualisation,
+        }}
+        caption='Nearest radius with no weighting. We see a perfect radial gradient.'
+      />
+
+      <TypographyP>
+        The first weighting function that we applied was a simple multiplication of the target&apos;s radius <TypographyInlineCode>rₜ</TypographyInlineCode> by the difference between its angle <TypographyInlineCode>θₜ</TypographyInlineCode> and the search angle <TypographyInlineCode>θₛ</TypographyInlineCode>; ie targets that fall nearer to the search angle will be multiplied by a smaller factor, and hence considered &lsquo;nearer&rsquo;.
+      </TypographyP>
+
+      <TypographyImage
+        image={{
+          light: targetWeightedSimpleVisualisation,
+          dark: targetWeightedSimpleVisualisation,
+        }}
+        caption='Nearest radius multiplied by angle deviation. We see that great emphasis is placed on points that fall along the search angle.'
+      />
+
+      <TypographyP>
+        We found this simple weighting function to produce an equally non-optimal algorithm, as it would place unfair preference upon even the radially farthermost target, provided that it lay along the search angle such that <TypographyInlineCode>θₜ ≈ θₛ</TypographyInlineCode>.
+        An example is provided in Figure 3 below, where this algorithm will pounce straight from target <TypographyInlineCode>(2)</TypographyInlineCode> to target <TypographyInlineCode>(3)</TypographyInlineCode>, skipping over targets <TypographyInlineCode>(4)</TypographyInlineCode> and <TypographyInlineCode>(5)</TypographyInlineCode>.
+      </TypographyP>
+
+      <TypographyImage
+        image={{ light: targetWeightedSimple, dark: targetWeightedSimple }}
+        caption='Figure 3: Nearest radius multiplied by angle deviation'
+      />
+
+      <TypographyP>
+        We then applied an offset to the multiplicative factor to violate the property of homogeneity, and hence linearity, of the algorithm.
+        We found this offset to behave as a damping factor; a control knob that we could employ to moderate the influence of angle deviation towards the computed &lsquo;nearness&rsquo; of a target position.
+        We observed that the algorithm behaved increasingly like the unweighted &lsquo;nearest radius&rsquo; algorithm as the damping factor tended to infinity, which can be understood through the theory behind a non-homogenous function.
+      </TypographyP>
+
+      <ImageCarousel
+        images={[
+          { light: targetWeightedDamping0Visualisation, dark: targetWeightedDamping0Visualisation, caption: 'Non-linear algorithm with no damping' },
+          { light: targetWeightedDamping0p5Visualisation, dark: targetWeightedDamping0p5Visualisation, caption: 'Non-linear algorithm with damping of 0.5' },
+          { light: targetWeightedDamping1p5Visualisation, dark: targetWeightedDamping1p5Visualisation, caption: 'Non-linear algorithm with damping of 1.5' },
+          { light: targetWeightedDamping5Visualisation, dark: targetWeightedDamping5Visualisation, caption: 'Non-linear algorithm with damping of 5' },
+          { light: targetWeightedDamping1000Visualisation, dark: targetWeightedDamping1000Visualisation, caption: 'Non-linear algorithm with damping of 1000. We see the same behaviour as the simple unweighted algorithm.' },
+        ]}
+        className='mt-6'
+      />
+
+      <TypographyP>
+        Implementing this damped algorithm, we found through empirical testing that the weighted nearest-target algorithm indeed felt significantly more natural and intuitive.
+        Examples are provided in Figures 4 and 5 below, where we found that presenting the same input sequences as Figures 1 and 2 will now produce the &lsquo;intuitive&rsquo; results.
+      </TypographyP>
+
+      <ImageCarousel
+        images={[
+          { light: targetWeightedDamped1, dark: targetWeightedDamped1, caption: 'Figure 4: Non-linear algorithm with damping of 0.5' },
+          { light: targetWeightedDamped2, dark: targetWeightedDamped2, caption: 'Figure 5: Non-linear algorithm with damping of 0.5' },
+        ]}
+        className='mt-6'
+      />
+
+      <TypographyP>
+        As <TypographyLink toFragmentId href={FRAGMENT_IDS.NEAREST_TARGET_REACHABLE}>alluded to</TypographyLink> when describing the motivations behind our manual override control mechanism, we do acknowledge that this algorithm does not guarantee that every target is reachable.
+        Although it is likely that we may assume in practice that there would be sufficient target positions to reliably reach a desired target, this is not formally true.
+      </TypographyP>
+
+      <TypographyP>
+        Figure 6 below illustrates an example of this, where the selected target <TypographyInlineCode>(4)</TypographyInlineCode> would be unreachable if:
+      </TypographyP>
+
+      <TypographyList ordered>
+        <TypographyListItem>the damping value was changed such that target <TypographyInlineCode>(3)</TypographyInlineCode> instead pounced <TypographyKeyInput>→</TypographyKeyInput> to target <TypographyInlineCode>(5)</TypographyInlineCode>, and</TypographyListItem>
+        <TypographyListItem>target <TypographyInlineCode>(1)</TypographyInlineCode> did not exist such that you could not pounce <TypographyKeyInput>↑</TypographyKeyInput>, and</TypographyListItem>
+        <TypographyListItem>the targets in the top-left did not exist such that you could not pounce <TypographyKeyInput>→</TypographyKeyInput>.</TypographyListItem>
+      </TypographyList>
+
+      <TypographyImage
+        image={{ light: targetWeightedUnreachable, dark: targetWeightedUnreachable }}
+        caption='Figure 6: Potentially unreachable target with weighted nearest-target algorithm'
+      />
+
+      <TypographyP>
+        <TypographyMuted>
+          We do also realise that this &lsquo;damping factor&rsquo; may very well be just as subjective as one&apos;s mouse sensitivity.
+          Consequently, we intend to implement some mechanism for the operator to adjust this parameter on-the-fly, complemented by some visual indication towards the impact of those changes.
+        </TypographyMuted>
+      </TypographyP>
+
+      <TypographyH5 id={FRAGMENT_IDS.DATA_CONTEXT}>Data Context</TypographyH5>
+      <TypographyP>
+        A React <TypographyLink href={GLOBALS.REACT.CONTEXT}>context</TypographyLink> is used to distribute the data configured on <GLOBALS.InlineCode.Pages.Settings /> throughout the application, without devolving to <TypographyLink href={GLOBALS.REACT.PROP_DRILLING}>prop drilling</TypographyLink>.
+        This data is backed into <TypographyInlineCode>window.localStorage</TypographyInlineCode> as stringified JSON through a <TypographyInlineCode>useLocalStorage()</TypographyInlineCode> <TypographyLink href={GLOBALS.REACT.CUSTOM_HOOK}>custom hook</TypographyLink>, such that the data persists locally within the operator&apos;s browser once configured.
+      </TypographyP>
+
+      <TypographyH5 id={FRAGMENT_IDS.VALIDATION}>Form Validation</TypographyH5>
+      <TypographyP>
+        <TypographyLink href={GLOBALS.ZOD}>Zod</TypographyLink> is used on <GLOBALS.InlineCode.Pages.Settings /> for form schema declaration and validation via static type inference.
+        This provides immediate, client-side validation at runtime for the operator&apos;s inputs, helping to ensure that all system environment variables are configured correctly.
+      </TypographyP>
     </>
   )
 }

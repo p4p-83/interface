@@ -139,6 +139,14 @@ export function TypographyMuted({ children, className }: TypographyProps & Style
   )
 }
 
+export function TypographyItalics({ children }: TypographyProps) {
+  return (
+    <em className='italic'>
+      {children}
+    </em>
+  )
+}
+
 type TypographyLinkProps = TypographyProps & {
   href: string;
   toFragmentId?: boolean;
@@ -164,27 +172,28 @@ export function TypographyLink({ children, href, toFragmentId = false }: Typogra
 
 type TypographyImageProps = {
   image: ImageProps['src'] | { light: ImageProps['src']; dark: ImageProps['src']; };
+  noBlur?: boolean;
   caption: string;
   captionElement?: ReactNode;
   className?: string;
   captionClassName?: string;
 }
 
-export function TypographyImage({ image, caption, captionElement, className, captionClassName }: TypographyImageProps) {
+export function TypographyImage({ image, noBlur = false, caption, captionElement, className, captionClassName }: TypographyImageProps) {
   const imageElement = ((image instanceof Object) && ('light' in image))
     ? (
       <>
         <Image
           src={image.light}
           alt={caption}
-          placeholder='blur'
+          placeholder={(noBlur) ? 'empty' : 'blur'}
           className={cn('mt-6 block dark:hidden', className)}
           quality={85}
         />
         <Image
           src={image.dark}
           alt={caption}
-          placeholder='blur'
+          placeholder={(noBlur) ? 'empty' : 'blur'}
           className={cn('mt-6 hidden dark:block', className)}
           quality={85}
         />
@@ -218,7 +227,7 @@ type TypographyImageCaptionProps = Pick<TypographyImageProps, 'caption' | 'capti
 
 function TypographyImageCaption({ caption, captionElement, className }: TypographyImageCaptionProps) {
   return (
-    <div className={cn('py-4 text-center', className)}>
+    <div className={cn('py-4 pb-0 text-center', className)}>
       <TypographySmall>
         <TypographyMuted>
           {captionElement ?? caption}

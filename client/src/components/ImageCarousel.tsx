@@ -17,6 +17,7 @@ import { cn } from '@/lib/utils'
 type ImageCarouselImage = {
   light: ImageProps['src'];
   dark: ImageProps['src'];
+  noBlur?: boolean;
   caption: string;
   captionElement?: ReactNode;
 }
@@ -51,20 +52,20 @@ export function ImageCarousel({ images, className, captionClassName }: ImageCaro
         }}
       >
         <CarouselContent>
-          {images.map(({ light, dark, caption }) => (
+          {images.map(({ light, dark, noBlur = false, caption }) => (
             <CarouselItem key={caption}>
               <Image
                 src={light}
                 alt={caption}
                 className='block dark:hidden'
-                placeholder='blur'
+                placeholder={(noBlur) ? 'empty' : 'blur'}
                 quality={85}
               />
               <Image
                 src={dark}
                 alt={caption}
                 className='hidden dark:block'
-                placeholder='blur'
+                placeholder={(noBlur) ? 'empty' : 'blur'}
                 quality={85}
               />
             </CarouselItem>
@@ -75,7 +76,7 @@ export function ImageCarousel({ images, className, captionClassName }: ImageCaro
         <CarouselNext />
       </Carousel>
 
-      <div className={cn('py-4 text-center', captionClassName)}>
+      <div className={cn('py-4 pb-0 text-center', captionClassName)}>
         <TypographySmall>
           <TypographyMuted>
             {images[current].captionElement ?? images[current].caption}
