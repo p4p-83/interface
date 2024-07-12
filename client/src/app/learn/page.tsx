@@ -858,7 +858,7 @@ function SystemUserInterface() {
       <TypographyP>
         In Figure 1, the operator first presents a <TypographyKeyInput>←</TypographyKeyInput> input to pounce to target <TypographyInlineCode>(1)</TypographyInlineCode>.
         This is as expected, and does not feel unnatural.
-        However, when the operator next presents a <TypographyKeyInput>→</TypographyKeyInput> input, expecting to pounce to target <TypographyInlineCode>(3)</TypographyInlineCode>, the shortest radius from <TypographyInlineCode>(1)</TypographyInlineCode> within the sector of <TypographyInlineCode>-45° &le; θₛ &le; 45°</TypographyInlineCode> is determined to be target <TypographyInlineCode>(2)</TypographyInlineCode>, which does feel unnatural and non-optimal.
+        However, when the operator next presents a <TypographyKeyInput>→</TypographyKeyInput> input, expecting to pounce to target <TypographyInlineCode>(3)</TypographyInlineCode>, the shortest radius from <TypographyInlineCode>(1)</TypographyInlineCode> within the sector of <TypographyInlineCode>-45° &le; θₛ &le; 45°</TypographyInlineCode> is instead determined to be target <TypographyInlineCode>(2)</TypographyInlineCode>, which does feel unnatural and non-optimal.
       </TypographyP>
 
       <TypographyP>
@@ -874,9 +874,9 @@ function SystemUserInterface() {
       />
 
       <TypographyP>
-        From this empirical result, we proceeded to investigate the way in which a &lsquo;weighting&rsquo; function might be applicable to produce an algorithm that could better capture the angle displacement between different targets.
-        To achieve this, we used Julia to visualise the effect of changing radius <TypographyInlineCode>rₜ</TypographyInlineCode> and angle <TypographyInlineCode>θₜ</TypographyInlineCode> with different weighting functions, producing the range of polar plots shown below.
-        We broke the polar plot into four sectors each with a central angle of <TypographyInlineCode>90°</TypographyInlineCode> and centred on a search angle <TypographyInlineCode>{'θₛ ∈ {0°, 90°, 180°, 270°}'}</TypographyInlineCode>, and used a colour gradient to represent the &lsquo;nearness&rsquo; value of each point with respect to <TypographyInlineCode>(0, 0)</TypographyInlineCode>.
+        From this empirical result, we proceeded to investigate the way in which a &lsquo;weighting&rsquo; function might be applicable to produce an algorithm that could better consider the angle displacement between targets.
+        To achieve this, we used Julia to visualise the effects of varying radius <TypographyInlineCode>rₜ</TypographyInlineCode> and angle <TypographyInlineCode>θₜ</TypographyInlineCode> with different weighting functions, producing the collection of polar plots shown below.
+        We broke the polar plot into four sectors, each with a central angle of <TypographyInlineCode>90°</TypographyInlineCode> and centred on a search angle <TypographyInlineCode>{'θₛ ∈ {0°, 90°, 180°, 270°}'}</TypographyInlineCode>, and used a colour gradient to represent the &lsquo;nearness&rsquo; value of each point with respect to <TypographyInlineCode>(0, 0)</TypographyInlineCode>.
       </TypographyP>
 
       <TypographyImage
@@ -908,7 +908,7 @@ function SystemUserInterface() {
       />
 
       <TypographyP>
-        We found this simple weighting function to produce an equally non-optimal algorithm, as it would place unfair preference upon even the radially farthermost target, provided that it lay along the search angle such that <TypographyInlineCode>θₜ ≈ θₛ</TypographyInlineCode>.
+        We found this simple weighting function to produce an equally non-optimal algorithm, as it would place unfair preference upon even the radially farthermost target, provided only that it lay along the search angle such that <TypographyInlineCode>θₜ ≈ θₛ</TypographyInlineCode>.
         An example is provided in Figure 3 below, where this algorithm will pounce straight from target <TypographyInlineCode>(2)</TypographyInlineCode> to target <TypographyInlineCode>(3)</TypographyInlineCode>, skipping over targets <TypographyInlineCode>(4)</TypographyInlineCode> and <TypographyInlineCode>(5)</TypographyInlineCode>.
       </TypographyP>
 
@@ -920,7 +920,7 @@ function SystemUserInterface() {
       <TypographyP>
         We then applied an offset to the multiplicative factor to violate the property of homogeneity, and hence linearity, of the algorithm.
         We found this offset to behave as a damping factor; a control knob that we could employ to moderate the influence of angle deviation towards the computed &lsquo;nearness&rsquo; of a target position.
-        We observed that the algorithm behaved increasingly like the unweighted &lsquo;nearest radius&rsquo; algorithm as the damping factor tended to infinity, which can be understood through the theory behind a non-homogenous function.
+        We observed that the algorithm behaved increasingly like the unweighted &lsquo;nearest radius&rsquo; algorithm as the damping factor tended to infinity, which can be understood through the theory behind non-homogenous functions.
       </TypographyP>
 
       <ImageCarousel
@@ -936,7 +936,7 @@ function SystemUserInterface() {
 
       <TypographyP>
         Implementing this damped algorithm, we found through empirical testing that the weighted nearest-target algorithm indeed felt significantly more natural and intuitive.
-        Examples are provided in Figures 4 and 5 below, where we found that presenting the same input sequences as Figures 1 and 2 will now produce the &lsquo;intuitive&rsquo; results.
+        Examples are provided in Figures 4 and 5 below, where we found that presenting the same input sequences as Figures 1 and 2 would now produce the &lsquo;intuitive&rsquo; results.
       </TypographyP>
 
       <ImageCarousel
