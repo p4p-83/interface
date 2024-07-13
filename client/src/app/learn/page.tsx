@@ -41,6 +41,7 @@ import {
 import { Separator } from '@/components/ui/separator'
 
 import { FRAGMENT_IDS } from './fragments'
+import { STATIC_IMAGES } from './static-images'
 
 export const metadata: Metadata = GLOBALS.PAGES.getMetadata(GLOBALS.PAGES.LEARN)
 
@@ -238,12 +239,6 @@ function ConstituentPages() {
   )
 }
 
-import lightHome from './lightHome.png'
-import lightHomeCalibrate from './lightHomeCalibrate.png'
-import lightHomeShift from './lightHomeShift.png'
-import darkHome from './darkHome.png'
-import darkHomeCalibrate from './darkHomeCalibrate.png'
-import darkHomeShift from './darkHomeShift.png'
 function ConstituentHomePage() {
   return (
     <>
@@ -289,18 +284,16 @@ function ConstituentHomePage() {
 
       <ImageCarousel
         images={[
-          { light: lightHome, dark: darkHome, caption: `${GLOBALS.PAGES.HOME.name} page` },
+          { image: STATIC_IMAGES.HOME.PAGE, caption: `${GLOBALS.PAGES.HOME.name} page` },
           {
-            light: lightHomeCalibrate,
-            dark: darkHomeCalibrate,
+            image: STATIC_IMAGES.HOME.CALIBRATE,
             caption: `${GLOBALS.PAGES.HOME.name} page with ${GLOBALS.PAGES.CALIBRATE.path} link revealed`,
             captionElement: (
               <>{GLOBALS.PAGES.HOME.name} page with <GLOBALS.InlineCode.Pages.Calibrate /> link revealed</>
             ),
           },
           {
-            light: lightHomeShift,
-            dark: darkHomeShift,
+            image: STATIC_IMAGES.HOME.SHIFT,
             caption: `${GLOBALS.PAGES.HOME.name} page with Shift modifier pressed`,
             captionElement: (
               <>{GLOBALS.PAGES.HOME.name} page with <TypographyKeyInput>Shift</TypographyKeyInput> modifier pressed</>
@@ -315,14 +308,6 @@ function ConstituentHomePage() {
   )
 }
 
-import lightPlaceProgress from './lightPlaceProgress.png'
-import lightPlaceError from './lightPlaceError.png'
-import lightPlaceSocketOpened from './lightPlaceSocketOpened.png'
-import lightPlaceHud from './lightPlaceHud.png'
-import darkPlaceProgress from './darkPlaceProgress.png'
-import darkPlaceError from './darkPlaceError.png'
-import darkPlaceSocketOpened from './darkPlaceSocketOpened.png'
-import darkPlaceHud from './darkPlaceHud.png'
 function ConstituentPlacePage() {
   return (
     <>
@@ -366,10 +351,10 @@ function ConstituentPlacePage() {
 
       <ImageCarousel
         images={[
-          { light: lightPlaceProgress, dark: darkPlaceProgress, caption: 'Progress bar whilst video stream loads' },
-          { light: lightPlaceError, dark: darkPlaceError, caption: 'Video stream error' },
-          { light: lightPlaceSocketOpened, dark: darkPlaceSocketOpened, caption: 'Successful WebSocket connection with overlaid heads-up display' },
-          { light: lightPlaceHud, dark: darkPlaceHud, caption: 'Heads-up display with purple target indicator' },
+          { image: STATIC_IMAGES.PLACE.PROGRESS, caption: 'Progress bar whilst video stream loads' },
+          { image: STATIC_IMAGES.PLACE.ERROR, caption: 'Video stream error' },
+          { image: STATIC_IMAGES.PLACE.SOCKET, caption: 'Successful WebSocket connection with overlaid heads-up display' },
+          { image: STATIC_IMAGES.PLACE.HUD, caption: 'Heads-up display with purple target indicator' },
         ]}
       />
 
@@ -558,6 +543,7 @@ function ConstituentPlacePage() {
           <TypographyListItem>ability to change the fixed step distance on-the-fly.</TypographyListItem>
           <TypographyListItem>ability to break the targets into topological grid squares, and/or the ability to long jump and skip over a number of intermediate targets.</TypographyListItem>
           <TypographyListItem>ability to change the <TypographyLink toFragmentId href={FRAGMENT_IDS.NEAREST_TARGET}>nearest-target damping value</TypographyLink> through the heads-up display.</TypographyListItem>
+          <TypographyListItem>scroll wheel zooms the video feed.</TypographyListItem>
         </TypographyList>
       </TypographyMuted>
 
@@ -575,8 +561,6 @@ function ConstituentPlacePage() {
   )
 }
 
-import lightSettings from './lightSettings.png'
-import darkSettings from './darkSettings.png'
 function ConstituentSettingsPage() {
   return (
     <>
@@ -603,10 +587,7 @@ function ConstituentSettingsPage() {
       </TypographyP>
 
       <TypographyImage
-        image={{
-          light: lightSettings,
-          dark: darkSettings,
-        }}
+        image={STATIC_IMAGES.SETTINGS.PAGE}
         caption={`${GLOBALS.PAGES.SETTINGS.name} page`}
         captionClassName='pb-4'
       />
@@ -820,20 +801,6 @@ function SystemArchitecture() {
   )
 }
 
-import targetUnweighted1 from './targetUnweighted1.png'
-import targetUnweighted2 from './targetUnweighted2.png'
-import targetWeightedSimple from './targetWeightedSimple.png'
-import targetWeightedDamped1 from './targetWeightedDamped1.png'
-import targetWeightedDamped2 from './targetWeightedDamped2.png'
-import targetWeightedUnreachable from './targetWeightedUnreachable.png'
-import targetUnweightedVisualisationDots from './targetUnweightedVisualisationDots.png'
-import targetUnweightedVisualisation from './targetUnweightedVisualisation.png'
-import targetWeightedSimpleVisualisation from './targetWeightedSimpleVisualisation.png'
-import targetWeightedDamping0Visualisation from './targetWeightedDamping0Visualisation.png'
-import targetWeightedDamping0p5Visualisation from './targetWeightedDamping0p5Visualisation.png'
-import targetWeightedDamping1p5Visualisation from './targetWeightedDamping1p5Visualisation.png'
-import targetWeightedDamping5Visualisation from './targetWeightedDamping5Visualisation.png'
-import targetWeightedDamping1000Visualisation from './targetWeightedDamping1000Visualisation.png'
 function SystemUserInterface() {
   return (
     <>
@@ -843,7 +810,6 @@ function SystemUserInterface() {
         {' '}<TypographyLink href={GLOBALS.TAILWIND}>Tailwind CSS</TypographyLink> is used for styling, and <TypographyLink href={GLOBALS.SHADCN_UI}><TypographyInlineCode>shadcn/ui</TypographyInlineCode></TypographyLink> headless components have been used to create a tailored component library.
       </TypographyP>
 
-      {/* TODO: */}
       <TypographyH5 id={FRAGMENT_IDS.NEAREST_TARGET}>Nearest-Target Algorithm</TypographyH5>
       <TypographyP>
         The development of our nearest-target algorithm was guided by a hypothesis that an algorithm which simply selected the mathematical nearest target would not be the most user-friendly algorithm.
@@ -868,8 +834,8 @@ function SystemUserInterface() {
 
       <ImageCarousel
         images={[
-          { light: targetUnweighted1, dark: targetUnweighted1, caption: 'Figure 1: Unweighted nearest radius algorithm' },
-          { light: targetUnweighted2, dark: targetUnweighted2, caption: 'Figure 2: Unweighted nearest radius algorithm' },
+          { image: STATIC_IMAGES.NEAREST_TARGET.EXAMPLES.UNWEIGHTED_1, caption: 'Figure 1: Unweighted nearest radius algorithm' },
+          { image: STATIC_IMAGES.NEAREST_TARGET.EXAMPLES.UNWEIGHTED_2, caption: 'Figure 2: Unweighted nearest radius algorithm' },
         ]}
         className='mt-6'
       />
@@ -881,18 +847,12 @@ function SystemUserInterface() {
       </TypographyP>
 
       <TypographyImage
-        image={{
-          light: targetUnweightedVisualisationDots,
-          dark: targetUnweightedVisualisationDots,
-        }}
+        image={STATIC_IMAGES.NEAREST_TARGET.PLOTS.UNWEIGHTED_DOTS}
         caption='Nearest radius with no weighting. The nearest-target algorithm, or cost function, is evaluated to determine a &lsquo;nearness&rsquo; value for each point in the polar plot.'
       />
 
       <TypographyImage
-        image={{
-          light: targetUnweightedVisualisation,
-          dark: targetUnweightedVisualisation,
-        }}
+        image={STATIC_IMAGES.NEAREST_TARGET.PLOTS.UNWEIGHTED}
         caption='Nearest radius with no weighting. We see a perfect radial gradient.'
       />
 
@@ -901,10 +861,7 @@ function SystemUserInterface() {
       </TypographyP>
 
       <TypographyImage
-        image={{
-          light: targetWeightedSimpleVisualisation,
-          dark: targetWeightedSimpleVisualisation,
-        }}
+        image={STATIC_IMAGES.NEAREST_TARGET.PLOTS.WEIGHTED_SIMPLE}
         caption='Nearest radius multiplied by angle deviation. We see that great emphasis is placed on points that fall along the search angle.'
       />
 
@@ -914,11 +871,10 @@ function SystemUserInterface() {
       </TypographyP>
 
       <TypographyImage
-        image={{ light: targetWeightedSimple, dark: targetWeightedSimple }}
+        image={STATIC_IMAGES.NEAREST_TARGET.EXAMPLES.WEIGHTED_SIMPLE}
         caption='Figure 3: Nearest radius multiplied by angle deviation'
       />
 
-      {/*  */}
       <TypographyP>
         We then applied an offset to the multiplicative factor to break the property of homogeneity, and hence linearity, of the cost function.
         We found this offset to behave as a damping factor; a control knob that we could employ to moderate the influence of angle deviation towards the computed &lsquo;nearness&rsquo; of a target position.
@@ -927,11 +883,11 @@ function SystemUserInterface() {
 
       <ImageCarousel
         images={[
-          { light: targetWeightedDamping0Visualisation, dark: targetWeightedDamping0Visualisation, caption: 'Non-linear algorithm with no damping' },
-          { light: targetWeightedDamping0p5Visualisation, dark: targetWeightedDamping0p5Visualisation, caption: 'Non-linear algorithm with damping of 0.5' },
-          { light: targetWeightedDamping1p5Visualisation, dark: targetWeightedDamping1p5Visualisation, caption: 'Non-linear algorithm with damping of 1.5' },
-          { light: targetWeightedDamping5Visualisation, dark: targetWeightedDamping5Visualisation, caption: 'Non-linear algorithm with damping of 5' },
-          { light: targetWeightedDamping1000Visualisation, dark: targetWeightedDamping1000Visualisation, caption: 'Non-linear algorithm with damping of 1000. We see the same behaviour as the simple unweighted algorithm.' },
+          { image: STATIC_IMAGES.NEAREST_TARGET.PLOTS.WEIGHTED_DAMPING_0, caption: 'Non-linear algorithm with no damping' },
+          { image: STATIC_IMAGES.NEAREST_TARGET.PLOTS.WEIGHTED_DAMPING_0p5, caption: 'Non-linear algorithm with damping of 0.5' },
+          { image: STATIC_IMAGES.NEAREST_TARGET.PLOTS.WEIGHTED_DAMPING_1p5, caption: 'Non-linear algorithm with damping of 1.5' },
+          { image: STATIC_IMAGES.NEAREST_TARGET.PLOTS.WEIGHTED_DAMPING_5, caption: 'Non-linear algorithm with damping of 5' },
+          { image: STATIC_IMAGES.NEAREST_TARGET.PLOTS.WEIGHTED_DAMPING_1000, caption: 'Non-linear algorithm with damping of 1000. We see the same behaviour as the simple unweighted algorithm.' },
         ]}
         className='mt-6'
       />
@@ -943,8 +899,8 @@ function SystemUserInterface() {
 
       <ImageCarousel
         images={[
-          { light: targetWeightedDamped1, dark: targetWeightedDamped1, caption: 'Figure 4: Non-linear algorithm with damping of 0.5' },
-          { light: targetWeightedDamped2, dark: targetWeightedDamped2, caption: 'Figure 5: Non-linear algorithm with damping of 0.5' },
+          { image: STATIC_IMAGES.NEAREST_TARGET.EXAMPLES.WEIGHTED_DAMPED_1, caption: 'Figure 4: Non-linear algorithm with damping of 0.5' },
+          { image: STATIC_IMAGES.NEAREST_TARGET.EXAMPLES.WEIGHTED_DAMPED_2, caption: 'Figure 5: Non-linear algorithm with damping of 0.5' },
         ]}
         className='mt-6'
       />
@@ -965,7 +921,7 @@ function SystemUserInterface() {
       </TypographyList>
 
       <TypographyImage
-        image={{ light: targetWeightedUnreachable, dark: targetWeightedUnreachable }}
+        image={STATIC_IMAGES.NEAREST_TARGET.EXAMPLES.WEIGHTED_UNREACHABLE}
         caption='Figure 6: Potentially unreachable target with weighted nearest-target algorithm'
       />
 

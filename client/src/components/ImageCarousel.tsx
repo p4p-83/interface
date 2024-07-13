@@ -15,8 +15,7 @@ import { TypographySmall, TypographyMuted } from '@/components//ui/typography'
 import { cn } from '@/lib/utils'
 
 type ImageCarouselImage = {
-  light: ImageProps['src'];
-  dark: ImageProps['src'];
+  image: ImageProps['src'] | { light: ImageProps['src']; dark: ImageProps['src']; };
   noBlur?: boolean;
   caption: string;
   captionElement?: ReactNode;
@@ -52,22 +51,36 @@ export function ImageCarousel({ images, className, captionClassName }: ImageCaro
         }}
       >
         <CarouselContent>
-          {images.map(({ light, dark, noBlur = false, caption }) => (
+          {images.map(({ image, noBlur = false, caption }) => (
             <CarouselItem key={caption}>
-              <Image
-                src={light}
-                alt={caption}
-                className='block dark:hidden'
-                placeholder={(noBlur) ? 'empty' : 'blur'}
-                quality={85}
-              />
-              <Image
-                src={dark}
-                alt={caption}
-                className='hidden dark:block'
-                placeholder={(noBlur) ? 'empty' : 'blur'}
-                quality={85}
-              />
+              {((image instanceof Object) && ('light' in image))
+                ? (
+                  <>
+                    <Image
+                      src={image.light}
+                      alt={caption}
+                      className='block dark:hidden'
+                      placeholder={(noBlur) ? 'empty' : 'blur'}
+                      quality={85}
+                    />
+                    <Image
+                      src={image.dark}
+                      alt={caption}
+                      className='hidden dark:block'
+                      placeholder={(noBlur) ? 'empty' : 'blur'}
+                      quality={85}
+                    />
+                  </>
+                )
+                : (
+                  <Image
+                    src={image}
+                    alt={caption}
+                    placeholder={(noBlur) ? 'empty' : 'blur'}
+                    quality={85}
+                  />
+                )
+              }
             </CarouselItem>
           ))}
         </CarouselContent>

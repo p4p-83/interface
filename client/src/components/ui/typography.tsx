@@ -239,10 +239,7 @@ function TypographyImageCaption({ caption, captionElement, className }: Typograp
 
 
 type TypographyVideoProps = {
-  video: string | {
-    light: string;
-    dark: string;
-  };
+  video: string | { light: string; dark: string; };
   loop?: boolean;
   caption: string;
   captionElement?: ReactNode;
