@@ -815,7 +815,7 @@ function SystemUserInterface() {
 
       <TypographyH5 id={FRAGMENT_IDS.NEAREST_TARGET}>Nearest-Target Algorithm</TypographyH5>
       <TypographyP>
-        The development of our nearest-target algorithm was guided by a hypothesis that an algorithm which simply selected the radially-nearest target would not be the most user-friendly algorithm.
+        The development of our nearest-target algorithm was guided by a hypothesis that a naïve algorithm which simply selected the radially-nearest target would not be the most intuitive algorithm for a human operator.
       </TypographyP>
 
       <TypographyP>
@@ -826,8 +826,9 @@ function SystemUserInterface() {
             \infty & \text{otherwise}
           \end{cases}
           `}</TypographyBlockMaths>
-        where the <TypographyInlineMaths>N</TypographyInlineMaths> is the total number of sectors, and <TypographyInlineMaths>{String.raw`\theta_\text{s}`}</TypographyInlineMaths> is the polar angle across which <TypographyInlineMaths>{String.raw`⌔_\text{s}`}</TypographyInlineMaths> is centred.
-        We hypothesised that this cost function would <TypographyItalics>not</TypographyItalics> produce an optimal algorithm for our cooperative, human-centric machine control.
+        where <TypographyInlineMaths>N</TypographyInlineMaths> is the total number of sectors, and <TypographyInlineMaths>{String.raw`\theta_\text{s}`}</TypographyInlineMaths> is the polar angle across which <TypographyInlineMaths>{String.raw`⌔_\text{s}`}</TypographyInlineMaths> is centred.
+        <TypographyInlineMaths>{String.raw`\frac{2\pi}{2N}`}</TypographyInlineMaths> is defined as the maximum deviation <TypographyInlineMaths>{String.raw`\theta_\text{d}`}</TypographyInlineMaths> from the search angle <TypographyInlineMaths>{String.raw`\theta_\text{s}`}</TypographyInlineMaths> for a target <TypographyInlineMaths>{String.raw`\theta_\text{t}`}</TypographyInlineMaths> to be within the sector <TypographyInlineMaths>{String.raw`⌔_\text{s}`}</TypographyInlineMaths>.
+        We hypothesised that this naïve cost function would <TypographyItalics>not</TypographyItalics> produce the optimal algorithm for our cooperative, human-centric machine control.
       </TypographyP>
 
       <TypographyP>
