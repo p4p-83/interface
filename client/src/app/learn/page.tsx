@@ -832,18 +832,20 @@ function SystemUserInterface() {
 
       <TypographyP>
         This hypothesis was found to be empirically supported through an initial implementation of such an &lsquo;unweighted&rsquo; algorithm.
-        An illustrative example of this is provided in Figures 1 and 2 below.
+        An illustrative example of this is provided in Figures 1 and 2 below:
       </TypographyP>
 
-      <TypographyP>
+      <TypographyList ordered>
+        <TypographyListItem>
         In Figure 1, the operator first presents a <TypographyKeyInput>←</TypographyKeyInput> input to pounce to target <TypographyInlineCode>(1)</TypographyInlineCode>.
         This behaves as expected, and does not feel unnatural.
-        However, when the operator next presents a <TypographyKeyInput>→</TypographyKeyInput> input, expecting to pounce to target <TypographyInlineCode>(3)</TypographyInlineCode>, the shortest radius <TypographyInlineMaths>{String.raw`r_\text{t}`}</TypographyInlineMaths> from <TypographyInlineCode>(1)</TypographyInlineCode> within the sector of <TypographyInlineMaths>{String.raw`-\frac{\pi}{4} \leq \theta_\text{t} \leq \frac{\pi}{4}`}</TypographyInlineMaths> is instead determined to be target <TypographyInlineCode>(2)</TypographyInlineCode>, which does feel unnatural and non-optimal.
-      </TypographyP>
-
-      <TypographyP>
+        However, when the operator next presents a <TypographyKeyInput>→</TypographyKeyInput> input, expecting to pounce to target <TypographyInlineCode>(3)</TypographyInlineCode>, the shortest radius <TypographyInlineMaths>{String.raw`r_\text{t}`}</TypographyInlineMaths> from <TypographyInlineCode>(1)</TypographyInlineCode> within the sector of <TypographyInlineMaths>{String.raw`-\frac{\pi}{4} \leq \theta_\text{t} \leq \frac{\pi}{4}`}</TypographyInlineMaths> is instead determined to be target <TypographyInlineCode>(2)</TypographyInlineCode>.
+        This <TypographyItalics>does</TypographyItalics> feel unnatural and non-optimal.
+        </TypographyListItem>
+        <TypographyListItem>
         Similarly, Figure 2 shows that the unweighted &lsquo;nearest radius&rsquo; cost function will pounce from target <TypographyInlineCode>(2)</TypographyInlineCode> to target <TypographyInlineCode>(3)</TypographyInlineCode>, rather than the more &lsquo;intuitive&rsquo; <TypographyInlineCode>(4)</TypographyInlineCode>.
-      </TypographyP>
+        </TypographyListItem>
+      </TypographyList>
 
       <ImageCarousel
         images={[
