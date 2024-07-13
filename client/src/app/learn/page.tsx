@@ -847,6 +847,7 @@ function SystemUserInterface() {
       <TypographyH5 id={FRAGMENT_IDS.NEAREST_TARGET}>Nearest-Target Algorithm</TypographyH5>
       <TypographyP>
         The development of our nearest-target algorithm was guided by a hypothesis that an algorithm which simply selected the mathematical nearest target would not be the most user-friendly algorithm.
+        {/* TODO: Cost function c(r, theta) */}
         More precisely, we hypothesised that always selecting whichever polar target <TypographyInlineCode>(rₜ, θₜ)</TypographyInlineCode> positioned within the search sector (eg <TypographyInlineCode>-45° &le; θₛ &le; 45°</TypographyInlineCode>) possessed the least radius <TypographyInlineCode>rₜ</TypographyInlineCode> would <TypographyItalics>not</TypographyItalics> produce an optimal algorithm for our cooperative, human-centric design.
       </TypographyP>
 
@@ -874,9 +875,9 @@ function SystemUserInterface() {
       />
 
       <TypographyP>
-        From this empirical result, we proceeded to investigate the way in which a &lsquo;weighting&rsquo; function might be applicable to produce an algorithm that could better consider the angle displacement between targets.
+        From this empirical result, we proceeded to investigate the way in which a &lsquo;weighting&rsquo; function might be applicable to produce an overall cost function that could better consider the angle displacement between targets.
         To achieve this, we used Julia to visualise the effects of varying radius <TypographyInlineCode>rₜ</TypographyInlineCode> and angle <TypographyInlineCode>θₜ</TypographyInlineCode> with different weighting functions, producing the collection of polar plots shown below.
-        We broke the polar plot into four sectors, each with a central angle of <TypographyInlineCode>90°</TypographyInlineCode> and centred on a search angle <TypographyInlineCode>{'θₛ ∈ {0°, 90°, 180°, 270°}'}</TypographyInlineCode>, and used a colour gradient to represent the &lsquo;nearness&rsquo; value of each point with respect to <TypographyInlineCode>(0, 0)</TypographyInlineCode>.
+        We broke the polar plot into four sectors, each with a central angle of <TypographyInlineCode>90°</TypographyInlineCode> and centred on a search angle <TypographyInlineCode>{'θₛ ∈ {0°, 90°, 180°, 270°}'}</TypographyInlineCode>, and used a colour gradient to represent the &lsquo;nearness&rsquo; value of each point with respect to <TypographyInlineCode>(0, 0)</TypographyInlineCode> as computed by the cost function.
       </TypographyP>
 
       <TypographyImage
@@ -884,7 +885,7 @@ function SystemUserInterface() {
           light: targetUnweightedVisualisationDots,
           dark: targetUnweightedVisualisationDots,
         }}
-        caption='Nearest radius with no weighting. The nearest-target algorithm is evaluated to determine a &lsquo;nearness&rsquo; value for each point in the polar plot.'
+        caption='Nearest radius with no weighting. The nearest-target algorithm, or cost function, is evaluated to determine a &lsquo;nearness&rsquo; value for each point in the polar plot.'
       />
 
       <TypographyImage
@@ -908,7 +909,7 @@ function SystemUserInterface() {
       />
 
       <TypographyP>
-        We found this simple weighting function to produce an equally non-optimal algorithm, as it would place unfair preference upon even the radially farthermost target, provided only that it lay along the search angle such that <TypographyInlineCode>θₜ ≈ θₛ</TypographyInlineCode>.
+        We found this simple weighting function to produce an equally non-optimal cost function, as it would place unfair preference upon even the radially farthermost target, provided only that it lay along the search angle such that <TypographyInlineCode>θₜ ≈ θₛ</TypographyInlineCode>.
         An example is provided in Figure 3 below, where this algorithm will pounce straight from target <TypographyInlineCode>(2)</TypographyInlineCode> to target <TypographyInlineCode>(3)</TypographyInlineCode>, skipping over targets <TypographyInlineCode>(4)</TypographyInlineCode> and <TypographyInlineCode>(5)</TypographyInlineCode>.
       </TypographyP>
 
@@ -917,10 +918,11 @@ function SystemUserInterface() {
         caption='Figure 3: Nearest radius multiplied by angle deviation'
       />
 
+      {/*  */}
       <TypographyP>
-        We then applied an offset to the multiplicative factor to violate the property of homogeneity, and hence linearity, of the algorithm.
+        We then applied an offset to the multiplicative factor to break the property of homogeneity, and hence linearity, of the cost function.
         We found this offset to behave as a damping factor; a control knob that we could employ to moderate the influence of angle deviation towards the computed &lsquo;nearness&rsquo; of a target position.
-        We observed that the algorithm behaved increasingly like the unweighted &lsquo;nearest radius&rsquo; algorithm as the damping factor tended to infinity, which can be understood through the theory behind non-homogenous functions.
+        We observed that the algorithm behaved increasingly like the unweighted &lsquo;nearest radius&rsquo; algorithm as the damping factor tended to infinity, which is understood through the theory behind non-homogenous functions.
       </TypographyP>
 
       <ImageCarousel
