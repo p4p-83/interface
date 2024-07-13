@@ -915,31 +915,64 @@ function SystemUserInterface() {
       <TypographyP>
         We realised through this observation that the &lsquo;damping factor&rsquo; <TypographyInlineMaths>c</TypographyInlineMaths> behaves in effect like the reciprocal of a directivity constant <TypographyInlineMaths>D</TypographyInlineMaths>, where <TypographyInlineMaths>{String.raw`w_\text{non-linear}(r, \theta)`}</TypographyInlineMaths> can be re-written as
         <TypographyBlockMaths>{String.raw`
-          w_\text{non-linear}(r, \theta) = \frac{\left\lvert \theta_\text{s} - \theta \right\rvert}{0.5 \times \theta_\text{c}} + \frac{1}{D}
+          w_\text{non-linear}(r, \theta) = \frac{\left\lvert \theta_\text{s} - \theta \right\rvert}{\theta_\text{d}} + \frac{1}{D}
         `}</TypographyBlockMaths>
         such that <TypographyInlineMaths>{String.raw`c_\text{non-linear}(r, \theta)`}</TypographyInlineMaths> approximates the unweighted &lsquo;nearest radius&rsquo; algorithm as <TypographyInlineMaths>D \to 0</TypographyInlineMaths>.
       </TypographyP>
 
       <ImageCarousel
         images={[
-          { image: STATIC_IMAGES.NEAREST_TARGET.PLOTS.WEIGHTED_DAMPING_0, caption: 'Non-linear algorithm with no damping' },
-          { image: STATIC_IMAGES.NEAREST_TARGET.PLOTS.WEIGHTED_DAMPING_0p5, caption: 'Non-linear algorithm with damping of 0.5' },
-          { image: STATIC_IMAGES.NEAREST_TARGET.PLOTS.WEIGHTED_DAMPING_1p5, caption: 'Non-linear algorithm with damping of 1.5' },
-          { image: STATIC_IMAGES.NEAREST_TARGET.PLOTS.WEIGHTED_DAMPING_5, caption: 'Non-linear algorithm with damping of 5' },
-          { image: STATIC_IMAGES.NEAREST_TARGET.PLOTS.WEIGHTED_DAMPING_1000, caption: 'Non-linear algorithm with damping of 1000. We see the same behaviour as the simple unweighted algorithm.' },
+          { image: STATIC_IMAGES.NEAREST_TARGET.PLOTS.WEIGHTED_NON_LINEAR_1M, caption: 'Non-linear algorithm with directivity D = 10^6',
+            captionElement: (
+              <>Non-linear algorithm with directivity <TypographyInlineMaths>D = 10^6</TypographyInlineMaths></>
+            ),
+          },
+          { image: STATIC_IMAGES.NEAREST_TARGET.PLOTS.WEIGHTED_NON_LINEAR_2, caption: 'Non-linear algorithm with directivity D = 2',
+            captionElement: (
+              <>Non-linear algorithm with directivity <TypographyInlineMaths>D = 2</TypographyInlineMaths></>
+            ),
+          },
+          { image: STATIC_IMAGES.NEAREST_TARGET.PLOTS.WEIGHTED_NON_LINEAR_1, caption: 'Non-linear algorithm with directivity D = 1',
+            captionElement: (
+              <>Non-linear algorithm with directivity <TypographyInlineMaths>D = 1</TypographyInlineMaths></>
+            ),
+          },
+          { image: STATIC_IMAGES.NEAREST_TARGET.PLOTS.WEIGHTED_NON_LINEAR_0p5, caption: 'Non-linear algorithm with directivity D = 0.5',
+            captionElement: (
+              <>Non-linear algorithm with directivity <TypographyInlineMaths>D = 0.5</TypographyInlineMaths></>
+            ),
+          },
+          { image: STATIC_IMAGES.NEAREST_TARGET.PLOTS.WEIGHTED_NON_LINEAR_0p25, caption: 'Non-linear algorithm with directivity D = 0.25',
+            captionElement: (
+              <>Non-linear algorithm with directivity <TypographyInlineMaths>D = 0.25</TypographyInlineMaths></>
+            ),
+          },
+          { image: STATIC_IMAGES.NEAREST_TARGET.PLOTS.WEIGHTED_NON_LINEAR_1u, caption: 'Non-linear algorithm with directivity D = 10^-6. We see the same behaviour as the simple unweighted algorithm.',
+            captionElement: (
+              <>Non-linear algorithm with directivity <TypographyInlineMaths>{String.raw`D = 10^{-6}`}</TypographyInlineMaths>. We see the same behaviour as the simple unweighted algorithm.</>
+            ),
+          },
         ]}
         className='mt-6'
       />
 
       <TypographyP>
-        Implementing this damped algorithm, we found through empirical testing that the weighted nearest-target algorithm indeed felt significantly more natural and intuitive.
+        Implementing this non-linear cost function, we found through empirical testing that this weighted nearest-target algorithm indeed felt significantly more natural and intuitive.
         Examples are provided in Figures 4 and 5 below, where we found that presenting the same input sequences as Figures 1 and 2 would now produce the &lsquo;intuitive&rsquo; results.
       </TypographyP>
 
       <ImageCarousel
         images={[
-          { image: STATIC_IMAGES.NEAREST_TARGET.EXAMPLES.WEIGHTED_DAMPED_1, caption: 'Figure 4: Non-linear algorithm with damping of 0.5' },
-          { image: STATIC_IMAGES.NEAREST_TARGET.EXAMPLES.WEIGHTED_DAMPED_2, caption: 'Figure 5: Non-linear algorithm with damping of 0.5' },
+          { image: STATIC_IMAGES.NEAREST_TARGET.EXAMPLES.WEIGHTED_NON_LINEAR_1, caption: 'Figure 4: Non-linear algorithm with directivity D = 2',
+            captionElement: (
+              <>Figure 4: Non-linear algorithm with directivity <TypographyInlineMaths>D = 2</TypographyInlineMaths></>
+            ),
+          },
+          { image: STATIC_IMAGES.NEAREST_TARGET.EXAMPLES.WEIGHTED_NON_LINEAR_2, caption: 'Figure 5: Non-linear algorithm with directivity D = 2',
+            captionElement: (
+              <>Figure 5: Non-linear algorithm with directivity <TypographyInlineMaths>D = 2</TypographyInlineMaths></>
+            ),
+          },
         ]}
         className='mt-6'
       />
@@ -954,7 +987,7 @@ function SystemUserInterface() {
       </TypographyP>
 
       <TypographyList ordered>
-        <TypographyListItem>the damping value was changed such that target <TypographyInlineCode>(3)</TypographyInlineCode> instead pounced <TypographyKeyInput>→</TypographyKeyInput> to target <TypographyInlineCode>(5)</TypographyInlineCode>, and</TypographyListItem>
+        <TypographyListItem>the directivity constant was changed such that target <TypographyInlineCode>(3)</TypographyInlineCode> instead pounced <TypographyKeyInput>→</TypographyKeyInput> to target <TypographyInlineCode>(5)</TypographyInlineCode>, and</TypographyListItem>
         <TypographyListItem>target <TypographyInlineCode>(1)</TypographyInlineCode> did not exist such that you could not pounce <TypographyKeyInput>↑</TypographyKeyInput>, and</TypographyListItem>
         <TypographyListItem>the targets in the top-left did not exist such that you could not pounce <TypographyKeyInput>→</TypographyKeyInput>.</TypographyListItem>
       </TypographyList>
@@ -966,7 +999,7 @@ function SystemUserInterface() {
 
       <TypographyP>
         <TypographyMuted>
-          We do also realise that this &lsquo;damping factor&rsquo; may very well be just as subjective as one&apos;s mouse sensitivity.
+          We do also realise that this directivity constant <TypographyInlineMaths>D</TypographyInlineMaths> may very well be just as subjective as one&apos;s mouse sensitivity.
           Consequently, we intend to implement some mechanism for the operator to adjust this parameter on-the-fly, complemented by some visual indication towards the impact of those changes.
         </TypographyMuted>
       </TypographyP>
