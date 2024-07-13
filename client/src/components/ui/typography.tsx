@@ -1,6 +1,8 @@
 import Link from 'next/link'
 import Image, { type ImageProps } from 'next/image'
 import { type ReactNode, type HTMLAttributes } from 'react'
+import { BlockMath, InlineMath } from 'react-katex'
+import 'katex/dist/katex.min.css'
 
 import { cn } from '@/lib/utils'
 
@@ -104,6 +106,18 @@ export function TypographyKeyInput({ children }: TypographyProps) {
     <kbd className='relative rounded bg-secondary/40 border border-b-2 shadow-sm px-[0.3rem] py-[0.2rem] font-mono text-xs sm:text-sm'>
       {children}
     </kbd>
+  )
+}
+
+export function TypographyInlineMaths({ children }: TypographyProps) {
+  return (
+    <InlineMath>{children}</InlineMath>
+  )
+}
+
+export function TypographyBlockMaths({ children }: TypographyProps) {
+  return (
+    <BlockMath>{children}</BlockMath>
   )
 }
 
