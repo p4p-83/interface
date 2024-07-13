@@ -31,6 +31,8 @@ import {
   TypographyImage,
   TypographyVideo,
   TypographyItalics,
+  TypographyInlineMaths,
+  TypographyBlockMaths,
 } from '@/components/ui/typography'
 import {
   Accordion,
@@ -408,7 +410,7 @@ function ConstituentPlacePage() {
 
       <TypographyP>
         The simplest form of input is a mouse click at any point atop the video feed.
-        The clicked pixel coordinates are processed into pixel deltas <TypographyInlineCode>(Δx, Δy)</TypographyInlineCode> with respect to the centre of the video feed, used as an analogy for the current head position; <TypographyLink toFragmentId href={FRAGMENT_IDS.DATA_NORMALISATION}>normalised</TypographyLink>; and sent to the <GLOBALS.InlineCode.GitHub.Controller />, which ultimately translates the <GLOBALS.InlineCode.GitHub.Gantry />.
+        The clicked pixel coordinates are processed into pixel deltas <TypographyInlineMaths>(\Delta x, \Delta y)</TypographyInlineMaths> with respect to the centre of the video feed, used as an analogy for the current head position; <TypographyLink toFragmentId href={FRAGMENT_IDS.DATA_NORMALISATION}>normalised</TypographyLink>; and sent to the <GLOBALS.InlineCode.GitHub.Controller />, which ultimately translates the <GLOBALS.InlineCode.GitHub.Gantry />.
         If the operator clicks inside the bounds of a target marker, it is the delta position of that target&apos;s centroid that is transmitted to the <GLOBALS.InlineCode.GitHub.Controller />.
       </TypographyP>
 
@@ -487,7 +489,7 @@ function ConstituentPlacePage() {
               <TypographyKeyInput>r</TypographyKeyInput>
             </TypographyTableDataCell>
             <TypographyTableDataCell>
-              Reset the indicated target to <TypographyInlineCode>(0, 0)</TypographyInlineCode> and remove the target indicator from the heads-up display.
+              Reset the indicated target to <TypographyInlineMaths>(0, 0)</TypographyInlineMaths> and remove the target indicator from the heads-up display.
             </TypographyTableDataCell>
           </TypographyTableRow>
 
@@ -538,7 +540,8 @@ function ConstituentPlacePage() {
       <TypographyMuted>
         <TypographyList>
           <TypographyListItem><TypographyKeyInput>1</TypographyKeyInput>, <TypographyKeyInput>2</TypographyKeyInput>, <TypographyKeyInput>3</TypographyKeyInput>, <TypographyKeyInput>4</TypographyKeyInput>, etc. to pounce to hard-coded parts bins, and/or programmable saved positions.</TypographyListItem>
-          <TypographyListItem>another modifier key to rotate the search angles from <TypographyInlineCode>{'θ ∈ {0°, 90°, 180°, 270°}'}</TypographyInlineCode> to <TypographyInlineCode>{'θ ∈ {45°, 135°, 225°, 315°}'}</TypographyInlineCode>.</TypographyListItem>
+          <TypographyListItem>another modifier key to rotate the search angles from <TypographyInlineMaths>{String.raw`\theta_\text{s} \in \{0, \frac{\pi}{2}, \pi, \frac{3\pi}{2}\}`}</TypographyInlineMaths> to <TypographyInlineMaths>{String.raw`\theta_\text{s} \in \{\frac{\pi}{4}, \frac{3\pi}{4}, \frac{5\pi}{4}, \frac{7\pi}{4}\}`}</TypographyInlineMaths>.</TypographyListItem>
+
           <TypographyListItem>displaying the search sectors through guide lines in the heads-up display.</TypographyListItem>
           <TypographyListItem>ability to change the fixed step distance on-the-fly.</TypographyListItem>
           <TypographyListItem>ability to break the targets into topological grid squares, and/or the ability to long jump and skip over a number of intermediate targets.</TypographyListItem>
@@ -782,9 +785,9 @@ function SystemArchitecture() {
             </TypographyP>
 
             <TypographyP>
-              Numeric data, such as the <TypographyInlineCode>TARGET_DELTAS</TypographyInlineCode> between the present head position and the operator&apos;s desired target, is <span id={FRAGMENT_IDS.DATA_NORMALISATION}>normalised into an absolute, invariant range of <TypographyInlineCode>[0, 65535]</TypographyInlineCode>.
-                This normalisation ensures that the exchanged units are independent of run-time variables—the client viewport, or streamed video dimensions, for instance</span>.
-              The representation range of a <TypographyInlineCode>16-bit</TypographyInlineCode> integer was chosen for performance—by using this range, we can leverage the efficiency and other benefits of protocol buffer <TypographyLink href={GLOBALS.PROTOCOL_BUFFERS.VARINTS}>varints</TypographyLink>, which would not be possible if we exchanged a <TypographyInlineCode>float</TypographyInlineCode> or <TypographyInlineCode>double</TypographyInlineCode> in the range of <TypographyInlineCode>[0, 1]</TypographyInlineCode>.
+              Numeric data, such as the <TypographyInlineCode>TARGET_DELTAS</TypographyInlineCode> between the present head position and the operator&apos;s desired target, is <span id={FRAGMENT_IDS.DATA_NORMALISATION}>normalised into an absolute, invariant range of <TypographyInlineMaths>[0, 65535]</TypographyInlineMaths>.
+              This normalisation ensures that the exchanged units are independent of run-time variables—the client viewport, or streamed video dimensions, for instance</span>.
+              The representation range of a <TypographyInlineCode>16-bit</TypographyInlineCode> integer was chosen for performance—by using this range, we can leverage the efficiency and other benefits of protocol buffer <TypographyLink href={GLOBALS.PROTOCOL_BUFFERS.VARINTS}>varints</TypographyLink>, which would not be possible if we exchanged a <TypographyInlineCode>float</TypographyInlineCode> or <TypographyInlineCode>double</TypographyInlineCode> in the range of <TypographyInlineMaths>[0, 1]</TypographyInlineMaths>.
             </TypographyP>
           </AccordionContent>
         </AccordionItem>
@@ -812,9 +815,19 @@ function SystemUserInterface() {
 
       <TypographyH5 id={FRAGMENT_IDS.NEAREST_TARGET}>Nearest-Target Algorithm</TypographyH5>
       <TypographyP>
-        The development of our nearest-target algorithm was guided by a hypothesis that an algorithm which simply selected the mathematical nearest target would not be the most user-friendly algorithm.
-        {/* TODO: Cost function c(r, theta) */}
-        More precisely, we hypothesised that always selecting whichever polar target <TypographyInlineCode>(rₜ, θₜ)</TypographyInlineCode> positioned within the search sector (eg <TypographyInlineCode>-45° &le; θₛ &le; 45°</TypographyInlineCode>) possessed the least radius <TypographyInlineCode>rₜ</TypographyInlineCode> would <TypographyItalics>not</TypographyItalics> produce an optimal algorithm for our cooperative, human-centric design.
+        The development of our nearest-target algorithm was guided by a hypothesis that an algorithm which simply selected the radially-nearest target would not be the most user-friendly algorithm.
+      </TypographyP>
+
+      <TypographyP>
+        More precisely, we theorised that we could use a cost function <TypographyInlineMaths>c(r, \theta)</TypographyInlineMaths> to capture the &lsquo;nearness&rsquo; of a polar target <TypographyInlineMaths>{String.raw`(r_\text{t}, \theta_\text{t})`}</TypographyInlineMaths> within a given search sector <TypographyInlineMaths>{String.raw`⌔_\text{s}`}</TypographyInlineMaths>, where
+        <TypographyBlockMaths>{String.raw`
+          c(r, \theta) = \begin{cases}
+            r & \left\lvert \theta_\text{s} - \theta \right\rvert \leq \frac{2\pi}{2N} \\
+            \infty & \text{otherwise}
+          \end{cases}
+          `}</TypographyBlockMaths>
+        where the <TypographyInlineMaths>N</TypographyInlineMaths> is the total number of sectors, and <TypographyInlineMaths>{String.raw`\theta_\text{s}`}</TypographyInlineMaths> is the polar angle across which <TypographyInlineMaths>{String.raw`⌔_\text{s}`}</TypographyInlineMaths> is centred.
+        We hypothesised that this cost function would <TypographyItalics>not</TypographyItalics> produce an optimal algorithm for our cooperative, human-centric machine control.
       </TypographyP>
 
       <TypographyP>
@@ -824,12 +837,12 @@ function SystemUserInterface() {
 
       <TypographyP>
         In Figure 1, the operator first presents a <TypographyKeyInput>←</TypographyKeyInput> input to pounce to target <TypographyInlineCode>(1)</TypographyInlineCode>.
-        This is as expected, and does not feel unnatural.
-        However, when the operator next presents a <TypographyKeyInput>→</TypographyKeyInput> input, expecting to pounce to target <TypographyInlineCode>(3)</TypographyInlineCode>, the shortest radius from <TypographyInlineCode>(1)</TypographyInlineCode> within the sector of <TypographyInlineCode>-45° &le; θₛ &le; 45°</TypographyInlineCode> is instead determined to be target <TypographyInlineCode>(2)</TypographyInlineCode>, which does feel unnatural and non-optimal.
+        This behaves as expected, and does not feel unnatural.
+        However, when the operator next presents a <TypographyKeyInput>→</TypographyKeyInput> input, expecting to pounce to target <TypographyInlineCode>(3)</TypographyInlineCode>, the shortest radius <TypographyInlineMaths>{String.raw`r_\text{t}`}</TypographyInlineMaths> from <TypographyInlineCode>(1)</TypographyInlineCode> within the sector of <TypographyInlineMaths>{String.raw`-\frac{\pi}{4} \leq \theta_\text{t} \leq \frac{\pi}{4}`}</TypographyInlineMaths> is instead determined to be target <TypographyInlineCode>(2)</TypographyInlineCode>, which does feel unnatural and non-optimal.
       </TypographyP>
 
       <TypographyP>
-        Similarly, Figure 2 shows that the unweighted &lsquo;nearest radius&rsquo; algorithm will pounce from target <TypographyInlineCode>(2)</TypographyInlineCode> to target <TypographyInlineCode>(3)</TypographyInlineCode>, rather than the more &lsquo;appropriate&rsquo; <TypographyInlineCode>(4)</TypographyInlineCode>.
+        Similarly, Figure 2 shows that the unweighted &lsquo;nearest radius&rsquo; cost function will pounce from target <TypographyInlineCode>(2)</TypographyInlineCode> to target <TypographyInlineCode>(3)</TypographyInlineCode>, rather than the more &lsquo;intuitive&rsquo; <TypographyInlineCode>(4)</TypographyInlineCode>.
       </TypographyP>
 
       <ImageCarousel
@@ -841,14 +854,14 @@ function SystemUserInterface() {
       />
 
       <TypographyP>
-        From this empirical result, we proceeded to investigate the way in which a &lsquo;weighting&rsquo; function might be applicable to produce an overall cost function that could better consider the angle displacement between targets.
-        To achieve this, we used Julia to visualise the effects of varying radius <TypographyInlineCode>rₜ</TypographyInlineCode> and angle <TypographyInlineCode>θₜ</TypographyInlineCode> with different weighting functions, producing the collection of polar plots shown below.
-        We broke the polar plot into four sectors, each with a central angle of <TypographyInlineCode>90°</TypographyInlineCode> and centred on a search angle <TypographyInlineCode>{'θₛ ∈ {0°, 90°, 180°, 270°}'}</TypographyInlineCode>, and used a colour gradient to represent the &lsquo;nearness&rsquo; value of each point with respect to <TypographyInlineCode>(0, 0)</TypographyInlineCode> as computed by the cost function.
+        From this empirical result, we proceeded to investigate the way in which a &lsquo;weighting&rsquo; function <TypographyInlineMaths>w(r, \theta)</TypographyInlineMaths> might be applicable to produce an overall cost function that could better consider the angle difference between targets.
+        To achieve this, we used Julia to visualise the effects of varying radius <TypographyInlineMaths>{String.raw`r_\text{t}`}</TypographyInlineMaths> and angle <TypographyInlineMaths>{String.raw`\theta_\text{t}`}</TypographyInlineMaths> with various weighted cost functions, producing the collection of polar plots shown below.
+        We broke the polar plot into four quadrants, each centred on a search angle <TypographyInlineMaths>{String.raw`\theta_\text{s} \in \{0, \frac{\pi}{2}, \pi, \frac{3\pi}{2}\}`}</TypographyInlineMaths>, and used a colour gradient to represent the &lsquo;nearness&rsquo; value of each point with respect to <TypographyInlineMaths>(0, 0)</TypographyInlineMaths> as computed by the cost function.
       </TypographyP>
 
       <TypographyImage
         image={STATIC_IMAGES.NEAREST_TARGET.PLOTS.UNWEIGHTED_DOTS}
-        caption='Nearest radius with no weighting. The nearest-target algorithm, or cost function, is evaluated to determine a &lsquo;nearness&rsquo; value for each point in the polar plot.'
+        caption='Nearest radius with no weighting. The cost function is evaluated to determine a &lsquo;nearness&rsquo; value for each point in the polar plot.'
       />
 
       <TypographyImage
@@ -857,7 +870,22 @@ function SystemUserInterface() {
       />
 
       <TypographyP>
-        The first weighting function that we applied was a simple multiplication of the target&apos;s radius <TypographyInlineCode>rₜ</TypographyInlineCode> by the difference between its angle <TypographyInlineCode>θₜ</TypographyInlineCode> and the search angle <TypographyInlineCode>θₛ</TypographyInlineCode>; ie targets that fall nearer to the search angle will be multiplied by a smaller factor, and hence considered &lsquo;nearer&rsquo;.
+        The first weighted cost function that we investigated was a simple product of the target&apos;s radius <TypographyInlineMaths>{String.raw`r_\text{t}`}</TypographyInlineMaths> by the difference between its angle <TypographyInlineMaths>{String.raw`\theta_\text{t}`}</TypographyInlineMaths> and the search angle <TypographyInlineMaths>{String.raw`\theta_\text{s}`}</TypographyInlineMaths>, normalised with respect to the maximum deviation <TypographyInlineMaths>{String.raw`\theta_\text{d}`}</TypographyInlineMaths>, where
+        <TypographyBlockMaths>{String.raw`
+          \begin{aligned}
+
+          \theta_\text{d} &= \frac{2\pi}{2N} \\[1.25em]
+
+          w_\text{simple}(r, \theta) &= \frac{\left\lvert \theta_\text{s} - \theta \right\rvert}{\theta_\text{d}} \\[1.25em]
+
+          c(r, \theta) &= \begin{cases}
+            r \cdot w(r, \theta) & \left\lvert \theta_\text{s} - \theta \right\rvert \leq \theta_\text{d} \\
+            \infty & \text{otherwise}
+          \end{cases}
+
+          \end{aligned}
+        `}</TypographyBlockMaths>
+        The intuition for this cost function is that targets which fall nearer to the search angle are multiplied by a smaller weight <TypographyInlineMaths>w(r, \theta)</TypographyInlineMaths> and hence considered &lsquo;nearer&rsquo;.
       </TypographyP>
 
       <TypographyImage
@@ -866,7 +894,7 @@ function SystemUserInterface() {
       />
 
       <TypographyP>
-        We found this simple weighting function to produce an equally non-optimal cost function, as it would place unfair preference upon even the radially farthermost target, provided only that it lay along the search angle such that <TypographyInlineCode>θₜ ≈ θₛ</TypographyInlineCode>.
+        We found this simple weighting function to produce an equally undesirable cost function, as it would place unfair preference upon even the radially farthermost target, provided only that it lay along the search angle such that <TypographyInlineMaths>{String.raw`\theta_\text{t} \approx \theta_\text{s}`}</TypographyInlineMaths>.
         An example is provided in Figure 3 below, where this algorithm will pounce straight from target <TypographyInlineCode>(2)</TypographyInlineCode> to target <TypographyInlineCode>(3)</TypographyInlineCode>, skipping over targets <TypographyInlineCode>(4)</TypographyInlineCode> and <TypographyInlineCode>(5)</TypographyInlineCode>.
       </TypographyP>
 
@@ -876,9 +904,20 @@ function SystemUserInterface() {
       />
 
       <TypographyP>
-        We then applied an offset to the multiplicative factor to break the property of homogeneity, and hence linearity, of the cost function.
+        We then applied an offset <TypographyInlineMaths>c</TypographyInlineMaths> to the multiplicative factor <TypographyInlineMaths>w(r, \theta)</TypographyInlineMaths> to break the property of homogeneity, and hence linearity, of the cost function.
+        <TypographyBlockMaths>{String.raw`
+          w_\text{non-linear}(r, \theta) = \frac{\left\lvert \theta_\text{s} - \theta \right\rvert}{\theta_\text{d}} + c
+        `}</TypographyBlockMaths>
         We found this offset to behave as a damping factor; a control knob that we could employ to moderate the influence of angle deviation towards the computed &lsquo;nearness&rsquo; of a target position.
-        We observed that the algorithm behaved increasingly like the unweighted &lsquo;nearest radius&rsquo; algorithm as the damping factor tended to infinity, which is understood through the theory behind non-homogenous functions.
+        We observed that this algorithm behaved increasingly like the unweighted &lsquo;nearest radius&rsquo; algorithm as <TypographyInlineMaths>c</TypographyInlineMaths> tended to infinity, which can be understood through the theory underpinning non-homogenous functions.
+      </TypographyP>
+
+      <TypographyP>
+        We realised through this observation that the &lsquo;damping factor&rsquo; <TypographyInlineMaths>c</TypographyInlineMaths> behaves in effect like the reciprocal of a directivity constant <TypographyInlineMaths>D</TypographyInlineMaths>, where <TypographyInlineMaths>{String.raw`w_\text{non-linear}(r, \theta)`}</TypographyInlineMaths> can be re-written as
+        <TypographyBlockMaths>{String.raw`
+          w_\text{non-linear}(r, \theta) = \frac{\left\lvert \theta_\text{s} - \theta \right\rvert}{0.5 \times \theta_\text{c}} + \frac{1}{D}
+        `}</TypographyBlockMaths>
+        such that <TypographyInlineMaths>{String.raw`c_\text{non-linear}(r, \theta)`}</TypographyInlineMaths> approximates the unweighted &lsquo;nearest radius&rsquo; algorithm as <TypographyInlineMaths>D \to 0</TypographyInlineMaths>.
       </TypographyP>
 
       <ImageCarousel

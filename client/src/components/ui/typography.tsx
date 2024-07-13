@@ -111,7 +111,9 @@ export function TypographyKeyInput({ children }: TypographyProps) {
 
 export function TypographyInlineMaths({ children }: TypographyProps) {
   return (
-    <InlineMath>{children}</InlineMath>
+    <span className='p-0.5 text-xs sm:text-sm'>
+      <InlineMath>{children}</InlineMath>
+    </span>
   )
 }
 
