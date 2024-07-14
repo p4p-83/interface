@@ -819,7 +819,7 @@ function SystemUserInterface() {
       </TypographyP>
 
       <TypographyP>
-        More precisely, we theorised that we could use a cost function <TypographyInlineMaths>c(r, \theta)</TypographyInlineMaths> to capture the &lsquo;nearness&rsquo; of a polar target <TypographyInlineMaths>{String.raw`(r_\text{t}, \theta_\text{t})`}</TypographyInlineMaths> within a given search sector <TypographyInlineMaths>{String.raw`⌔_\text{s}`}</TypographyInlineMaths>, where
+        More precisely, we theorised that a cost function <TypographyInlineMaths>c(r, \theta)</TypographyInlineMaths> could be used to capture the &lsquo;nearness&rsquo; of a polar target <TypographyInlineMaths>{String.raw`(r_\text{t}, \theta_\text{t})`}</TypographyInlineMaths> within a given search sector <TypographyInlineMaths>{String.raw`⌔_\text{s}`}</TypographyInlineMaths>, where
         <TypographyBlockMaths>{String.raw`
           c(r, \theta) = \begin{cases}
             r & \left\lvert \theta_\text{s} - \theta \right\rvert \leq \frac{2\pi}{2N} \\
@@ -873,7 +873,7 @@ function SystemUserInterface() {
       />
 
       <TypographyP>
-        The first weighted cost function that we investigated was a simple product of the target&apos;s radius <TypographyInlineMaths>{String.raw`r_\text{t}`}</TypographyInlineMaths> by the difference between its angle <TypographyInlineMaths>{String.raw`\theta_\text{t}`}</TypographyInlineMaths> and the search angle <TypographyInlineMaths>{String.raw`\theta_\text{s}`}</TypographyInlineMaths>, normalised with respect to the maximum deviation <TypographyInlineMaths>{String.raw`\theta_\text{d}`}</TypographyInlineMaths>, where
+        The first weighted cost function that we investigated was a simple product of the target&apos;s radius <TypographyInlineMaths>{String.raw`r_\text{t}`}</TypographyInlineMaths> by the difference <TypographyInlineMaths>{String.raw`\left\lvert \theta_\text{s} - \theta_\text{t} \right\rvert`}</TypographyInlineMaths> between its angle <TypographyInlineMaths>{String.raw`\theta_\text{t}`}</TypographyInlineMaths> and the search angle <TypographyInlineMaths>{String.raw`\theta_\text{s}`}</TypographyInlineMaths>, normalised with respect to the maximum deviation <TypographyInlineMaths>{String.raw`\theta_\text{d}`}</TypographyInlineMaths>, where
         <TypographyBlockMaths>{String.raw`
           \begin{aligned}
 
@@ -1009,7 +1009,7 @@ function SystemUserInterface() {
 
       <TypographyH5 id={FRAGMENT_IDS.DATA_CONTEXT}>Data Context</TypographyH5>
       <TypographyP>
-        A React <TypographyLink href={GLOBALS.REACT.CONTEXT}>context</TypographyLink> is used to distribute the data configured on <GLOBALS.InlineCode.Pages.Settings /> throughout the application, without devolving to <TypographyLink href={GLOBALS.REACT.PROP_DRILLING}>prop drilling</TypographyLink>.
+        A React <TypographyLink href={GLOBALS.REACT.CONTEXT}>context</TypographyLink> is used to distribute the data configured on <GLOBALS.InlineCode.Pages.Settings /> throughout the application without devolving to <TypographyLink href={GLOBALS.REACT.PROP_DRILLING}>prop drilling</TypographyLink>.
         This data is backed into <TypographyInlineCode>window.localStorage</TypographyInlineCode> as stringified JSON through a <TypographyInlineCode>useLocalStorage()</TypographyInlineCode> <TypographyLink href={GLOBALS.REACT.CUSTOM_HOOK}>custom hook</TypographyLink>, such that the data persists locally within the operator&apos;s browser once configured.
       </TypographyP>
 
