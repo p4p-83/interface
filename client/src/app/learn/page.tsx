@@ -838,13 +838,13 @@ function SystemUserInterface() {
 
       <TypographyList ordered>
         <TypographyListItem>
-        In Figure 1, the operator first presents a <TypographyKeyInput>←</TypographyKeyInput> input to pounce to target <TypographyInlineCode>(1)</TypographyInlineCode>.
+        In Figure 1, the operator first presents a <TypographyKeyInput>←</TypographyKeyInput> input to pounce to target <TypographyInlineCode>①</TypographyInlineCode>.
         This behaves as expected, and does not feel unnatural.
-        However, when the operator next presents a <TypographyKeyInput>→</TypographyKeyInput> input, expecting to pounce to target <TypographyInlineCode>(3)</TypographyInlineCode>, the shortest radius <TypographyInlineMaths>{String.raw`r_\text{t}`}</TypographyInlineMaths> from <TypographyInlineCode>(1)</TypographyInlineCode> within the sector <TypographyInlineMaths>{String.raw`\left\lvert\theta_\text{t}\right\rvert \leq \frac{\pi}{4}`}</TypographyInlineMaths> is instead determined to be target <TypographyInlineCode>(2)</TypographyInlineCode>.
+        However, when the operator next presents a <TypographyKeyInput>→</TypographyKeyInput> input, expecting to pounce to target <TypographyInlineCode>③</TypographyInlineCode>, the shortest radius <TypographyInlineMaths>{String.raw`r_\text{t}`}</TypographyInlineMaths> from <TypographyInlineCode>①</TypographyInlineCode> within the sector <TypographyInlineMaths>{String.raw`\left\lvert\theta_\text{t}\right\rvert \leq \frac{\pi}{4}`}</TypographyInlineMaths> is instead determined to be target <TypographyInlineCode>②</TypographyInlineCode>.
         This <TypographyItalics>does</TypographyItalics> feel unnatural and non-optimal.
         </TypographyListItem>
         <TypographyListItem>
-        Similarly, Figure 2 shows that the unweighted &lsquo;nearest radius&rsquo; cost function will pounce from target <TypographyInlineCode>(2)</TypographyInlineCode> to target <TypographyInlineCode>(3)</TypographyInlineCode>, rather than the more &lsquo;intuitive&rsquo; <TypographyInlineCode>(4)</TypographyInlineCode>.
+        Similarly, Figure 2 shows that the unweighted &lsquo;nearest radius&rsquo; cost function will pounce from target <TypographyInlineCode>②</TypographyInlineCode> to target <TypographyInlineCode>③</TypographyInlineCode>, rather than the more &lsquo;intuitive&rsquo; <TypographyInlineCode>④</TypographyInlineCode>.
         </TypographyListItem>
       </TypographyList>
 
@@ -898,7 +898,7 @@ function SystemUserInterface() {
 
       <TypographyP>
         We found this simple weighting function to produce an equally undesirable cost function, as it would place unfair preference upon even the radially farthermost target, provided only that it lay along the search angle such that <TypographyInlineMaths>{String.raw`\theta_\text{t} \approx \theta_\text{s}`}</TypographyInlineMaths>.
-        An example is provided in Figure 3 below, where this algorithm will pounce straight from target <TypographyInlineCode>(2)</TypographyInlineCode> to target <TypographyInlineCode>(3)</TypographyInlineCode>, skipping over targets <TypographyInlineCode>(4)</TypographyInlineCode> and <TypographyInlineCode>(5)</TypographyInlineCode>.
+        An example is provided in Figure 3 below, where this algorithm will pounce straight from target <TypographyInlineCode>②</TypographyInlineCode> to target <TypographyInlineCode>③</TypographyInlineCode>, skipping over targets <TypographyInlineCode>④</TypographyInlineCode> and <TypographyInlineCode>⑤</TypographyInlineCode>.
       </TypographyP>
 
       <TypographyImage
@@ -986,12 +986,12 @@ function SystemUserInterface() {
       </TypographyP>
 
       <TypographyP>
-        Figure 6 below illustrates an example of this, where the selected target <TypographyInlineCode>(4)</TypographyInlineCode> would be unreachable if:
+        Figure 6 below illustrates an example of this, where the selected target <TypographyInlineCode>④</TypographyInlineCode> would be unreachable if:
       </TypographyP>
 
       <TypographyList ordered>
-        <TypographyListItem>the directivity constant was changed such that target <TypographyInlineCode>(3)</TypographyInlineCode> instead pounced <TypographyKeyInput>→</TypographyKeyInput> to target <TypographyInlineCode>(5)</TypographyInlineCode>, and</TypographyListItem>
-        <TypographyListItem>target <TypographyInlineCode>(1)</TypographyInlineCode> did not exist such that you could not pounce <TypographyKeyInput>↑</TypographyKeyInput>, and</TypographyListItem>
+        <TypographyListItem>the directivity constant was changed such that target <TypographyInlineCode>③</TypographyInlineCode> instead pounced <TypographyKeyInput>→</TypographyKeyInput> to target <TypographyInlineCode>⑤</TypographyInlineCode>, and</TypographyListItem>
+        <TypographyListItem>target <TypographyInlineCode>①</TypographyInlineCode> did not exist such that you could not pounce <TypographyKeyInput>↑</TypographyKeyInput>, and</TypographyListItem>
         <TypographyListItem>the targets in the top-left did not exist such that you could not pounce <TypographyKeyInput>→</TypographyKeyInput>.</TypographyListItem>
       </TypographyList>
 
