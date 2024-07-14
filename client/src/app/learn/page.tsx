@@ -1016,7 +1016,7 @@ function SystemUserInterface() {
       <TypographyH5 id={FRAGMENT_IDS.VALIDATION}>Form Validation</TypographyH5>
       <TypographyP>
         <TypographyLink href={GLOBALS.ZOD}>Zod</TypographyLink> is used on <GLOBALS.InlineCode.Pages.Settings /> for form schema declaration and validation via static type inference.
-        This provides immediate, client-side validation at runtime for the operator&apos;s inputs, helping to ensure that all system environment variables are configured correctly.
+        This provides immediate, client-side validation at run-time for the operator&apos;s inputs, helping to ensure that all system environment variables are configured correctly.
       </TypographyP>
     </>
   )
