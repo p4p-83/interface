@@ -243,7 +243,7 @@ type TypographyImageCaptionProps = Pick<TypographyImageProps, 'caption' | 'capti
 
 function TypographyImageCaption({ caption, captionElement, className }: TypographyImageCaptionProps) {
   return (
-    <div className={cn('py-4 pb-0 text-center', className)}>
+    <div className={cn('py-4 pb-0 text-center leading-none', className)}>
       <TypographySmall>
         <TypographyMuted>
           {captionElement ?? caption}

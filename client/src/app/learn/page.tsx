@@ -285,7 +285,6 @@ function ConstituentHomePage() {
       </TypographyP>
 
       <ImageCarousel
-        itemClassName='basis-5/6'
         images={[
           { image: STATIC_IMAGES.HOME.PAGE, caption: `${GLOBALS.PAGES.HOME.name} page` },
           {
@@ -304,7 +303,7 @@ function ConstituentHomePage() {
           },
         ]}
         className='mt-6'
-        captionClassName='pb-4'
+        captionClassName='mb-4 lg:mb-4'
       />
 
     </>
@@ -353,7 +352,6 @@ function ConstituentPlacePage() {
       </TypographyList>
 
       <ImageCarousel
-        itemClassName='basis-5/6'
         images={[
           { image: STATIC_IMAGES.PLACE.PROGRESS, caption: 'Progress bar whilst video stream loads' },
           { image: STATIC_IMAGES.PLACE.ERROR, caption: 'Video stream error' },
@@ -851,7 +849,6 @@ function SystemUserInterface() {
       </TypographyList>
 
       <ImageCarousel
-        itemClassName='basis-11/12'
         images={[
           { image: STATIC_IMAGES.NEAREST_TARGET.EXAMPLES.UNWEIGHTED_1, caption: 'Figure 1: Unweighted nearest radius algorithm' },
           { image: STATIC_IMAGES.NEAREST_TARGET.EXAMPLES.UNWEIGHTED_2, caption: 'Figure 2: Unweighted nearest radius algorithm' },
@@ -927,7 +924,6 @@ function SystemUserInterface() {
       </TypographyP>
 
       <ImageCarousel
-        itemClassName='basis-3/4'
         images={[
           { image: STATIC_IMAGES.NEAREST_TARGET.PLOTS.WEIGHTED_NON_LINEAR_1M, caption: 'Non-linear algorithm with directivity D = 10^6',
             captionElement: (
@@ -969,7 +965,6 @@ function SystemUserInterface() {
       </TypographyP>
 
       <ImageCarousel
-        itemClassName='basis-11/12'
         images={[
           { image: STATIC_IMAGES.NEAREST_TARGET.EXAMPLES.WEIGHTED_NON_LINEAR_1, caption: 'Figure 4: Non-linear algorithm with directivity D = 2',
             captionElement: (

@@ -24,11 +24,10 @@ type ImageCarouselImage = {
 type ImageCarouselProps = {
   images: ImageCarouselImage[];
   className?: string;
-  itemClassName?: string;
   captionClassName?: string;
 }
 
-export function ImageCarousel({ images, className, itemClassName, captionClassName }: ImageCarouselProps) {
+export function ImageCarousel({ images, className, captionClassName }: ImageCarouselProps) {
   const [api, setApi] = useState<CarouselApi | null>(null)
   const [current, setCurrent] = useState(0)
 
@@ -53,7 +52,7 @@ export function ImageCarousel({ images, className, itemClassName, captionClassNa
       >
         <CarouselContent>
           {images.map(({ image, noBlur = false, caption }) => (
-            <CarouselItem key={caption} className={cn('basis-3/4 lg:basis-full', itemClassName)}>
+            <CarouselItem key={caption}>
               {((image instanceof Object) && ('light' in image))
                 ? (
                   <>
@@ -86,17 +85,21 @@ export function ImageCarousel({ images, className, itemClassName, captionClassNa
           ))}
         </CarouselContent>
 
-        <CarouselPrevious className='hidden lg:inline-flex' />
-        <CarouselNext className='hidden lg:inline-flex' />
-      </Carousel>
+        <div className={cn('flex flex-row mt-2.5 lg:mt-4 -mb-1 lg:mb-0 justify-between items-center gap-2', captionClassName)}>
+          <CarouselPrevious className='shrink-0' />
 
-      <div className={cn('py-4 pb-0 text-center', captionClassName)}>
-        <TypographySmall>
-          <TypographyMuted>
-            {images[current].captionElement ?? images[current].caption}
-          </TypographyMuted>
-        </TypographySmall>
-      </div>
+          <span className={cn('text-center text-pretty grow leading-none')}>
+            <TypographySmall>
+              <TypographyMuted>
+                {images[current].captionElement ?? images[current].caption}
+              </TypographyMuted>
+            </TypographySmall>
+          </span>
+
+          <CarouselNext className='shrink-0' />
+        </div>
+
+      </Carousel>
 
     </div>
   )
