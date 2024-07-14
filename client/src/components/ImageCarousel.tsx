@@ -24,10 +24,11 @@ type ImageCarouselImage = {
 type ImageCarouselProps = {
   images: ImageCarouselImage[];
   className?: string;
+  itemClassName?: string;
   captionClassName?: string;
 }
 
-export function ImageCarousel({ images, className, captionClassName }: ImageCarouselProps) {
+export function ImageCarousel({ images, className, itemClassName, captionClassName }: ImageCarouselProps) {
   const [api, setApi] = useState<CarouselApi | null>(null)
   const [current, setCurrent] = useState(0)
 
@@ -52,7 +53,7 @@ export function ImageCarousel({ images, className, captionClassName }: ImageCaro
       >
         <CarouselContent>
           {images.map(({ image, noBlur = false, caption }) => (
-            <CarouselItem key={caption}>
+            <CarouselItem key={caption} className={cn('basis-3/4 lg:basis-full', itemClassName)}>
               {((image instanceof Object) && ('light' in image))
                 ? (
                   <>
@@ -85,8 +86,8 @@ export function ImageCarousel({ images, className, captionClassName }: ImageCaro
           ))}
         </CarouselContent>
 
-        <CarouselPrevious />
-        <CarouselNext />
+        <CarouselPrevious className='hidden lg:inline-flex' />
+        <CarouselNext className='hidden lg:inline-flex' />
       </Carousel>
 
       <div className={cn('py-4 pb-0 text-center', captionClassName)}>
