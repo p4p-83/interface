@@ -7,6 +7,7 @@ import { useDidUnmount } from '@/hooks/useDidUnmount'
 import * as socket from '@/lib/socket'
 
 import { Size, Position } from './PlaceInterface'
+import { POSITIONS } from './301'
 
 type PlaceOverlayProps = {
   socketUrl: string;
@@ -15,11 +16,24 @@ type PlaceOverlayProps = {
   hideOverlay?: boolean;
 }
 
+function offsetTargetPositions(accumulatedOffset: Position) {
+  console.log(accumulatedOffset)
+  return POSITIONS.map((position) => ({
+    x: position.x + (accumulatedOffset.x * 1),
+    y: position.y + (accumulatedOffset.y * 1),
+  }))
+    .filter(({ x, y }) => ((x >= 0 && x <= 1) && (y >= 0 && y <= 1)))
+}
+
 export function PlaceOverlay({ socketUrl, overlaySize, circleSize, hideOverlay = false }: PlaceOverlayProps) {
   const dismissStatusOnUnmount = useRef(false)
 
+  const [accumulatedOffset, setAccumulatedOffset] = useState<Position>({ x: 0, y: 0 })
+
   const [targetOffset, setTargetOffset] = useState<Position | null>(null)
-  const [targetPositionOffsets, setTargetPositionOffsets] = useState<Position[] | null>(null)
+  // const [targetPositionOffsets, setTargetPositionOffsets] = useState<Position[] | null>(offsetTargetPositions(accumulatedOffset))
+
+  const targetPositionOffsets = offsetTargetPositions(accumulatedOffset)
 
   const didUnmount = useDidUnmount({
     onUnmount: useCallback(() => {
@@ -75,7 +89,7 @@ export function PlaceOverlay({ socketUrl, overlaySize, circleSize, hideOverlay =
           break
 
         case 'DRAW_TARGETS':
-          setTargetPositionOffsets(action.payload)
+          // setTargetPositionOffsets(action.payload)
           break
 
         case 'NO_OPERATION':
@@ -186,10 +200,14 @@ export function PlaceOverlay({ socketUrl, overlaySize, circleSize, hideOverlay =
             y: (event.nativeEvent.offsetY / overlaySize.height),
           }
           setTargetOffset(offset)
+          setAccumulatedOffset((previous) => ({ x: previous.x - (offset.x - 0.5), y: previous.y - (offset.y - 0.5) }))
+          console.log({ offset, accumulatedOffset })
 
           console.info(`Clicked at (${offset.x}, ${offset.y})`)
           socket.sendTargetDeltas(webSocket, offset)
         }}
+
+        // TODO: dim overlay
 
         // TODO: https://arc.net/l/quote/ruztcwya
         onKeyDown={(event: KeyboardEvent) => {
@@ -212,9 +230,14 @@ export function PlaceOverlay({ socketUrl, overlaySize, circleSize, hideOverlay =
               return
             }
 
+            if (event.code === 'KeyG') {
+              socket.sendTargetDeltas(webSocket, accumulatedOffset)
+              setAccumulatedOffset({ x: 0, y:0 })
+              return
+            }
+
             const unclampedOffset = { ...previousOffset }
             switch (event.code) {
-            case 'KeyR':
             case 'KeyS':
             case 'ArrowDown':
             case 'KeyJ':
@@ -338,8 +361,10 @@ export function PlaceOverlay({ socketUrl, overlaySize, circleSize, hideOverlay =
               break
             case 'KeyR':
               setTargetOffset(null)
+              setAccumulatedOffset({ x: 0, y:0 })
               return
             case 'Space':
+              targetOffset && setAccumulatedOffset((previous) => ({ x: previous.x - (targetOffset.x - 0.5), y: previous.y - (targetOffset.y - 0.5) }))
               targetOffset && socket.sendTargetDeltas(webSocket, targetOffset)
               return
             default:
@@ -372,12 +397,12 @@ export function PlaceOverlay({ socketUrl, overlaySize, circleSize, hideOverlay =
         {/* Target circle */}
         {(targetOffset) && (
           <div
-            className='absolute z-50 bg-ring/75 outline outline-1 outline-primary-foreground rounded-full pointer-events-none cursor-crosshair'
+            className='absolute z-50 bg-primary-accent/75 border-2 outline outline-2 outline-secondary border-primary-foreground rounded-full pointer-events-none cursor-crosshair'
             style={{
-              width: circleSize,
-              height: circleSize,
-              top: (targetOffset.y * overlaySize.height) - (circleSize / 2),
-              left: (targetOffset.x * overlaySize.width) - (circleSize / 2),
+              width: circleSize * 1.25,
+              height: circleSize * 1.25,
+              top: (targetOffset.y * overlaySize.height) - (circleSize * 1.25 / 2),
+              left: (targetOffset.x * overlaySize.width) - (circleSize * 1.25 / 2),
             }}
           />
         )}
@@ -386,18 +411,19 @@ export function PlaceOverlay({ socketUrl, overlaySize, circleSize, hideOverlay =
         {(targetPositionOffsets?.length) && targetPositionOffsets.map(position => (
           <div
             key={`${position.x},${position.y}`}
-            className='absolute z-0 bg-accent-foreground/25 outline outline-1 outline-accent rounded-none cursor-pointer'
+            className='absolute z-0 bg-muted/65 outline outline-1 outline-primary-foreground border border-primary rounded-sm cursor-pointer'
             onMouseDown={(event: MouseEvent) => {
               console.info(`Clicked target at position (${position.x}, ${position.y})`)
               event.stopPropagation()
               setTargetOffset(position)
+              setAccumulatedOffset((previous) => ({ x: previous.x - (position.x - 0.5), y: previous.y - (position.y - 0.5) }))
               socket.sendTargetDeltas(webSocket, position)
             }}
             style={{
-              width: circleSize,
-              height: circleSize,
-              top: (position.y * overlaySize.height) - (circleSize / 2),
-              left: (position.x * overlaySize.width) - (circleSize / 2),
+              width: circleSize * 0.75,
+              height: circleSize * 0.75,
+              top: (position.y * overlaySize.height) - (circleSize * 0.75 / 2),
+              left: (position.x * overlaySize.width) - (circleSize * 0.75 / 2),
             }}
           />
         ))}

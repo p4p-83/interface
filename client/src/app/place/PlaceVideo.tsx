@@ -72,7 +72,7 @@ export function PlaceVideo({ className, videoUrl, socketUrl }: PlaceVideoProps) 
       </div>
 
       {(isVideoStreaming) && (
-        <PlaceOverlay socketUrl={socketUrl} overlaySize={videoSize} circleSize={10} />
+        <PlaceOverlay socketUrl={socketUrl} overlaySize={videoSize} circleSize={17.5} />
       )}
 
     </div>

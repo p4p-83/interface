@@ -59,18 +59,18 @@ export async function processMessage(data: unknown): Promise<Action> {
       }
 
     case pnp.v1.Message.Tags.TARGET_POSITIONS:
-      if (!decodedMessage.has_positions) {
-        console.error('Missing positions payload: ', decodedMessage)
-        throw new Error('Missing positions payload')
-      }
+      // if (!decodedMessage.has_positions) {
+      //   console.error('Missing positions payload: ', decodedMessage)
+      //   throw new Error('Missing positions payload')
+      // }
 
-      return {
-        actionType: 'DRAW_TARGETS',
-        messageType: decodedMessage.tag,
-        rawPayload,
-        payload: decodedMessage.positions.offsets.map(denormalisePosition),
-        silent: true,
-      }
+      // return {
+      //   actionType: 'DRAW_TARGETS',
+      //   messageType: decodedMessage.tag,
+      //   rawPayload,
+      //   payload: decodedMessage.positions.offsets.map(denormalisePosition),
+      //   silent: true,
+      // }
 
     case pnp.v1.Message.Tags.HEARTBEAT:
     case pnp.v1.Message.Tags.TARGET_DELTAS:

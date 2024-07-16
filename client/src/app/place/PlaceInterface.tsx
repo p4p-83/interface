@@ -14,6 +14,7 @@ export type Size = {
 export type Position = {
   x: number;
   y: number;
+  weight?: number;
 }
 
 export default function PlaceInterface() {
