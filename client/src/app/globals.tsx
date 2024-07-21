@@ -108,7 +108,7 @@ export const GITHUB = {
 
 export const UNIVERSITY = {
   HOME: 'https://www.auckland.ac.nz/en.html',
-  ECSE: 'https://www.auckland.ac.nz/en/engineering/about-the-faculty/electrical-computer-and-software-engineering.html',
+  ECSE: 'https://ecse.auckland.ac.nz',
 } as const
 
 export const MEDIA_MTX = 'https://github.com/bluenviron/mediamtx'
