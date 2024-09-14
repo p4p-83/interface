@@ -192,10 +192,28 @@ export function CalibrateOverlay({ socketUrl, overlaySize, circleSize, hideOverl
     }
 
     case CalibrationStates.CLICK_TARGET:
+    {
+      toast.loading('Calibrating gantry...', {
+        id: ToastIds.CALIBRATION,
+        description: 'Click on a target point.',
+        duration: Infinity,
+        important: true,
+        action: null,
+      })
       break
+    }
 
     case CalibrationStates.CLICK_REAL:
+    {
+      toast.loading('Calibrating gantry...', {
+        id: ToastIds.CALIBRATION,
+        description: 'Click on the new position of that same target point.',
+        duration: Infinity,
+        important: true,
+        action: null,
+      })
       break
+    }
 
     case CalibrationStates.AWAIT_SOCKET:
     default:
@@ -240,7 +258,10 @@ export function CalibrateOverlay({ socketUrl, overlaySize, circleSize, hideOverl
             break
 
           case CalibrationStates.CLICK_REAL:
-            if (!targetOffset) break
+            if (!targetOffset) {
+              setCurrentState(CalibrationStates.MANUALLY_ALIGN_GRID)
+              break
+            }
             socket.sendCalibrationDeltas(webSocket, targetOffset, offset)
             setTargetOffset(null)
             setCurrentState(CalibrationStates.MANUALLY_ALIGN_GRID)
