@@ -248,7 +248,6 @@ export function CalibrateOverlay({ socketUrl, overlaySize, circleSize, hideOverl
           console.info(`Clicked at (${offset.x}, ${offset.y})`)
           switch (currentState) {
           case CalibrationStates.MANUALLY_ALIGN_GRID:
-            setTargetOffset(offset)
             socket.sendTargetDeltas(webSocket, offset)
             break
 
