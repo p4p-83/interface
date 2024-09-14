@@ -174,52 +174,53 @@ export function CalibrateOverlay({ socketUrl, overlaySize, circleSize, hideOverl
 
   // Display calibration prompt/instruction toasts
   useEffect(() => {
-    switch (currentState) {
-
-    case CalibrationStates.MANUALLY_ALIGN_GRID:
-    {
-      toast.loading('Calibrating gantry...', {
-        id: ToastIds.CALIBRATION,
-        description: 'Align the corner of a grid square directly beneath the camera.',
-        duration: Infinity,
-        important: true,
-        action: {
-          label: 'Continue',
-          onClick: () => setCurrentState(CalibrationStates.CLICK_TARGET),
-        },
+    new Promise((resolve) => setTimeout(resolve, 250))
+      .then(() => {
+        switch (currentState) {
+        case CalibrationStates.MANUALLY_ALIGN_GRID:
+        {
+          toast.loading('Calibrating gantry...', {
+            id: ToastIds.CALIBRATION,
+            description: 'Align the corner of a grid square directly beneath the camera.',
+            duration: Infinity,
+            important: true,
+            action: {
+              label: 'Continue',
+              onClick: (event) => {
+                event.preventDefault()
+                setCurrentState(CalibrationStates.CLICK_TARGET)
+              },
+            },
+          })
+          break
+        }
+        case CalibrationStates.CLICK_TARGET:
+        {
+          toast.loading('Calibrating gantry...', {
+            id: ToastIds.CALIBRATION,
+            description: 'Click on a target point.',
+            duration: Infinity,
+            important: true,
+            action: null,
+          })
+          break
+        }
+        case CalibrationStates.CLICK_REAL:
+        {
+          toast.loading('Calibrating gantry...', {
+            id: ToastIds.CALIBRATION,
+            description: 'Click on the new position of that same target point.',
+            duration: Infinity,
+            important: true,
+            action: null,
+          })
+          break
+        }
+        case CalibrationStates.AWAIT_SOCKET:
+        default:
+          break
+        }
       })
-      break
-    }
-
-    case CalibrationStates.CLICK_TARGET:
-    {
-      toast.loading('Calibrating gantry...', {
-        id: ToastIds.CALIBRATION,
-        description: 'Click on a target point.',
-        duration: Infinity,
-        important: true,
-        action: null,
-      })
-      break
-    }
-
-    case CalibrationStates.CLICK_REAL:
-    {
-      toast.loading('Calibrating gantry...', {
-        id: ToastIds.CALIBRATION,
-        description: 'Click on the new position of that same target point.',
-        duration: Infinity,
-        important: true,
-        action: null,
-      })
-      break
-    }
-
-    case CalibrationStates.AWAIT_SOCKET:
-    default:
-      break
-
-    }
   }, [currentState])
 
   if (hideOverlay || !overlaySize) return
@@ -254,16 +255,19 @@ export function CalibrateOverlay({ socketUrl, overlaySize, circleSize, hideOverl
           case CalibrationStates.CLICK_TARGET:
             setTargetOffset(offset)
             socket.sendTargetDeltas(webSocket, offset)
+            toast.dismiss(ToastIds.CALIBRATION)
             setCurrentState(CalibrationStates.CLICK_REAL)
             break
 
           case CalibrationStates.CLICK_REAL:
             if (!targetOffset) {
+              toast.dismiss(ToastIds.CALIBRATION)
               setCurrentState(CalibrationStates.MANUALLY_ALIGN_GRID)
               break
             }
             socket.sendCalibrationDeltas(webSocket, targetOffset, offset)
             setTargetOffset(null)
+            toast.dismiss(ToastIds.CALIBRATION)
             setCurrentState(CalibrationStates.MANUALLY_ALIGN_GRID)
             break
 
