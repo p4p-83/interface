@@ -1,4 +1,4 @@
-import { useCallback, useRef, useState, type MouseEvent, type KeyboardEvent } from 'react'
+import { useCallback, useRef, useState, useEffect, type MouseEvent, type KeyboardEvent } from 'react'
 import useWebSocket from 'react-use-websocket'
 import { toast } from 'sonner'
 
@@ -15,10 +15,18 @@ type CalibrateOverlayProps = {
   hideOverlay?: boolean;
 }
 
+enum CalibrationStates {
+  AWAIT_SOCKET = 0,
+  MANUALLY_ALIGN_GRID = 1,
+  CLICK_TARGET = 2,
+  CLICK_REAL = 3,
+}
+
 export function CalibrateOverlay({ socketUrl, overlaySize, circleSize, hideOverlay = false }: CalibrateOverlayProps) {
   const dismissStatusOnUnmount = useRef(false)
 
   const [targetOffset, setTargetOffset] = useState<Position | null>(null)
+  const [currentState, setCurrentState] = useState<CalibrationStates>(CalibrationStates.AWAIT_SOCKET)
 
   const didUnmount = useDidUnmount({
     onUnmount: useCallback(() => {
@@ -43,6 +51,8 @@ export function CalibrateOverlay({ socketUrl, overlaySize, circleSize, hideOverl
           cancel: DISMISS_BUTTON,
           duration: 1000,
         })
+
+        setCurrentState(CalibrationStates.MANUALLY_ALIGN_GRID)
       },
 
       onClose: (event) => {
@@ -53,6 +63,7 @@ export function CalibrateOverlay({ socketUrl, overlaySize, circleSize, hideOverl
           cancel: DISMISS_BUTTON,
           duration: 1000,
         })
+        setCurrentState(CalibrationStates.AWAIT_SOCKET)
       },
 
       onMessage: async (message) => {
@@ -64,14 +75,15 @@ export function CalibrateOverlay({ socketUrl, overlaySize, circleSize, hideOverl
         switch (action.actionType) {
 
         case 'MOVE_TARGET':
-          setTargetOffset((previousOffset) => {
-            if (!previousOffset) return null
-            return {
-              x: previousOffset.x - action.payload.x,
-              y: previousOffset.y - action.payload.y,
-            }
-          })
-          break
+          return
+          // setTargetOffset((previousOffset) => {
+          //   if (!previousOffset) return null
+          //   return {
+          //     x: previousOffset.x - action.payload.x,
+          //     y: previousOffset.y - action.payload.y,
+          //   }
+          // })
+          // break
 
         case 'NO_OPERATION':
           break
@@ -109,6 +121,7 @@ export function CalibrateOverlay({ socketUrl, overlaySize, circleSize, hideOverl
           cancel: DISMISS_BUTTON,
           duration: 6000,
         })
+        setCurrentState(CalibrationStates.AWAIT_SOCKET)
       },
 
       retryOnError: true,
@@ -159,6 +172,38 @@ export function CalibrateOverlay({ socketUrl, overlaySize, circleSize, hideOverl
     if (overlayElement) overlayElement.focus()
   }, [])
 
+  // Display calibration prompt/instruction toasts
+  useEffect(() => {
+    switch (currentState) {
+
+    case CalibrationStates.MANUALLY_ALIGN_GRID:
+    {
+      toast.loading('Calibrating gantry...', {
+        id: ToastIds.CALIBRATION,
+        description: 'Align the corner of a grid square directly beneath the camera.',
+        duration: Infinity,
+        important: true,
+        action: {
+          label: 'Continue',
+          onClick: () => setCurrentState(CalibrationStates.CLICK_TARGET),
+        },
+      })
+      break
+    }
+
+    case CalibrationStates.CLICK_TARGET:
+      break
+
+    case CalibrationStates.CLICK_REAL:
+      break
+
+    case CalibrationStates.AWAIT_SOCKET:
+    default:
+      break
+
+    }
+  }, [currentState])
+
   if (hideOverlay || !overlaySize) return
 
   return (
@@ -180,10 +225,30 @@ export function CalibrateOverlay({ socketUrl, overlaySize, circleSize, hideOverl
             x: (event.nativeEvent.offsetX / overlaySize.width),
             y: (event.nativeEvent.offsetY / overlaySize.height),
           }
-          setTargetOffset(offset)
 
           console.info(`Clicked at (${offset.x}, ${offset.y})`)
-          socket.sendTargetDeltas(webSocket, offset)
+          switch (currentState) {
+          case CalibrationStates.MANUALLY_ALIGN_GRID:
+            setTargetOffset(offset)
+            socket.sendTargetDeltas(webSocket, offset)
+            break
+
+          case CalibrationStates.CLICK_TARGET:
+            setTargetOffset(offset)
+            socket.sendTargetDeltas(webSocket, offset)
+            setCurrentState(CalibrationStates.CLICK_REAL)
+            break
+
+          case CalibrationStates.CLICK_REAL:
+            if (!targetOffset) break
+            socket.sendCalibrationDeltas(webSocket, targetOffset, offset)
+            setTargetOffset(null)
+            setCurrentState(CalibrationStates.MANUALLY_ALIGN_GRID)
+            break
+
+          default:
+            break
+          }
         }}
 
         // TODO: https://arc.net/l/quote/ruztcwya
@@ -200,6 +265,11 @@ export function CalibrateOverlay({ socketUrl, overlaySize, circleSize, hideOverl
           const previousOffset = targetOffset ?? { x:0.5, y:0.5 }
 
           if (event.shiftKey) {
+
+            if (currentState !== CalibrationStates.MANUALLY_ALIGN_GRID) {
+              console.log(`Returning as state is ${currentState}`)
+              return
+            }
 
             if (event.code === 'KeyR') {
               socket.sendGantryStep(webSocket, socket.GantryDirection.ZERO)
@@ -251,13 +321,35 @@ export function CalibrateOverlay({ socketUrl, overlaySize, circleSize, hideOverl
             }
 
           }
+          else if (event.code === 'Space') {
+            switch (currentState) {
+            case CalibrationStates.MANUALLY_ALIGN_GRID:
+              setCurrentState(CalibrationStates.CLICK_TARGET)
+              break
+            case CalibrationStates.CLICK_TARGET:
+              setCurrentState(CalibrationStates.CLICK_REAL)
+              break
+            case CalibrationStates.CLICK_REAL:
+              setCurrentState(CalibrationStates.MANUALLY_ALIGN_GRID)
+              break
+            }
+          }
         }}
       >
+
+        {/* State display */}
+        {(
+          <div
+            className='absolute z-50 px-12 left-1/2 top-12 bg-secondary/50 outline outline-1 outline-secondary-foreground rounded-full pointer-events-none'
+          >
+            {currentState}
+          </div>
+        )}
 
         {/* Target circle */}
         {(targetOffset) && (
           <div
-            className='absolute z-50 bg-ring/75 outline outline-1 outline-primary-foreground rounded-full pointer-events-none cursor-crosshair'
+            className='absolute z-40 bg-ring/75 outline outline-1 outline-primary-foreground rounded-full pointer-events-none cursor-crosshair'
             style={{
               width: circleSize,
               height: circleSize,
