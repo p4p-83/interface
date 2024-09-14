@@ -19,7 +19,6 @@ export function CalibrateOverlay({ socketUrl, overlaySize, circleSize, hideOverl
   const dismissStatusOnUnmount = useRef(false)
 
   const [targetOffset, setTargetOffset] = useState<Position | null>(null)
-  const [targetPositionOffsets, setTargetPositionOffsets] = useState<Position[] | null>(null)
 
   const didUnmount = useDidUnmount({
     onUnmount: useCallback(() => {
@@ -72,10 +71,6 @@ export function CalibrateOverlay({ socketUrl, overlaySize, circleSize, hideOverl
               y: previousOffset.y - action.payload.y,
             }
           })
-          break
-
-        case 'DRAW_TARGETS':
-          setTargetPositionOffsets(action.payload)
           break
 
         case 'NO_OPERATION':
@@ -256,116 +251,6 @@ export function CalibrateOverlay({ socketUrl, overlaySize, circleSize, hideOverl
             }
 
           }
-          else {
-
-            if (!targetPositionOffsets?.length) return
-
-            const getFlatMapper = (searchAngleDegrees: number, searchArcDegrees: number) => (targetPosition: Position) => {
-              const targetDeltas = {
-                x: (targetPosition.x - previousOffset.x),
-                y: (targetPosition.y - previousOffset.y),
-              }
-
-              if ((targetDeltas.x === 0) && (targetDeltas.y === 0)) return []
-
-              let angleDegrees = (-Math.atan2(targetDeltas.y, targetDeltas.x) * 180) / Math.PI
-              if (angleDegrees < 0) {
-                angleDegrees += 360
-              }
-
-              let angleDifferenceDegrees = Math.abs(angleDegrees - searchAngleDegrees)
-              angleDifferenceDegrees = Math.min((360 - angleDifferenceDegrees), angleDifferenceDegrees)
-
-              // console.info(JSON.stringify({
-              //   ...targetPosition,
-              //   radius: Math.hypot(targetDeltas.x, targetDeltas.y),
-              //   angle: angleDegrees,
-              //   searchAngle: searchAngleDegrees,
-              //   searchArc: (searchArcDegrees / 2),
-              //   difference: angleDifferenceDegrees,
-              //   flattened: angleDifferenceDegrees > (searchArcDegrees / 2),
-              // }, null, 2))
-
-              if (angleDifferenceDegrees > (searchArcDegrees / 2)) return []
-
-              return [{
-                ...targetPosition,
-                radius: Math.hypot(targetDeltas.x, targetDeltas.y),
-                angleDegrees,
-                angleDifferenceDegrees,
-              }]
-            }
-
-            const getSortFunction = (searchAngleDegrees: number, searchArcDegrees: number) => (position: Position & {
-              radius: number,
-              angleDegrees: number,
-              angleDifferenceDegrees: number,
-            }) => {
-              const angleDeviationRatio = position.angleDifferenceDegrees / (searchArcDegrees / 2)
-
-              // console.log(JSON.stringify({
-              //   ...position,
-              //   sD: searchAngleDegrees,
-              //   devR: angleDeviationRatio,
-              //   res: (position.radius * angleDeviationRatio),
-              // }, null, 2))
-
-              // * See James' Logbook for 3 July!
-              return (position.radius * (angleDeviationRatio + 1.5))
-            }
-
-            let searchAngleDegrees: number
-            switch (event.code) {
-            case 'KeyS':
-            case 'ArrowDown':
-            case 'KeyJ':
-              searchAngleDegrees = 270
-              break
-            case 'KeyW':
-            case 'ArrowUp':
-            case 'KeyK':
-              searchAngleDegrees = 90
-              break
-            case 'KeyA':
-            case 'ArrowLeft':
-            case 'KeyH':
-              searchAngleDegrees = 180
-              break
-            case 'KeyD':
-            case 'ArrowRight':
-            case 'KeyL':
-              searchAngleDegrees = 0
-              break
-            case 'KeyR':
-              setTargetOffset(null)
-              return
-            case 'Space':
-              targetOffset && socket.sendTargetDeltas(webSocket, targetOffset)
-              return
-            default:
-              return
-            }
-
-            // Find nearest target
-            // A higher-order getter function is used here for TypeScript to statically ensure all code paths assign searchAngleDegrees
-            const flatMapper = getFlatMapper(searchAngleDegrees, 90)
-            const sortFunction = getSortFunction(searchAngleDegrees, 90)
-
-            const nearestTargetOffset = targetPositionOffsets
-              .flatMap(flatMapper)
-              .toSorted((a, b) => sortFunction(a) - sortFunction(b))
-              [0]
-
-            if (!nearestTargetOffset) {
-              console.info('No target found')
-              return
-            }
-
-            // Go there
-            console.info('Found: ', nearestTargetOffset)
-            setTargetOffset(nearestTargetOffset)
-
-          }
         }}
       >
 
@@ -381,26 +266,6 @@ export function CalibrateOverlay({ socketUrl, overlaySize, circleSize, hideOverl
             }}
           />
         )}
-
-        {/* Target positions */}
-        {(targetPositionOffsets?.length) && targetPositionOffsets.map(position => (
-          <div
-            key={`${position.x},${position.y}`}
-            className='absolute z-0 bg-accent-foreground/25 outline outline-1 outline-accent rounded-none cursor-pointer'
-            onMouseDown={(event: MouseEvent) => {
-              console.info(`Clicked target at position (${position.x}, ${position.y})`)
-              event.stopPropagation()
-              setTargetOffset(position)
-              socket.sendTargetDeltas(webSocket, position)
-            }}
-            style={{
-              width: circleSize,
-              height: circleSize,
-              top: (position.y * overlaySize.height) - (circleSize / 2),
-              left: (position.x * overlaySize.width) - (circleSize / 2),
-            }}
-          />
-        ))}
 
         {/* Centre circle */}
         <div
