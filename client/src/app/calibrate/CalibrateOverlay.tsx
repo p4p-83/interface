@@ -18,7 +18,7 @@ type CalibrateOverlayProps = {
 
 enum CalibrationStates {
   AWAIT_SOCKET = 0,
-  MANUALLY_ALIGN_GRID = 1,
+  MOVE_TO_PATTERN = 1,
   CLICK_TARGET = 2,
   CLICK_REAL = 3,
 }
@@ -53,7 +53,7 @@ export function CalibrateOverlay({ socketUrl, overlaySize, circleSize, hideOverl
           duration: 1000,
         })
 
-        setCurrentState(CalibrationStates.MANUALLY_ALIGN_GRID)
+        setCurrentState(CalibrationStates.MOVE_TO_PATTERN)
       },
 
       onClose: (event) => {
@@ -178,11 +178,11 @@ export function CalibrateOverlay({ socketUrl, overlaySize, circleSize, hideOverl
     new Promise((resolve) => setTimeout(resolve, 250))
       .then(() => {
         switch (currentState) {
-        case CalibrationStates.MANUALLY_ALIGN_GRID:
+        case CalibrationStates.MOVE_TO_PATTERN:
         {
           toast.loading('Calibrating gantry...', {
             id: ToastIds.CALIBRATION,
-            description: 'Align the corner of a grid square directly beneath the camera.',
+            description: 'Move the camera above a calibration pattern.',
             duration: Infinity,
             important: true,
             action: {
@@ -199,7 +199,7 @@ export function CalibrateOverlay({ socketUrl, overlaySize, circleSize, hideOverl
         {
           toast.loading('Calibrating gantry...', {
             id: ToastIds.CALIBRATION,
-            description: 'Click on a target point.',
+            description: 'Click on a diagonal target point.',
             duration: Infinity,
             important: true,
             action: null,
@@ -248,7 +248,7 @@ export function CalibrateOverlay({ socketUrl, overlaySize, circleSize, hideOverl
 
           console.info(`Clicked at (${offset.x}, ${offset.y})`)
           switch (currentState) {
-          case CalibrationStates.MANUALLY_ALIGN_GRID:
+          case CalibrationStates.MOVE_TO_PATTERN:
             socket.sendTargetDeltas(webSocket, offset)
             break
 
@@ -262,13 +262,13 @@ export function CalibrateOverlay({ socketUrl, overlaySize, circleSize, hideOverl
           case CalibrationStates.CLICK_REAL:
             if (!targetOffset) {
               toast.dismiss(ToastIds.CALIBRATION)
-              setCurrentState(CalibrationStates.MANUALLY_ALIGN_GRID)
+              setCurrentState(CalibrationStates.MOVE_TO_PATTERN)
               break
             }
             socket.sendCalibrationDeltas(webSocket, targetOffset, offset)
             setTargetOffset(null)
             toast.dismiss(ToastIds.CALIBRATION)
-            setCurrentState(CalibrationStates.MANUALLY_ALIGN_GRID)
+            setCurrentState(CalibrationStates.MOVE_TO_PATTERN)
             break
 
           default:
@@ -291,7 +291,7 @@ export function CalibrateOverlay({ socketUrl, overlaySize, circleSize, hideOverl
 
           if (event.shiftKey) {
 
-            if (currentState !== CalibrationStates.MANUALLY_ALIGN_GRID) {
+            if (currentState !== CalibrationStates.MOVE_TO_PATTERN) {
               console.log(`Returning as state is ${currentState}`)
               return
             }
@@ -346,16 +346,17 @@ export function CalibrateOverlay({ socketUrl, overlaySize, circleSize, hideOverl
             }
 
           }
+          // TODO: only if okay
           else if (event.code === 'Space') {
             switch (currentState) {
-            case CalibrationStates.MANUALLY_ALIGN_GRID:
+            case CalibrationStates.MOVE_TO_PATTERN:
               setCurrentState(CalibrationStates.CLICK_TARGET)
               break
             case CalibrationStates.CLICK_TARGET:
               setCurrentState(CalibrationStates.CLICK_REAL)
               break
             case CalibrationStates.CLICK_REAL:
-              setCurrentState(CalibrationStates.MANUALLY_ALIGN_GRID)
+              setCurrentState(CalibrationStates.MOVE_TO_PATTERN)
               break
             }
           }
@@ -376,7 +377,7 @@ export function CalibrateOverlay({ socketUrl, overlaySize, circleSize, hideOverl
           >
             {{
               [CalibrationStates.AWAIT_SOCKET]: 'Awaiting socket connection',
-              [CalibrationStates.MANUALLY_ALIGN_GRID]: 'Align camera with grid',
+              [CalibrationStates.MOVE_TO_PATTERN]: 'Move camera above pattern',
               [CalibrationStates.CLICK_TARGET]: 'Click on a target point',
               [CalibrationStates.CLICK_REAL]: 'Click on previous target point',
             }[currentState]}
