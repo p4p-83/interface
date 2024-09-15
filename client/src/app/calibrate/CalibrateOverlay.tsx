@@ -5,6 +5,7 @@ import { toast } from 'sonner'
 import { ToastIds, DISMISS_BUTTON } from '@/components/ui/sonner'
 import { useDidUnmount } from '@/hooks/useDidUnmount'
 import * as socket from '@/lib/socket'
+import { cn } from '@/lib/utils'
 
 import { Size, Position } from './CalibrateInterface'
 
@@ -364,9 +365,21 @@ export function CalibrateOverlay({ socketUrl, overlaySize, circleSize, hideOverl
         {/* State display */}
         {(
           <div
-            className='absolute z-50 px-12 left-1/2 top-12 bg-secondary/50 outline outline-1 outline-secondary-foreground rounded-full pointer-events-none'
+            className={cn(
+              'absolute z-50 inset-x-1/2 -ml-48 w-96 top-0',
+              'bg-card/95 backdrop-blur-md supports-[backdrop-filter]:bg-secondary/60 text-secondary-foreground shadow-sm',
+              'ring-2 ring-ring/25 rounded-b-lg',
+              'px-8 py-4 text-center',
+              'font-bold uppercase text-sm',
+              'select-none cursor-pointer pointer-events-none',
+            )}
           >
-            {currentState}
+            {{
+              [CalibrationStates.AWAIT_SOCKET]: 'Awaiting socket connection',
+              [CalibrationStates.MANUALLY_ALIGN_GRID]: 'Align camera with grid',
+              [CalibrationStates.CLICK_TARGET]: 'Click on a target point',
+              [CalibrationStates.CLICK_REAL]: 'Click on previous target point',
+            }[currentState]}
           </div>
         )}
 
