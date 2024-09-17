@@ -74,6 +74,7 @@ export async function processMessage(data: unknown): Promise<Action> {
 
     case pnp.v1.Message.Tags.HEARTBEAT:
     case pnp.v1.Message.Tags.TARGET_DELTAS:
+    case pnp.v1.Message.Tags.CALIBRATE_DELTAS:
     case pnp.v1.Message.Tags.STEP_GANTRY:
       return {
         actionType: 'NO_OPERATION',
@@ -180,5 +181,31 @@ export function sendGantryStep(webSocket: WebSocketHook, direction: pnp.v1.Messa
   sendMessage(webSocket, new pnp.v1.Message({
     tag: pnp.v1.Message.Tags.STEP_GANTRY,
     step: new pnp.v1.Message.Step({ direction }),
+  }))
+}
+
+export function sendCalibrationDeltas(webSocket: WebSocketHook, targetOffset: Position, realOffset: Position) {
+  const normalisedDeltas = {
+    target: normalisePosition({
+      x: (targetOffset.x - 0.5),
+      y: (targetOffset.y - 0.5),
+    }),
+    real: normalisePosition({
+      x: (realOffset.x - 0.5),
+      y: (realOffset.y - 0.5),
+    }),
+  }
+
+  normalisedDeltas.target.x = Math.max(INT16_CONSTANTS.MINIMUM, Math.min(INT16_CONSTANTS.MAXIMUM, Math.floor(normalisedDeltas.target.x)))
+  normalisedDeltas.target.y = Math.max(INT16_CONSTANTS.MINIMUM, Math.min(INT16_CONSTANTS.MAXIMUM, Math.floor(normalisedDeltas.target.y)))
+  normalisedDeltas.real.x = Math.max(INT16_CONSTANTS.MINIMUM, Math.min(INT16_CONSTANTS.MAXIMUM, Math.floor(normalisedDeltas.real.x)))
+  normalisedDeltas.real.y = Math.max(INT16_CONSTANTS.MINIMUM, Math.min(INT16_CONSTANTS.MAXIMUM, Math.floor(normalisedDeltas.real.y)))
+
+  sendMessage(webSocket, new pnp.v1.Message({
+    tag: pnp.v1.Message.Tags.CALIBRATE_DELTAS,
+    calibration: new pnp.v1.Message.Calibration({
+      target: new pnp.v1.Message.Deltas(normalisedDeltas.target),
+      real: new pnp.v1.Message.Deltas(normalisedDeltas.real),
+    }),
   }))
 }
