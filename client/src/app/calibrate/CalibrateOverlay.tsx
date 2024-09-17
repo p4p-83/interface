@@ -210,7 +210,7 @@ export function CalibrateOverlay({ socketUrl, overlaySize, circleSize, hideOverl
         {
           toast.loading('Calibrating gantry...', {
             id: ToastIds.CALIBRATION,
-            description: 'Click on the new position of that same target point.',
+            description: 'Click on the new position of that same target point, or hit space if it was perfect.',
             duration: Infinity,
             important: true,
             action: null,
@@ -308,8 +308,8 @@ export function CalibrateOverlay({ socketUrl, overlaySize, circleSize, hideOverl
             case 'KeyS':
             case 'ArrowDown':
             case 'KeyJ':
-            // TODO: This must be a internalisable distance.
-            // Either have a new setting that configures this for a real um/mm, or have some ability to switch in real time—probably some HUD indicator, and a key like 'u' to switch units (and have a corresponding tag on the protobuf)
+              // TODO: This must be a internalisable distance.
+              // Either have a new setting that configures this for a real um/mm, or have some ability to switch in real time—probably some HUD indicator, and a key like 'u' to switch units (and have a corresponding tag on the protobuf)
               unclampedOffset.y = previousOffset.y + 0.01
               break
             case 'KeyW':
@@ -346,16 +346,14 @@ export function CalibrateOverlay({ socketUrl, overlaySize, circleSize, hideOverl
             }
 
           }
-          // TODO: only if okay
           else if (event.code === 'Space') {
             switch (currentState) {
             case CalibrationStates.MOVE_TO_PATTERN:
               setCurrentState(CalibrationStates.CLICK_TARGET)
               break
-            case CalibrationStates.CLICK_TARGET:
-              setCurrentState(CalibrationStates.CLICK_REAL)
-              break
             case CalibrationStates.CLICK_REAL:
+              setTargetOffset(null)
+              toast.dismiss(ToastIds.CALIBRATION)
               setCurrentState(CalibrationStates.MOVE_TO_PATTERN)
               break
             }
