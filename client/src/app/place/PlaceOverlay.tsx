@@ -7,7 +7,7 @@ import { useDidUnmount } from '@/hooks/useDidUnmount'
 import * as socket from '@/lib/socket'
 import { cn } from '@/lib/utils'
 
-import { Size, Position } from './PlaceInterface'
+import { Size, Position, MachineState } from './PlaceInterface'
 
 type PlaceOverlayProps = {
   socketUrl: string;
@@ -15,9 +15,6 @@ type PlaceOverlayProps = {
   circleSize: number;
   hideOverlay?: boolean;
 }
-
-// TODO: toggle vacuum
-// TODO: up and down
 
 enum PlaceStates {
   AWAIT_SOCKET,
@@ -33,6 +30,11 @@ export function PlaceOverlay({ socketUrl, overlaySize, circleSize, hideOverlay =
   const [targetOffset, setTargetOffset] = useState<Position | null>(null)
   const [targetPositionOffsets, setTargetPositionOffsets] = useState<Position[] | null>(null)
   const [currentState, setCurrentState] = useState<PlaceStates>(PlaceStates.AWAIT_SOCKET)
+  const [currentMachineState, setCurrentMachineState] = useState<MachineState | null>({
+    gantryPosition: { x: 1, y: 2 },
+    isHeadDown: true,
+    isVacuumEngaged: false,
+  })
 
   const didUnmount = useDidUnmount({
     onUnmount: useCallback(() => {
@@ -92,6 +94,10 @@ export function PlaceOverlay({ socketUrl, overlaySize, circleSize, hideOverlay =
 
         case 'DRAW_TARGETS':
           setTargetPositionOffsets(action.payload)
+          break
+
+        case 'UPDATE_STATE':
+          setCurrentMachineState(action.payload)
           break
 
         case 'NO_OPERATION':
@@ -298,14 +304,22 @@ export function PlaceOverlay({ socketUrl, overlaySize, circleSize, hideOverlay =
             }
 
             if (event.code === 'KeyV') {
-              // TODO: depends on machine state
-              socket.sendHeadOperation(webSocket, socket.HeadOperation.ENGAGE_VACUUM)
+              socket.sendHeadOperation(
+                webSocket,
+                (currentMachineState?.isVacuumEngaged)
+                  ? socket.HeadOperation.DISENGAGE_VACUUM
+                  : socket.HeadOperation.ENGAGE_VACUUM
+              )
               return
             }
 
             if (event.code === 'KeyP') {
-              // TODO: depends on machine state
-              socket.sendHeadOperation(webSocket, socket.HeadOperation.PICK)
+              socket.sendHeadOperation(
+                webSocket,
+                (currentMachineState?.isHeadDown)
+                  ? socket.HeadOperation.RAISE_HEAD
+                  : socket.HeadOperation.LOWER_HEAD
+              )
               return
             }
 
@@ -478,24 +492,39 @@ export function PlaceOverlay({ socketUrl, overlaySize, circleSize, hideOverlay =
       >
 
         {/* State display */}
-        {(
+        <div
+          className={cn(
+            'absolute z-50 inset-x-1/2 -ml-48 w-96 top-0',
+            'bg-card/95 backdrop-blur-md supports-[backdrop-filter]:bg-secondary/60 text-secondary-foreground shadow-sm',
+            'ring-2 ring-ring/25 rounded-b-lg',
+            'px-8 py-4 text-center',
+            'font-bold uppercase text-sm',
+            'select-none cursor-pointer pointer-events-none',
+          )}
+        >
+          {{
+            [PlaceStates.AWAIT_SOCKET]: 'Awaiting socket connection',
+            [PlaceStates.MOVE_TO_COMPONENT]: 'Move to component',
+            [PlaceStates.PICK_COMPONENT]: 'Pick component',
+            [PlaceStates.MOVE_TO_PAD]: 'Move to pad',
+            [PlaceStates.PLACE_COMPONENT]: 'Place component',
+          }[currentState]}
+        </div>
+
+        {/* Machine state display */}
+        {(currentMachineState) && (
           <div
             className={cn(
-              'absolute z-50 inset-x-1/2 -ml-48 w-96 top-0',
+              'absolute z-50 inset-x-1/2 -ml-48 w-96 bottom-0',
               'bg-card/95 backdrop-blur-md supports-[backdrop-filter]:bg-secondary/60 text-secondary-foreground shadow-sm',
-              'ring-2 ring-ring/25 rounded-b-lg',
-              'px-8 py-4 text-center',
-              'font-bold uppercase text-sm',
+              'ring-2 ring-ring/25 rounded-t-lg',
+              'px-8 py-3 text-center',
+              'font-bold uppercase text-xs',
               'select-none cursor-pointer pointer-events-none',
             )}
           >
-            {{
-              [PlaceStates.AWAIT_SOCKET]: 'Awaiting socket connection',
-              [PlaceStates.MOVE_TO_COMPONENT]: 'Move to component',
-              [PlaceStates.PICK_COMPONENT]: 'Pick component',
-              [PlaceStates.MOVE_TO_PAD]: 'Move to pad',
-              [PlaceStates.PLACE_COMPONENT]: 'Place component',
-            }[currentState]}
+            Head is {(currentMachineState.isHeadDown) ? 'down' : 'up'}&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
+            Vacuum is {(currentMachineState.isVacuumEngaged) ? 'on' : 'off'}
           </div>
         )}
 

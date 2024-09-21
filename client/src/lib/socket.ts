@@ -1,7 +1,7 @@
 import { type WebSocketHook } from 'react-use-websocket/dist/lib/types'
 
 import { pnp } from '@/proto/pnp/v1/pnp'
-import { type Position } from '@/app/place/PlaceInterface'
+import { type Position, type MachineState } from '@/app/place/PlaceInterface'
 
 const INT16_CONSTANTS = {
   RANGE: 65535,
@@ -16,6 +16,7 @@ export type ActionPayloads = {
   ['NO_OPERATION']: null,
   ['MOVE_TARGET']: Position,
   ['DRAW_TARGETS']: Position[],
+  ['UPDATE_STATE']: MachineState,
 }
 type ActionType = keyof ActionPayloads
 
@@ -51,7 +52,6 @@ export async function processMessage(data: unknown): Promise<Action> {
         console.error('Missing deltas payload: ', decodedMessage)
         throw new Error('Missing deltas payload')
       }
-
       return {
         actionType: 'MOVE_TARGET',
         messageType: decodedMessage.tag,
@@ -64,12 +64,24 @@ export async function processMessage(data: unknown): Promise<Action> {
         console.error('Missing positions payload: ', decodedMessage)
         throw new Error('Missing positions payload')
       }
-
       return {
         actionType: 'DRAW_TARGETS',
         messageType: decodedMessage.tag,
         rawPayload,
         payload: decodedMessage.positions.offsets.map(denormalisePosition),
+        silent: true,
+      }
+
+    case pnp.v1.Message.Tags.MACHINE_STATE:
+      if (!decodedMessage.has_positions) {
+        console.error('Missing machine state payload: ', decodedMessage)
+        throw new Error('Missing machine state payload')
+      }
+      return {
+        actionType: 'UPDATE_STATE',
+        messageType: decodedMessage.tag,
+        rawPayload,
+        payload: decodedMessage.machineState,
         silent: true,
       }
 
