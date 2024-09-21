@@ -14,7 +14,7 @@ enum ToastIds {
   SOCKET_STATUS,
   SOCKET_ERROR,
   MESSAGE,
-  CALIBRATION,
+  PROMPT,
 }
 
 const DISMISS_BUTTON: ExternalToast['cancel'] = {

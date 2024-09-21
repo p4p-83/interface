@@ -16,6 +16,13 @@ export type Position = {
   y: number;
 }
 
+export type MachineState = {
+  gantryPosition: Position;
+  isHeadDown: boolean;
+  isVacuumEngaged: boolean;
+  isComponentPicked: boolean;
+}
+
 export default function PlaceInterface() {
   const { settingsData } = useContext(DataContext)
 
