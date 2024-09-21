@@ -181,7 +181,7 @@ export function CalibrateOverlay({ socketUrl, overlaySize, circleSize, hideOverl
         case CalibrationStates.MOVE_TO_PATTERN:
         {
           toast.loading('Calibrating gantry...', {
-            id: ToastIds.CALIBRATION,
+            id: ToastIds.PROMPT,
             description: 'Move the camera above a calibration pattern.',
             duration: Infinity,
             important: true,
@@ -198,7 +198,7 @@ export function CalibrateOverlay({ socketUrl, overlaySize, circleSize, hideOverl
         case CalibrationStates.CLICK_TARGET:
         {
           toast.loading('Calibrating gantry...', {
-            id: ToastIds.CALIBRATION,
+            id: ToastIds.PROMPT,
             description: 'Click on a diagonal target point.',
             duration: Infinity,
             important: true,
@@ -209,7 +209,7 @@ export function CalibrateOverlay({ socketUrl, overlaySize, circleSize, hideOverl
         case CalibrationStates.CLICK_REAL:
         {
           toast.loading('Calibrating gantry...', {
-            id: ToastIds.CALIBRATION,
+            id: ToastIds.PROMPT,
             description: 'Click on the new position of that same target point, or hit space if it was perfect.',
             duration: Infinity,
             important: true,
@@ -255,19 +255,19 @@ export function CalibrateOverlay({ socketUrl, overlaySize, circleSize, hideOverl
           case CalibrationStates.CLICK_TARGET:
             setTargetOffset(offset)
             socket.sendTargetDeltas(webSocket, offset)
-            toast.dismiss(ToastIds.CALIBRATION)
+            toast.dismiss(ToastIds.PROMPT)
             setCurrentState(CalibrationStates.CLICK_REAL)
             break
 
           case CalibrationStates.CLICK_REAL:
             if (!targetOffset) {
-              toast.dismiss(ToastIds.CALIBRATION)
+              toast.dismiss(ToastIds.PROMPT)
               setCurrentState(CalibrationStates.MOVE_TO_PATTERN)
               break
             }
             socket.sendCalibrationDeltas(webSocket, targetOffset, offset)
             setTargetOffset(null)
-            toast.dismiss(ToastIds.CALIBRATION)
+            toast.dismiss(ToastIds.PROMPT)
             setCurrentState(CalibrationStates.MOVE_TO_PATTERN)
             break
 
@@ -353,7 +353,7 @@ export function CalibrateOverlay({ socketUrl, overlaySize, circleSize, hideOverl
               break
             case CalibrationStates.CLICK_REAL:
               setTargetOffset(null)
-              toast.dismiss(ToastIds.CALIBRATION)
+              toast.dismiss(ToastIds.PROMPT)
               setCurrentState(CalibrationStates.MOVE_TO_PATTERN)
               break
             }

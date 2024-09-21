@@ -1,10 +1,11 @@
-import { useCallback, useRef, useState, type MouseEvent, type KeyboardEvent } from 'react'
+import { useCallback, useRef, useState, useEffect, type MouseEvent, type KeyboardEvent } from 'react'
 import useWebSocket from 'react-use-websocket'
 import { toast } from 'sonner'
 
 import { ToastIds, DISMISS_BUTTON } from '@/components/ui/sonner'
 import { useDidUnmount } from '@/hooks/useDidUnmount'
 import * as socket from '@/lib/socket'
+import { cn } from '@/lib/utils'
 
 import { Size, Position } from './PlaceInterface'
 
@@ -15,11 +16,23 @@ type PlaceOverlayProps = {
   hideOverlay?: boolean;
 }
 
+// TODO: toggle vacuum
+// TODO: up and down
+
+enum PlaceStates {
+  AWAIT_SOCKET,
+  MOVE_TO_COMPONENT,
+  PICK_COMPONENT,
+  MOVE_TO_PAD,
+  PLACE_COMPONENT,
+}
+
 export function PlaceOverlay({ socketUrl, overlaySize, circleSize, hideOverlay = false }: PlaceOverlayProps) {
   const dismissStatusOnUnmount = useRef(false)
 
   const [targetOffset, setTargetOffset] = useState<Position | null>(null)
   const [targetPositionOffsets, setTargetPositionOffsets] = useState<Position[] | null>(null)
+  const [currentState, setCurrentState] = useState<PlaceStates>(PlaceStates.AWAIT_SOCKET)
 
   const didUnmount = useDidUnmount({
     onUnmount: useCallback(() => {
@@ -44,6 +57,8 @@ export function PlaceOverlay({ socketUrl, overlaySize, circleSize, hideOverlay =
           cancel: DISMISS_BUTTON,
           duration: 1000,
         })
+
+        setCurrentState(PlaceStates.MOVE_TO_COMPONENT)
       },
 
       onClose: (event) => {
@@ -54,6 +69,7 @@ export function PlaceOverlay({ socketUrl, overlaySize, circleSize, hideOverlay =
           cancel: DISMISS_BUTTON,
           duration: 1000,
         })
+        setCurrentState(PlaceStates.AWAIT_SOCKET)
       },
 
       onMessage: async (message) => {
@@ -114,6 +130,7 @@ export function PlaceOverlay({ socketUrl, overlaySize, circleSize, hideOverlay =
           cancel: DISMISS_BUTTON,
           duration: 6000,
         })
+        setCurrentState(PlaceStates.AWAIT_SOCKET)
       },
 
       retryOnError: true,
@@ -164,6 +181,74 @@ export function PlaceOverlay({ socketUrl, overlaySize, circleSize, hideOverlay =
     if (overlayElement) overlayElement.focus()
   }, [])
 
+  // Display prompt/instruction toasts
+  useEffect(() => {
+    new Promise((resolve) => setTimeout(resolve, 250))
+      .then(() => {
+        switch (currentState) {
+        case PlaceStates.MOVE_TO_COMPONENT:
+        {
+          toast.loading('Picking component...', {
+            id: ToastIds.PROMPT,
+            description: 'Move the camera to a component.',
+            duration: Infinity,
+            important: true,
+            action: {
+              label: 'Continue',
+              onClick: (event) => {
+                event.preventDefault()
+                setCurrentState(PlaceStates.PICK_COMPONENT)
+              },
+            },
+          })
+          break
+        }
+        case PlaceStates.PLACE_COMPONENT:
+        {
+          toast.loading('Picking component...', {
+            id: ToastIds.PROMPT,
+            description: 'Hit v to pick the component.',
+            duration: Infinity,
+            important: true,
+            action: null,
+          })
+          break
+        }
+        case PlaceStates.MOVE_TO_PAD:
+        {
+          toast.loading('Placing component...', {
+            id: ToastIds.PROMPT,
+            description: 'Move the camera to the target pad.',
+            duration: Infinity,
+            important: true,
+            action: {
+              label: 'Continue',
+              onClick: (event) => {
+                event.preventDefault()
+                setCurrentState(PlaceStates.PLACE_COMPONENT)
+              },
+            },
+          })
+          break
+        }
+        case PlaceStates.PLACE_COMPONENT:
+        {
+          toast.loading('Placing component...', {
+            id: ToastIds.PROMPT,
+            description: 'Hit v to place the component.',
+            duration: Infinity,
+            important: true,
+            action: null,
+          })
+          break
+        }
+        case PlaceStates.AWAIT_SOCKET:
+        default:
+          break
+        }
+      })
+  }, [currentState])
+
   if (hideOverlay || !overlaySize) return
 
   return (
@@ -212,6 +297,18 @@ export function PlaceOverlay({ socketUrl, overlaySize, circleSize, hideOverlay =
               return
             }
 
+            if (event.code === 'KeyV') {
+              // TODO: depends on machine state
+              socket.sendHeadOperation(webSocket, socket.HeadOperation.ENGAGE_VACUUM)
+              return
+            }
+
+            if (event.code === 'KeyP') {
+              // TODO: depends on machine state
+              socket.sendHeadOperation(webSocket, socket.HeadOperation.PICK)
+              return
+            }
+
             const unclampedOffset = { ...previousOffset }
             switch (event.code) {
             case 'KeyR':
@@ -257,6 +354,17 @@ export function PlaceOverlay({ socketUrl, overlaySize, circleSize, hideOverlay =
 
           }
           else {
+
+            if (event.code === 'Space') {
+              switch (currentState) {
+              case PlaceStates.PICK_COMPONENT:
+                socket.sendHeadOperation(webSocket, socket.HeadOperation.PICK)
+                return
+              case PlaceStates.PLACE_COMPONENT:
+                socket.sendHeadOperation(webSocket, socket.HeadOperation.PLACE)
+                return
+              }
+            }
 
             if (!targetPositionOffsets?.length) return
 
@@ -368,6 +476,28 @@ export function PlaceOverlay({ socketUrl, overlaySize, circleSize, hideOverlay =
           }
         }}
       >
+
+        {/* State display */}
+        {(
+          <div
+            className={cn(
+              'absolute z-50 inset-x-1/2 -ml-48 w-96 top-0',
+              'bg-card/95 backdrop-blur-md supports-[backdrop-filter]:bg-secondary/60 text-secondary-foreground shadow-sm',
+              'ring-2 ring-ring/25 rounded-b-lg',
+              'px-8 py-4 text-center',
+              'font-bold uppercase text-sm',
+              'select-none cursor-pointer pointer-events-none',
+            )}
+          >
+            {{
+              [PlaceStates.AWAIT_SOCKET]: 'Awaiting socket connection',
+              [PlaceStates.MOVE_TO_COMPONENT]: 'Move to component',
+              [PlaceStates.PICK_COMPONENT]: 'Pick component',
+              [PlaceStates.MOVE_TO_PAD]: 'Move to pad',
+              [PlaceStates.PLACE_COMPONENT]: 'Place component',
+            }[currentState]}
+          </div>
+        )}
 
         {/* Target circle */}
         {(targetOffset) && (
