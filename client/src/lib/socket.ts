@@ -57,6 +57,7 @@ export async function processMessage(data: unknown): Promise<Action> {
         messageType: decodedMessage.tag,
         rawPayload,
         payload: denormalisePosition(decodedMessage.deltas),
+        silent: true,
       }
 
     case pnp.v1.Message.Tags.TARGET_POSITIONS:
