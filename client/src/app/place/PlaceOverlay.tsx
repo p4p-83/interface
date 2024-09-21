@@ -374,9 +374,11 @@ export function PlaceOverlay({ socketUrl, overlaySize, circleSize, hideOverlay =
               switch (currentState) {
               case PlaceStates.PICK_COMPONENT:
                 socket.sendHeadOperation(webSocket, socket.HeadOperation.PICK)
+                setCurrentState(PlaceStates.MOVE_TO_PAD)
                 return
               case PlaceStates.PLACE_COMPONENT:
                 socket.sendHeadOperation(webSocket, socket.HeadOperation.PLACE)
+                setCurrentState(PlaceStates.MOVE_TO_COMPONENT)
                 return
               }
             }
