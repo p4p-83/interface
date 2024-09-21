@@ -210,11 +210,11 @@ export function PlaceOverlay({ socketUrl, overlaySize, circleSize, hideOverlay =
           })
           break
         }
-        case PlaceStates.PLACE_COMPONENT:
+        case PlaceStates.PICK_COMPONENT:
         {
           toast.loading('Picking component...', {
             id: ToastIds.PROMPT,
-            description: 'Hit v to pick the component.',
+            description: 'Hit space to pick the component.',
             duration: Infinity,
             important: true,
             action: null,
@@ -242,7 +242,7 @@ export function PlaceOverlay({ socketUrl, overlaySize, circleSize, hideOverlay =
         {
           toast.loading('Placing component...', {
             id: ToastIds.PROMPT,
-            description: 'Hit v to place the component.',
+            description: 'Hit space to place the component.',
             duration: Infinity,
             important: true,
             action: null,
