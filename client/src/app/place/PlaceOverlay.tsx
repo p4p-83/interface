@@ -496,8 +496,8 @@ export function PlaceOverlay({ socketUrl, overlaySize, circleSize, hideOverlay =
         <div
           className={cn(
             'absolute z-50 inset-x-1/2 -ml-48 w-96 top-0',
-            'bg-card/95 backdrop-blur-md supports-[backdrop-filter]:bg-secondary/60 text-secondary-foreground shadow-sm',
-            'ring-2 ring-ring/25 rounded-b-lg',
+            'bg-card/95 backdrop-blur-lg supports-[backdrop-filter]:bg-secondary/60 text-secondary-foreground shadow-sm',
+            'rounded-b-lg',
             'px-8 py-4 text-center',
             'font-bold uppercase text-sm',
             'select-none cursor-pointer pointer-events-none',
@@ -516,10 +516,10 @@ export function PlaceOverlay({ socketUrl, overlaySize, circleSize, hideOverlay =
         {(currentMachineState) && (
           <div
             className={cn(
-              'absolute z-50 inset-x-1/2 -ml-48 w-96 bottom-0',
-              'bg-card/95 backdrop-blur-md supports-[backdrop-filter]:bg-secondary/60 text-secondary-foreground shadow-sm',
-              'ring-2 ring-ring/25 rounded-t-lg',
-              'px-8 py-3 text-center',
+              'absolute z-50 inset-x-1/2 -ml-40 w-80 bottom-0',
+              'bg-card/95 backdrop-blur-lg supports-[backdrop-filter]:bg-secondary/60 text-secondary-foreground shadow-sm',
+              'rounded-t-lg',
+              'px-6 py-2 text-center',
               'font-bold uppercase text-xs',
               'select-none cursor-pointer pointer-events-none',
             )}

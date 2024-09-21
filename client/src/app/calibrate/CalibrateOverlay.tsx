@@ -361,13 +361,13 @@ export function CalibrateOverlay({ socketUrl, overlaySize, circleSize, hideOverl
         }}
       >
 
-        {/* State display */}
+        {/* State */}
         {(
           <div
             className={cn(
               'absolute z-50 inset-x-1/2 -ml-48 w-96 top-0',
-              'bg-card/95 backdrop-blur-md supports-[backdrop-filter]:bg-secondary/60 text-secondary-foreground shadow-sm',
-              'ring-2 ring-ring/25 rounded-b-lg',
+              'bg-card/95 backdrop-blur-lg supports-[backdrop-filter]:bg-secondary/60 text-secondary-foreground shadow-sm',
+              'rounded-b-lg',
               'px-8 py-4 text-center',
               'font-bold uppercase text-sm',
               'select-none cursor-pointer pointer-events-none',
