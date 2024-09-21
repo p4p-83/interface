@@ -10,6 +10,7 @@ const INT16_CONSTANTS = {
 } as const
 
 export const GantryDirection = pnp.v1.Message.Step.Direction
+export const HeadOperation = pnp.v1.Message.HeadOperation.Operation
 
 export type ActionPayloads = {
   ['NO_OPERATION']: null,
@@ -75,6 +76,7 @@ export async function processMessage(data: unknown): Promise<Action> {
     case pnp.v1.Message.Tags.HEARTBEAT:
     case pnp.v1.Message.Tags.TARGET_DELTAS:
     case pnp.v1.Message.Tags.CALIBRATE_DELTAS:
+    case pnp.v1.Message.Tags.OPERATE_HEAD:
     case pnp.v1.Message.Tags.STEP_GANTRY:
       return {
         actionType: 'NO_OPERATION',
@@ -207,5 +209,14 @@ export function sendCalibrationDeltas(webSocket: WebSocketHook, targetOffset: Po
       target: new pnp.v1.Message.Deltas(normalisedDeltas.target),
       real: new pnp.v1.Message.Deltas(normalisedDeltas.real),
     }),
+  }))
+}
+
+export function sendHeadOperation(webSocket: WebSocketHook, operation: pnp.v1.Message.HeadOperation.Operation) {
+  console.info(`Performing ${operation} head operation`)
+
+  sendMessage(webSocket, new pnp.v1.Message({
+    tag: pnp.v1.Message.Tags.OPERATE_HEAD,
+    headOperation: new pnp.v1.Message.HeadOperation({ operation }),
   }))
 }
