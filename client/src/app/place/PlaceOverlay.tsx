@@ -34,6 +34,7 @@ export function PlaceOverlay({ socketUrl, overlaySize, circleSize, hideOverlay =
     gantryPosition: { x: 1, y: 2 },
     isHeadDown: true,
     isVacuumEngaged: false,
+    isComponentPicked: false,
   })
 
   const didUnmount = useDidUnmount({
@@ -523,8 +524,11 @@ export function PlaceOverlay({ socketUrl, overlaySize, circleSize, hideOverlay =
               'select-none cursor-pointer pointer-events-none',
             )}
           >
-            Head is {(currentMachineState.isHeadDown) ? 'down' : 'up'}&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
-            Vacuum is {(currentMachineState.isVacuumEngaged) ? 'on' : 'off'}
+            Head {(currentMachineState.isHeadDown) ? 'down' : 'up'}
+            &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
+            Vacuum {(currentMachineState.isVacuumEngaged) ? 'on' : 'off'}
+            &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
+            {(currentMachineState.isComponentPicked) ? 'Picked' : 'Not picked'}
           </div>
         )}
 
