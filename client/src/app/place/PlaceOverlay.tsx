@@ -242,7 +242,7 @@ export function PlaceOverlay({ socketUrl, overlaySize, circleSize, hideOverlay =
         {
           toast.loading('Placing component...', {
             id: ToastIds.PROMPT,
-            description: 'Hit space to place the component.',
+            description: 'Hit space to place the component. Hit [ and ] to rotate the component.',
             duration: Infinity,
             important: true,
             action: null,
@@ -324,6 +324,15 @@ export function PlaceOverlay({ socketUrl, overlaySize, circleSize, hideOverlay =
               return
             }
 
+            if (event.code === 'BracketLeft') {
+              socket.sendNozzleRotation(webSocket, 10)
+              return
+            }
+            else if (event.code === 'BracketRight') {
+              socket.sendNozzleRotation(webSocket, -10)
+              return
+            }
+
             const unclampedOffset = { ...previousOffset }
             switch (event.code) {
             case 'KeyR':
@@ -381,6 +390,15 @@ export function PlaceOverlay({ socketUrl, overlaySize, circleSize, hideOverlay =
                 setCurrentState(PlaceStates.MOVE_TO_COMPONENT)
                 return
               }
+            }
+
+            if (event.code === 'BracketLeft') {
+              socket.sendNozzleRotation(webSocket, 1)
+              return
+            }
+            else if (event.code === 'BracketRight') {
+              socket.sendNozzleRotation(webSocket, -1)
+              return
             }
 
             if (!targetPositionOffsets?.length) return
@@ -510,7 +528,7 @@ export function PlaceOverlay({ socketUrl, overlaySize, circleSize, hideOverlay =
             [PlaceStates.MOVE_TO_COMPONENT]: 'Move to component',
             [PlaceStates.PICK_COMPONENT]: 'Pick component',
             [PlaceStates.MOVE_TO_PAD]: 'Move to pad',
-            [PlaceStates.PLACE_COMPONENT]: 'Place component',
+            [PlaceStates.PLACE_COMPONENT]: 'Rotate and place component',
           }[currentState]}
         </div>
 
