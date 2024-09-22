@@ -90,6 +90,7 @@ export async function processMessage(data: unknown): Promise<Action> {
     case pnp.v1.Message.Tags.TARGET_DELTAS:
     case pnp.v1.Message.Tags.CALIBRATE_DELTAS:
     case pnp.v1.Message.Tags.OPERATE_HEAD:
+    case pnp.v1.Message.Tags.ROTATE_NOZZLE:
     case pnp.v1.Message.Tags.STEP_GANTRY:
       return {
         actionType: 'NO_OPERATION',
@@ -231,5 +232,14 @@ export function sendHeadOperation(webSocket: WebSocketHook, operation: pnp.v1.Me
   sendMessage(webSocket, new pnp.v1.Message({
     tag: pnp.v1.Message.Tags.OPERATE_HEAD,
     headOperation: new pnp.v1.Message.HeadOperation({ operation }),
+  }))
+}
+
+export function sendNozzleRotation(webSocket: WebSocketHook, degrees: number) {
+  console.info(`Rotating nozzle ${degrees} degrees`)
+
+  sendMessage(webSocket, new pnp.v1.Message({
+    tag: pnp.v1.Message.Tags.ROTATE_NOZZLE,
+    nozzleRotation: new pnp.v1.Message.NozzleRotation({ degrees }),
   }))
 }
