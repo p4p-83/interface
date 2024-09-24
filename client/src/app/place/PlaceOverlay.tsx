@@ -234,7 +234,7 @@ export function PlaceOverlay({ socketUrl, overlaySize, circleSize, hideOverlay =
           break
         }
       })
-  }, [currentState])
+  }, [webSocket, currentState])
 
   if (hideOverlay || !overlaySize) return
 
