@@ -197,27 +197,17 @@ export function PlaceOverlay({ socketUrl, overlaySize, circleSize, hideOverlay =
         {
           toast.loading('Picking component...', {
             id: ToastIds.PROMPT,
-            description: 'Move the camera to a component.',
+            description: 'Move the camera to a component. Hit Shift + Space to pick the component.',
             duration: Infinity,
             important: true,
             action: {
-              label: 'Continue',
+              label: 'Pick',
               onClick: (event) => {
                 event.preventDefault()
-                setCurrentState(PlaceStates.PICK_COMPONENT)
+                socket.sendHeadOperation(webSocket, socket.HeadOperation.PICK)
+                setCurrentState(PlaceStates.MOVE_TO_PAD)
               },
             },
-          })
-          break
-        }
-        case PlaceStates.PICK_COMPONENT:
-        {
-          toast.loading('Picking component...', {
-            id: ToastIds.PROMPT,
-            description: 'Hit space to pick the component.',
-            duration: Infinity,
-            important: true,
-            action: null,
           })
           break
         }
@@ -225,27 +215,17 @@ export function PlaceOverlay({ socketUrl, overlaySize, circleSize, hideOverlay =
         {
           toast.loading('Placing component...', {
             id: ToastIds.PROMPT,
-            description: 'Move the camera to the target pad.',
+            description: 'Move the camera to the target pad. Hit [ and ] to rotate the component. Hit Shift + Space to place the component.',
             duration: Infinity,
             important: true,
             action: {
-              label: 'Continue',
+              label: 'Place',
               onClick: (event) => {
                 event.preventDefault()
-                setCurrentState(PlaceStates.PLACE_COMPONENT)
+                socket.sendHeadOperation(webSocket, socket.HeadOperation.PLACE)
+                setCurrentState(PlaceStates.MOVE_TO_COMPONENT)
               },
             },
-          })
-          break
-        }
-        case PlaceStates.PLACE_COMPONENT:
-        {
-          toast.loading('Placing component...', {
-            id: ToastIds.PROMPT,
-            description: 'Hit space to place the component. Hit [ and ] to rotate the component.',
-            duration: Infinity,
-            important: true,
-            action: null,
           })
           break
         }
@@ -322,6 +302,19 @@ export function PlaceOverlay({ socketUrl, overlaySize, circleSize, hideOverlay =
                   : socket.HeadOperation.LOWER_HEAD
               )
               return
+            }
+
+            if (event.code === 'Space') {
+              switch (currentState) {
+              case PlaceStates.MOVE_TO_COMPONENT:
+                socket.sendHeadOperation(webSocket, socket.HeadOperation.PICK)
+                setCurrentState(PlaceStates.MOVE_TO_PAD)
+                return
+              case PlaceStates.MOVE_TO_PAD:
+                socket.sendHeadOperation(webSocket, socket.HeadOperation.PLACE)
+                setCurrentState(PlaceStates.MOVE_TO_COMPONENT)
+                return
+              }
             }
 
             if (event.code === 'BracketLeft') {
