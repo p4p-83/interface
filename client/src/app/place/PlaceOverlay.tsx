@@ -32,7 +32,7 @@ export function PlaceOverlay({ socketUrl, overlaySize, circleSize, hideOverlay =
   const [currentState, setCurrentState] = useState<PlaceStates>(PlaceStates.AWAIT_SOCKET)
   const [currentMachineState, setCurrentMachineState] = useState<MachineState | null>({
     gantryPosition: { x: 1, y: 2 },
-    isHeadDown: true,
+    isHeadDown: false,
     isVacuumEngaged: false,
     isComponentPicked: false,
   })
@@ -579,7 +579,7 @@ export function PlaceOverlay({ socketUrl, overlaySize, circleSize, hideOverlay =
         ))}
 
         {/* Centre circle */}
-        <div
+        {/* <div
           className='relative bg-secondary/50 outline outline-1 outline-secondary-foreground rounded-full pointer-events-none cursor-crosshair'
           style={{
             width: circleSize,
@@ -587,7 +587,7 @@ export function PlaceOverlay({ socketUrl, overlaySize, circleSize, hideOverlay =
             top: (overlaySize.height / 2) - (circleSize / 2),
             left: (overlaySize.width / 2) - (circleSize / 2),
           }}
-        />
+        /> */}
 
       </div>
 
