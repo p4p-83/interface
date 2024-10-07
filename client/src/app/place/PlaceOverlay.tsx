@@ -84,13 +84,14 @@ export function PlaceOverlay({ socketUrl, overlaySize, circleSize, hideOverlay =
         switch (action.actionType) {
 
         case 'MOVE_TARGET':
-          setTargetOffset((previousOffset) => {
-            if (!previousOffset) return null
-            return {
-              x: previousOffset.x - action.payload.x,
-              y: previousOffset.y - action.payload.y,
-            }
-          })
+        //   setTargetOffset((previousOffset) => {
+        //     if (!previousOffset) return null
+        //     return {
+        //       x: previousOffset.x - action.payload.x,
+        //       y: previousOffset.y - action.payload.y,
+        //     }
+        //   })
+		setTargetOffset(null)
           break
 
         case 'DRAW_TARGETS':
