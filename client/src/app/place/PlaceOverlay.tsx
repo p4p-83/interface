@@ -91,7 +91,7 @@ export function PlaceOverlay({ socketUrl, overlaySize, circleSize, hideOverlay =
         //       y: previousOffset.y - action.payload.y,
         //     }
         //   })
-		setTargetOffset(null)
+          setTargetOffset(null)
           break
 
         case 'DRAW_TARGETS':

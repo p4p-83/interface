@@ -74,7 +74,7 @@ export async function processMessage(data: unknown): Promise<Action> {
       }
 
     case pnp.v1.Message.Tags.MACHINE_STATE:
-      if (!decodedMessage.has_positions) {
+      if (!decodedMessage.has_machineState) {
         console.error('Missing machine state payload: ', decodedMessage)
         throw new Error('Missing machine state payload')
       }
