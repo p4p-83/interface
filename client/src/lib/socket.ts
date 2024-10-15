@@ -82,7 +82,12 @@ export async function processMessage(data: unknown): Promise<Action> {
         actionType: 'UPDATE_STATE',
         messageType: decodedMessage.tag,
         rawPayload,
-        payload: decodedMessage.machineState,
+        payload: {
+          gantryPosition: denormalisePosition(decodedMessage.machineState.gantryPosition),
+          isHeadDown: decodedMessage.machineState.isHeadDown,
+          isVacuumEngaged: decodedMessage.machineState.isVacuumEngaged,
+          isComponentPicked: decodedMessage.machineState.isComponentPicked,
+        },
         silent: true,
       }
 

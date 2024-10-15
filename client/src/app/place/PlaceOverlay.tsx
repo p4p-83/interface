@@ -275,7 +275,7 @@ export function PlaceOverlay({ socketUrl, overlaySize, circleSize, hideOverlay =
            * Shift+Direction will cause the gantry to step a fixed distance in the specified direction
            */
 
-          const previousOffset = targetOffset ?? { x:0.5, y:0.5 }
+          const previousOffset = targetOffset ?? currentMachineState?.gantryPosition ?? { x: 0.5, y: 0.5 }
 
           if (event.shiftKey) {
 
@@ -395,7 +395,49 @@ export function PlaceOverlay({ socketUrl, overlaySize, circleSize, hideOverlay =
               return
             }
 
-            if (!targetPositionOffsets?.length) return
+            if (!targetPositionOffsets?.length) {
+              const unclampedOffset = { ...previousOffset }
+              switch (event.code) {
+              case 'KeyR':
+              case 'KeyS':
+              case 'ArrowDown':
+              case 'KeyJ':
+                unclampedOffset.y = previousOffset.y + 0.0002
+                break
+              case 'KeyW':
+              case 'ArrowUp':
+              case 'KeyK':
+                unclampedOffset.y = previousOffset.y - 0.0002
+                break
+              case 'KeyA':
+              case 'ArrowLeft':
+              case 'KeyH':
+                unclampedOffset.x = previousOffset.x - 0.0002
+                break
+              case 'KeyD':
+              case 'ArrowRight':
+              case 'KeyL':
+                unclampedOffset.x = previousOffset.x + 0.0002
+                break
+              default:
+                return
+              }
+
+              const clampedOffset = {
+                x: Math.max(0, Math.min(1, unclampedOffset.x)),
+                y: Math.max(0, Math.min(1, unclampedOffset.y)),
+              }
+
+              if ((clampedOffset.x === 0.5) && (clampedOffset.y === 0.5)) {
+                console.log('Setting null')
+                setTargetOffset(null)
+              }
+              else {
+                setTargetOffset(clampedOffset)
+                socket.sendTargetDeltas(webSocket, clampedOffset)
+              }
+              return
+            }
 
             const getFlatMapper = (searchAngleDegrees: number, searchArcDegrees: number) => (targetPosition: Position) => {
               const targetDeltas = {
