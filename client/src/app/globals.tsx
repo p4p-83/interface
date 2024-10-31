@@ -161,6 +161,9 @@ export const SHADCN_UI = 'https://ui.shadcn.com/'
 export const SONNER = 'https://sonner.emilkowal.ski/'
 export const ZOD = 'https://zod.dev/'
 
+export const CANVAS = 'https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API'
+export const WEBGL = 'https://developer.mozilla.org/en-US/docs/Web/API/WebGL_API'
+
 /* Components */
 
 // * I don't love this; it's not very DRY.

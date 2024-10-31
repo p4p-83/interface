@@ -35,6 +35,7 @@ import centroidMasked from './static-images/centroidMasked.png'
 import centroidFinal from './static-images/centroidFinal.png'
 
 import componentAligning from './static-images/componentAligning.png'
+import componentPlaced from './static-images/componentPlaced.png'
 
 import targetPlotUnweightedDots from './static-images/targetPlotUnweightedDots.png'
 import targetPlotUnweighted from './static-images/targetPlotUnweighted.png'
@@ -68,9 +69,9 @@ export const STATIC_IMAGES = {
   },
 
   CALIBRATE: {
-    BOTTOM: { light: calibrationBottom, dark:calibrationBottom },
-    TOP: { light: calibrationTop, dark: calibrationTop },
-    SCHEMATIC: { light: calibrationSchematic, dark: calibrationSchematic },
+    BOTTOM: calibrationBottom,
+    TOP: calibrationTop,
+    SCHEMATIC: calibrationSchematic,
   },
 
   SETTINGS: {
@@ -83,19 +84,19 @@ export const STATIC_IMAGES = {
   },
 
   HEAD: {
-    UP: { light: headUp, dark: headUp },
-    DOWN: { light: headDown, dark: headDown },
+    UP: headUp,
+    DOWN: headDown,
   },
 
   CENTROID: {
-    RAW: { light: centroidRaw, dark: centroidRaw },
-    KEYED: { light: centroidKeyed, dark: centroidKeyed },
-    MASKED: { light: centroidMasked, dark: centroidMasked },
-    FINAL: { light: centroidFinal, dark: centroidFinal },
+    RAW: centroidRaw,
+    KEYED: centroidKeyed,
+    MASKED: centroidMasked,
+    FINAL: centroidFinal,
   },
 
   COMPOSITE: {
-    ALIGNING: { light: componentAligning, dark: componentAligning },
+    ALIGNING: componentAligning,
   },
 
   NEAREST_TARGET: {
@@ -118,6 +119,10 @@ export const STATIC_IMAGES = {
       WEIGHTED_NON_LINEAR_2: targetExampleWeightedNonLinear2,
       WEIGHTED_UNREACHABLE: targetExampleWeightedUnreachable,
     },
+  },
+
+  HUD: {
+    PLACED: componentPlaced,
   },
 
 } as const

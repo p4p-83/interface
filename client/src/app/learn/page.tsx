@@ -359,42 +359,6 @@ function ConstituentPlacePage() {
         ]}
       />
 
-      <TypographyH5>Heads-Up Display</TypographyH5>
-      <TypographyP>
-        <TypographyMuted>
-          The heads-up display is far-from-final.
-          This heading documents its implementation at present.
-        </TypographyMuted>
-      </TypographyP>
-
-      <TypographyP>
-        The heads-up display consists of visual elements overlaid atop the video feed.
-        Presently, there are four kinds of elements:
-      </TypographyP>
-
-      <TypographyList ordered>
-        <TypographyListItem>a cursor crosshair,</TypographyListItem>
-        <TypographyListItem>a centre indicator,</TypographyListItem>
-        <TypographyListItem>a target indicator, and</TypographyListItem>
-        <TypographyListItem>target markers.</TypographyListItem>
-      </TypographyList>
-
-      <TypographyP>
-        The centre indicator is a fixed grey circle rendered at the centre of the video feed, and indicates the current position of the pick-and-place head.
-        This indicator never moves.
-      </TypographyP>
-
-      <TypographyP>
-        The target indicator is a temporary purple circle that indicates the uncommitted target position for the gantry to next translate to, if one exists.
-      </TypographyP>
-
-      <TypographyP>
-        The target markers are grey squares drawn atop any centroids of interest that are identified by the <GLOBALS.InlineCode.GitHub.Vision />, which are transmitted to this <GLOBALS.InlineCode.GitHub.Interface /> via the <GLOBALS.InlineCode.GitHub.Controller />.
-        These act as &lsquo;pounce&rsquo; targets that may be jumped to efficiently, heavily inspired by the likes of <span id={FRAGMENT_IDS.VIM_PLUGINS}>
-          <TypographyLink href={GLOBALS.VIM.EASY_MOTION}><TypographyInlineCode>vim-easymotion</TypographyInlineCode></TypographyLink>, <TypographyLink href={GLOBALS.VIM.HOP}><TypographyInlineCode>hop.nvim</TypographyInlineCode></TypographyLink>, and <TypographyLink href={GLOBALS.VIM.POUNCE}><TypographyInlineCode>pounce.nvim</TypographyInlineCode></TypographyLink>
-        </span>—which James personally uses.
-      </TypographyP>
-
       <TypographyH5>User Input</TypographyH5>
       <TypographyP>
         The <GLOBALS.InlineCode.Pages.Place /> interface has been designed for speed, intuition, and brevity.
@@ -1217,6 +1181,67 @@ function SystemUserInterface() {
         <TypographyLink href={GLOBALS.ZOD}>Zod</TypographyLink> is used on <GLOBALS.InlineCode.Pages.Settings /> for form schema declaration and validation via static type inference.
         This provides immediate, client-side validation at run-time for the operator&apos;s inputs, helping to ensure that all system environment variables are configured correctly.
       </TypographyP>
+
+      <TypographyH5 id={FRAGMENT_IDS.DATA_CONTEXT}>Heads-Up Display</TypographyH5>
+      <TypographyP>
+        The initial design of the user interface explored using the <TypographyLink href={GLOBALS.CANVAS}>HTML <TypographyInlineCode>{'<canvas>'}</TypographyInlineCode> API </TypographyLink>for its flexibility in drawing graphics and handling user input.
+        This approach would have enabled the implementation of a Zoomable User Interface (ZUI) as identified in literature, where the operator could pan and zoom around a high-resolution image of the PCB.
+        This idea was further explored by considering the use of <TypographyLink href={GLOBALS.WEBGL}>WebGL</TypographyLink>, which would have enabled hardware-accelerated graphics rendering to improve performance and responsiveness.
+      </TypographyP>
+
+      <TypographyP>
+        Upon further research into the <TypographyInlineCode>{'<canvas>'}</TypographyInlineCode> element, it was ultimately deemed to be poorly documented and less intuitive for development.
+        The event handling model for <TypographyInlineCode>{'<canvas>'}</TypographyInlineCode> is less intuitive than that of standard HTML DOM elements, requiring more complex code to handle user interactions.
+        The final implementation of the user interface therefore opted for a simpler approach using standard HTML elements like <TypographyInlineCode>{'<div>'}</TypographyInlineCode>s for layout and interaction, with provision for further investigation into <TypographyInlineCode>{'<canvas>'}</TypographyInlineCode> and WebGL if advanced graphics were needed in future.
+      </TypographyP>
+
+      <TypographyP>
+        A <TypographyInlineCode>{'<div>'}</TypographyInlineCode> overlay HUD is positioned directly atop the <TypographyInlineCode>{'<video>'}</TypographyInlineCode> element that displays the real-time WebRTC video feed.
+        The overlay dynamically resizes to match the dimensions of the streamed video.
+        A crosshair cursor style is applied to the mouse pointer within the overlay to provide the operator with visual feedback, indicating the exact location on the PCB that will be targeted by the machine.
+        The operator&apos;s mouse click viewport coordinates are <TypographyLink href={FRAGMENT_IDS.DATA_NORMALISATION}>normalised into an <TypographyInlineCode>Int16</TypographyInlineCode> coordinate space</TypographyLink>.
+      </TypographyP>
+
+      <TypographyP>
+        This HUD is responsible for communicating machine state to the operator to enhance their sense of control.
+        A large instruction bar is displayed at the top of the HUD to inform the operator as to the currently expected action, and toast-style notifications are used for event and error reporting.
+        A state indicator bar displaying information about the mechanical condition of the pick-and-place machine is shown at the bottom of the HUD.
+        An example of the developed HUD is shown below.
+      </TypographyP>
+
+      <TypographyImage
+        image={STATIC_IMAGES.HUD.PLACED}
+        caption={'Screenshot of heads-up display (HUD) after a successful component placement. Target markers are not shown.'}
+      />
+
+      <TypographyP>
+        In addition to these elements, the HUD additionally comprises of four other indicator types:
+      </TypographyP>
+
+      <TypographyList ordered>
+        <TypographyListItem>a cursor crosshair,</TypographyListItem>
+        <TypographyListItem>a nozzle centre indicator,</TypographyListItem>
+        <TypographyListItem>a selected target indicator, and</TypographyListItem>
+        <TypographyListItem>target markers.</TypographyListItem>
+      </TypographyList>
+
+      <TypographyP>
+        The nozzle centre indicator is a grey circle fixed to the position of the vacuum nozzle when in the &lsquo;upward&rsquo; position.
+        This indicator is used to communicate the origin <TypographyInlineMaths>(0, 0)</TypographyInlineMaths> of the machine to the operator.
+      </TypographyP>
+
+      <TypographyP>
+        The target indicator is a temporary purple circle that indicates the currently selected target marker for the gantry to next translate to, if one exists.
+        When mouse input is presented, this indicator is used to mark the clicked coordinates.
+      </TypographyP>
+
+      <TypographyP>
+        The target markers are grey squares drawn atop any centroids of interest that are identified by the <GLOBALS.InlineCode.GitHub.Vision />, which are transmitted to this <GLOBALS.InlineCode.GitHub.Interface /> via the <GLOBALS.InlineCode.GitHub.Controller />.
+        These act as &lsquo;pounce&rsquo; targets that may be jumped to efficiently, heavily inspired by the likes of <span id={FRAGMENT_IDS.VIM_PLUGINS}>
+          <TypographyLink href={GLOBALS.VIM.EASY_MOTION}><TypographyInlineCode>vim-easymotion</TypographyInlineCode></TypographyLink>, <TypographyLink href={GLOBALS.VIM.HOP}><TypographyInlineCode>hop.nvim</TypographyInlineCode></TypographyLink>, and <TypographyLink href={GLOBALS.VIM.POUNCE}><TypographyInlineCode>pounce.nvim</TypographyInlineCode></TypographyLink>
+        </span>—which James personally uses.
+      </TypographyP>
+
     </>
   )
 }
