@@ -68,7 +68,7 @@ export default function Learn() {
             <span>The intent for this page is to serve as a one-stop-shop towards understanding the operating principles and features of our pick-and-place machine.</span>
             <br />
             <br />
-            <span>Whether you&apos;re looking to hone your skills—or simply after an in-depth look at our system—we do hope that you&apos;ll find this page to hit just the right spot.</span>
+            <span>Whether you&apos;re looking to hone your skills—or simply after an in-depth look at our machine—we do hope that you&apos;ll find this page to hit just the right spot.</span>
             <br />
             <br />
             <Separator className='w-1/12 h-0.5' />
@@ -84,7 +84,7 @@ export default function Learn() {
 
           <ConstituentPages />
 
-          <SystemArchitecture />
+          <MachineArchitecture />
 
           <TypographyH2>{GLOBALS.PAGES.PLACE.description}</TypographyH2>
           <TypographyBlockquote>
@@ -507,7 +507,7 @@ function ConstituentPlacePage() {
 
       <TypographyP>
         The primary key input scheme of unmodified directional keys described above instantiates the &lsquo;light computer assistance&rsquo; of our machine, which has been designed to improve the accessibility, productivity, and health of the human operator.
-        Though we certainly hope that this primary input method is intuitive, functional, and reliable, we do recognise that the optimal performance of our system has many dependent variables—some of which are not within our direct influence or control.
+        Though we certainly hope that this primary input method is intuitive, functional, and reliable, we do recognise that the optimal performance of our machine has many dependent variables—some of which are not within our direct influence or control.
         Consequently, this input scheme necessitates a number of assumptions, including that:
       </TypographyP>
 
@@ -515,7 +515,7 @@ function ConstituentPlacePage() {
         <TypographyListItem>the <GLOBALS.InlineCode.GitHub.Vision /> reliably identifies all target markers, and their centroids, without false positives;</TypographyListItem>
         <TypographyListItem>those target marker centroids and accompanying video feed are transmitted in real-time via the <GLOBALS.InlineCode.GitHub.Controller /> to this <GLOBALS.InlineCode.GitHub.Interface />;</TypographyListItem>
         <TypographyListItem>the weighted nearest-target algorithm is indeed intuitive, fit-for-purpose, <span id={FRAGMENT_IDS.NEAREST_TARGET_REACHABLE}><TypographyItalics>correct</TypographyItalics>, and that all target markers are reachable</span>;</TypographyListItem>
-        <TypographyListItem>the loop delay and round-trip latency of the system is sufficiently low that the system is stable, reactive, and real-time;</TypographyListItem>
+        <TypographyListItem>the loop delay and round-trip latency of the machine is sufficiently low that the machine is stable, reactive, and real-time;</TypographyListItem>
         <TypographyListItem>the <GLOBALS.InlineCode.GitHub.Controller /> repeatably translates the <GLOBALS.InlineCode.GitHub.Gantry /> to the correct position; and</TypographyListItem>
         <TypographyListItem>the <GLOBALS.InlineCode.GitHub.Controller /> and <GLOBALS.InlineCode.GitHub.Gantry /> repeatably places the component with the vacuum nozzle at the correct position.</TypographyListItem>
       </TypographyList>
@@ -673,7 +673,7 @@ function ConstituentSettingsPage() {
       </TypographyP>
 
       <TypographyP>
-        The <GLOBALS.InlineCode.Pages.Settings /> page provides the ability for the operator to (re-)configure system environment variables once system components are deployed, without requiring the modification of any source code.
+        The <GLOBALS.InlineCode.Pages.Settings /> page provides the ability for the operator to (re-)configure system environment variables once machine components are deployed, without requiring the modification of any source code.
       </TypographyP>
 
       <TypographyP>
@@ -699,13 +699,15 @@ function ConstituentSettingsPage() {
   )
 }
 
-function SystemArchitecture() {
+function MachineArchitecture() {
   return (
     <>
-      <TypographyH3>System Architecture</TypographyH3>
+      <TypographyH3>Machine Architecture</TypographyH3>
+
+      <TypographyH4>Open- and Closed-Loop Control</TypographyH4>
 
       <TypographyP>
-        Our pick-and-place machine comprises of four distinct components, or modules—each of which serves an important role towards the successful function of our system.
+        Our pick-and-place machine comprises of four distinct components, or modules—each of which serves an important role towards the successful function of our machine.
         These components are:
       </TypographyP>
 
