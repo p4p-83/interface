@@ -21,6 +21,21 @@ import calibrationSchematic from './static-images/calibrationSchematic.png'
 import lightSettings from './static-images/lightSettings.png'
 import darkSettings from './static-images/darkSettings.png'
 
+import lightArchitectureBlockDiagram from './static-images/lightArchitectureBlockDiagram.png'
+import lightArchitecture from './static-images/lightArchitecture.png'
+import darkArchitectureBlockDiagram from './static-images/darkArchitectureBlockDiagram.png'
+import darkArchitecture from './static-images/darkArchitecture.png'
+
+import headUp from './static-images/headUp.png'
+import headDown from './static-images/headDown.png'
+
+import centroidRaw from './static-images/centroidRaw.jpg'
+import centroidKeyed from './static-images/centroidKeyed.png'
+import centroidMasked from './static-images/centroidMasked.png'
+import centroidFinal from './static-images/centroidFinal.png'
+
+import componentAligning from './static-images/componentAligning.png'
+
 import targetPlotUnweightedDots from './static-images/targetPlotUnweightedDots.png'
 import targetPlotUnweighted from './static-images/targetPlotUnweighted.png'
 import targetPlotWeightedSimple from './static-images/targetPlotWeightedSimple.png'
@@ -60,6 +75,27 @@ export const STATIC_IMAGES = {
 
   SETTINGS: {
     PAGE: { light: lightSettings, dark: darkSettings },
+  },
+
+  ARCHITECTURE: {
+    BLOCK_DIAGRAM: { light: lightArchitectureBlockDiagram, dark: darkArchitectureBlockDiagram },
+    DIAGRAM: { light: lightArchitecture, dark: darkArchitecture },
+  },
+
+  HEAD: {
+    UP: { light: headUp, dark: headUp },
+    DOWN: { light: headDown, dark: headDown },
+  },
+
+  CENTROID: {
+    RAW: { light: centroidRaw, dark: centroidRaw },
+    KEYED: { light: centroidKeyed, dark: centroidKeyed },
+    MASKED: { light: centroidMasked, dark: centroidMasked },
+    FINAL: { light: centroidFinal, dark: centroidFinal },
+  },
+
+  COMPOSITE: {
+    ALIGNING: { light: componentAligning, dark: componentAligning },
   },
 
   NEAREST_TARGET: {

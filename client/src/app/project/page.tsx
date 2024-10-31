@@ -14,8 +14,11 @@ import {
   TypographyLink,
   TypographyList,
   TypographyListItem,
+  TypographyImage,
 } from '@/components/ui/typography'
 import { badgeVariants } from '@/components/ui/badge'
+
+import poster from './Poster_83.png'
 
 export const metadata: Metadata = GLOBALS.PAGES.getMetadata(GLOBALS.PAGES.PROJECT)
 
@@ -104,11 +107,21 @@ export default function Project() {
             </TypographyListItem>
           </TypographyList>
 
+          <TypographyH4>Project Poster</TypographyH4>
+
+          <TypographyImage
+            image={poster}
+            caption={'Our final project poster'}
+          />
+
           <TypographyH2>See what we&apos;ve built</TypographyH2>
 
           <TypographyH3>GitHub Organisation</TypographyH3>
           <TypographyP>
             Our work towards this research project is contained within our GitHub organisation, <GLOBALS.Links.GitHub.Organisation />.
+          </TypographyP>
+
+          <TypographyP>
             We have additionally maintained logbooks throughout this project within an Obsidian vault (ie Markdown <TypographyInlineCode>.md</TypographyInlineCode> files), which is version controlled in a repository at <GLOBALS.Links.GitHub.Docs />.
           </TypographyP>
 

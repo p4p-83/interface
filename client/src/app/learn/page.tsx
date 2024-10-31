@@ -673,7 +673,7 @@ function ConstituentSettingsPage() {
       </TypographyP>
 
       <TypographyP>
-        The <GLOBALS.InlineCode.Pages.Settings /> page provides the ability for the operator to (re-)configure system environment variables once machine components are deployed, without requiring the modification of any source code.
+        The <GLOBALS.InlineCode.Pages.Settings /> page provides the ability for the operator to (re-)configure system environment variables once machine modules are deployed, without requiring the modification of any source code.
       </TypographyP>
 
       <TypographyP>
@@ -705,17 +705,51 @@ function MachineArchitecture() {
       <TypographyH3>Machine Architecture</TypographyH3>
 
       <TypographyH4>Open- and Closed-Loop Control</TypographyH4>
+      <TypographyP>
+        We will first define the objective, and what is meant by &lsquo;an open-loop machine designed with provisions for closed-loop active assistance&rsquo;.
+      </TypographyP>
 
       <TypographyP>
-        Our pick-and-place machine comprises of four distinct components, or modules—each of which serves an important role towards the successful function of our machine.
-        These components are:
+        The proposed real-time pick-and-place machine is modelled as a control systems block diagram as shown below.
+        The operator&apos;s input is received by the machine through the input device, which is treated initially as a black box.
+        This input is fed through the user interface to be interpreted, resulting in a movement of the <TypographyInlineMaths>x</TypographyInlineMaths>-<TypographyInlineMaths>y</TypographyInlineMaths> machine gantry and the mounted vacuum head.
+        This represents the open-loop control path of the machine.
       </TypographyP>
+
+      <TypographyImage
+        image={STATIC_IMAGES.ARCHITECTURE.BLOCK_DIAGRAM}
+        caption={'The prototype machine block diagram'}
+      />
+
+      <TypographyP>
+        It is proposed that computer vision (CV) &lsquo;feedback&rsquo; can be introduced to this open-loop control path to achieve enhanced machine performance.
+        This CV would provide active alignment assistance to the human operator, offloading the burden of fine positioning to the machine.
+        In such an operating profile, the operator would be solely responsible for rough position identification.
+        Once component leads have been roughly associated with its corresponding component pads, active alignment assistance would correct any rotational error and perform final &lsquo;wicking&rsquo; of the component into place.
+      </TypographyP>
+
+      <TypographyH4>Machine Modules</TypographyH4>
+      <TypographyP>
+        To achieve the desired closed-loop feedback, a mechanical system that provides two real-time video feeds is devised.
+        One real-time video feed captures the PCB&apos;s pads, and another captures the picked component&apos;s leads.
+        This real-time video is fed to a CV algorithm to identify the gantry translations and head rotations required to achieve wicking.
+      </TypographyP>
+
+      <TypographyP>
+        The experimental prototype comprises of three primary software modules and three supplementary electromechanical components, as diagrammed below.
+        The machine software comprises of the machine controller, the user interface, and the CV routines.
+      </TypographyP>
+
+      <TypographyImage
+        image={STATIC_IMAGES.ARCHITECTURE.DIAGRAM}
+        caption={'The prototype machine architecture'}
+      />
 
       <TypographyTable>
 
         <TypographyTableHead>
           <TypographyTableRow>
-            <TypographyTableHeaderCell>Component</TypographyTableHeaderCell>
+            <TypographyTableHeaderCell>Module</TypographyTableHeaderCell>
             <TypographyTableHeaderCell>Technologies</TypographyTableHeaderCell>
             <TypographyTableHeaderCell>Description</TypographyTableHeaderCell>
           </TypographyTableRow>
@@ -728,11 +762,11 @@ function MachineArchitecture() {
               <span className='*:m-0.5'>
                 <Badge variant='outline'>C</Badge>
                 <Badge variant='outline'>C++</Badge>
-                <Badge variant='outline'>Protobufs</Badge>
+                <Badge variant='outline'>G-code</Badge>
               </span>
             </TypographyTableDataCell>
             <TypographyTableDataCell>
-              The stateless, low-level machine control of our stepper motors, vacuum nozzle, and limit switches.
+              The low-level machine control of our <TypographyInlineMaths>x</TypographyInlineMaths>-<TypographyInlineMaths>y</TypographyInlineMaths> stepper motors and limit switches.
             </TypographyTableDataCell>
           </TypographyTableRow>
 
@@ -743,8 +777,8 @@ function MachineArchitecture() {
                 <Badge variant='outline'>C++</Badge>
                 <Badge variant='outline'>Julia</Badge>
                 <Badge variant='outline'>libcamera</Badge>
-                <Badge variant='outline'>OpenCV</Badge>
                 <Badge variant='outline'>ffmpeg</Badge>
+                <Badge variant='outline'>WebRTC</Badge>
               </span>
             </TypographyTableDataCell>
             <TypographyTableDataCell>
@@ -782,7 +816,7 @@ function MachineArchitecture() {
               </span>
             </TypographyTableDataCell>
             <TypographyTableDataCell>
-              This web application; the user interface to be used by the operator.
+              This web application; displays the real-time video feeds to the human operator, and receives & interprets their inputs.
             </TypographyTableDataCell>
           </TypographyTableRow>
         </TypographyTableBody>
@@ -790,47 +824,99 @@ function MachineArchitecture() {
       </TypographyTable>
 
       <TypographyP>
-        The <GLOBALS.InlineCode.GitHub.Vision /> and <GLOBALS.InlineCode.GitHub.Controller /> both run on a single <TypographyLink href={GLOBALS.RASPBERRY_PI_5}>Raspberry Pi 5</TypographyLink>.
-        {/* TODO: */}
-        {' '}<TypographyMuted>This is definitely subject to change.</TypographyMuted>{' '}
-        The <GLOBALS.InlineCode.GitHub.Gantry /> runs on a <TypographyLink href={GLOBALS.RASPBERRY_PI_PICO}>Raspberry Pi Pico</TypographyLink>, connected to the main Raspberry Pi 5 via USB.
-        This <GLOBALS.InlineCode.GitHub.Interface /> web application is served by the Raspberry Pi 5 to a client browser, which could be the operator&apos;s own device; a University computer; or a web browser running on the same Raspberry Pi.
+        A single 4 GB <TypographyLink href={GLOBALS.RASPBERRY_PI_5}>Raspberry Pi 5</TypographyLink> is used to run all three software modules, though the user interface may be served to any client browser that is networked to the Raspberry Pi.
+        The user interface may also be run on an operator&apos;s own device, provided there is a network connection to the Raspberry Pi such that the real-time <TypographyLink href={GLOBALS.WEB_RTC}>WebRTC</TypographyLink> video feed and <TypographyLink href={GLOBALS.WEB_SOCKET}>WebSocket</TypographyLink> connections can be established to the machine controller.
       </TypographyP>
 
       <TypographyP>
-        <TypographyMuted>
-          Note that the <GLOBALS.InlineCode.GitHub.Vision /> is yet to be implemented, and that the <GLOBALS.InlineCode.GitHub.Gantry /> is yet to be completed.
-          The current gantry firmware resides at <GLOBALS.Links.GitHub.GantryOld />, with more details provided <TypographyLink toFragmentId href={FRAGMENT_IDS.GANTRY_OLD}>below</TypographyLink>.
-        </TypographyMuted>
-      </TypographyP>
-
-      <TypographyP>
-        In this section, we outline these components, the role(s) that they each play, some technical details that pertain, and the interactions between them.
-        The overarching focus is on these system behaviours and interactions—consequently, many of the following headings necessarily cross component boundaries.
+        In this section, we outline these modules, the role(s) that they each play, some technical details that pertain, and the interactions between them.
+        The overarching focus is on these system behaviours and interactions—consequently, many of the following headings necessarily cross module boundaries.
       </TypographyP>
 
       <Accordion type='multiple' className='w-full mt-2' fragmentIdsMap={{
         [FRAGMENT_IDS.DATA_NORMALISATION]: 'messagePassing',
-        [FRAGMENT_IDS.GANTRY_OLD]: 'messagePassing',
         [FRAGMENT_IDS.NEAREST_TARGET]: 'userInterface',
         [FRAGMENT_IDS.DATA_CONTEXT]: 'userInterface',
         [FRAGMENT_IDS.VALIDATION]: 'userInterface',
       }}>
-        <AccordionItem value='gantryControl'>
-          <AccordionTrigger><TypographyH4>Gantry Control</TypographyH4></AccordionTrigger>
+        <AccordionItem value='headDesign'>
+          <AccordionTrigger><TypographyH4>Head Design</TypographyH4></AccordionTrigger>
           <AccordionContent>
-            <TypographyBlockquote>
-              <TypographyMuted>A work in progress!</TypographyMuted>
-            </TypographyBlockquote>
+            <TypographyP>
+              Our approach trialled a compound head movement that could place components with its vertical stroke, and bring components to a second camera with its horizontal stroke.
+              This permits a real-time video feed without obstruction by the nozzle.
+            </TypographyP>
+
+            <TypographyP>
+              Many prototypes of the head were needed to get the mechanism right — providing adequate precision with the additional constraints imposed by the compound motion isn&apos;t trivial.
+              Our best design uses two stepper motors and belt drives to achieve the &lsquo;folded&rsquo; z-axis motion.
+              Other, &lsquo;unfolded&rsquo; options were considered but ruled out due to complexity — getting the cameras far enough away from their targets to achieve focus required overly long nozzle travels.
+            </TypographyP>
+
+            <ImageCarousel
+              images={[
+                { image: STATIC_IMAGES.HEAD.DOWN, caption: 'Head mechanism pictured in its downward position' },
+                { image: STATIC_IMAGES.HEAD.UP, caption: 'Head mechanism pictured in its upward position' },
+              ]}
+              className='mt-6'
+            />
           </AccordionContent>
         </AccordionItem>
 
         <AccordionItem value='machineVision'>
           <AccordionTrigger><TypographyH4>Machine Vision</TypographyH4></AccordionTrigger>
           <AccordionContent>
-            <TypographyBlockquote>
-              <TypographyMuted>A work in progress!</TypographyMuted>
-            </TypographyBlockquote>
+
+            <TypographyP>
+              Research suggests that computer vision can aid operators in achieving more precise spatial navigation with computer input devices, as demonstrated in teleoperation studies.
+              CV is employed in this project to facilitate active assistance in component placement by identifying features of interest on both the PCB and the component being placed.
+              This is a departure from traditional pick-and-place machines, which rely on a priori knowledge of component and pad locations, typically encoded in Gerber files.
+              The project aims to devise a more organic and intuitive system that leverages real-time CV to adapt to the operator&apos;s actions and the specific components being placed.
+            </TypographyP>
+
+            <TypographyP>
+              Initial considerations for CV-driven placement focussed on identifying the centre of each component.
+              However, it was quickly realised that a more effective approach would be to match individual component leads with their corresponding PCB pads.
+              This approach is not only more robust to variations in component orientation but also enables a more intuitive user interface, where the operator can select a single lead and the machine will automatically identify the matching pad and calculate the optimal rotation for placement.
+            </TypographyP>
+
+            <TypographyP>
+              A centroid finding algorithm was developed to identify the centre of each component pad.
+              This algorithm processes the real-time video feed captured from the downward-facing camera, identifying regions of interest that correspond to pad pixels.
+              The identified centroids are then used to guide the vacuum head towards the exact pad location.
+            </TypographyP>
+
+            <TypographyP>
+              In this context, a centroid represents the average <TypographyInlineMaths>(x, y)</TypographyInlineMaths> coordinate of all pixels belonging to a particular feature, such as a component pad.
+              It can be thought of as the &lsquo;centre of mass&rsquo; of the feature; a single point that represents the location of the feature.
+            </TypographyP>
+
+            <TypographyP>
+              The centroid finding algorithm operates by first applying a threshold to the camera image, converting it to a binary representation where pixels are classified as either belonging to a feature or to the background.
+              This thresholding step leverages the colour difference between the metallic pads and the PCB&apos;s solder mask layer.
+              A connected component analysis is then performed to identify groups of adjacent pixels that belong to the same feature.
+              For each identified connected component, the algorithm calculates the average $x$ and $y$ coordinates of all pixels bounded by that component, producing the centroid of the feature.
+              An example of this process is provided below.
+            </TypographyP>
+
+            <ImageCarousel
+              images={[
+                { image: STATIC_IMAGES.CENTROID.RAW, caption: 'The raw camera image' },
+                { image: STATIC_IMAGES.CENTROID.KEYED, caption: 'An intermediate representation to demonstrate the separation in tone between the pads, white silkscreen text, and green solder mask' },
+                { image: STATIC_IMAGES.CENTROID.MASKED, caption: 'Identifying pad pixels that satisfy a calibrated luminosity range' },
+                { image: STATIC_IMAGES.CENTROID.FINAL, caption: 'Pad centroids identified from groups of pad pixels.' },
+              ]}
+              className='mt-6'
+            />
+
+            <TypographyP>
+              Whilst the initial focus was targeted towards detecting the metallic pads of PCBs, the same principles can be applied to detect solder paste applied atop the pads.
+              This is essential for real-world functionality of such an active assistance mechanism, as SMT components placed atop bare pads without solder paste applied first are not useful.
+              The challenge of solder paste detection lies in differentiating the paste from other features on the PCB, such as silkscreen reference designators and solder mask.
+              Further research is required to explore different lighting techniques and image processing algorithms to achieve robust and accurate solder paste detection.
+            </TypographyP>
+
+
           </AccordionContent>
         </AccordionItem>
 
@@ -844,9 +930,15 @@ function MachineArchitecture() {
 
             <TypographyP>
               A <TypographyLink href={GLOBALS.MEDIA_MTX}>MediaMTX</TypographyLink> real-time media server is used to stream real-time video from the Raspberry Pi&apos;s camera(s) to this web application over the <TypographyLink href={GLOBALS.WEB_RTC}>WebRTC</TypographyLink> protocol.
-              The video stream is first read from the camera sensor with the <TypographyLink href={GLOBALS.RPI_CAM_VID}><TypographyInlineCode>rpicam-vid</TypographyInlineCode></TypographyLink> command-line binary (built atop <TypographyLink href={GLOBALS.LIB_CAMERA}><TypographyInlineCode>libcamera</TypographyInlineCode></TypographyLink>) that is distributed as part of <TypographyLink href={GLOBALS.RASPBERRY_PI_OS}>Raspberry Pi OS</TypographyLink>.
-              It is then piped through <TypographyInlineCode>stdin</TypographyInlineCode> to <TypographyLink href={GLOBALS.FFMPEG}><TypographyInlineCode>ffmpeg</TypographyInlineCode></TypographyLink>, which transcodes the video from its raw <TypographyLink href={GLOBALS.YUV_420}><TypographyInlineCode>YUV 4:2:0</TypographyInlineCode></TypographyLink> format into <TypographyLink href={GLOBALS.H_264}><TypographyInlineCode>H.264</TypographyInlineCode></TypographyLink>, and streams it to MediaMTX via <TypographyLink href={GLOBALS.RTSP}>RTSP</TypographyLink>.
+              The individual video streams are first read by <GLOBALS.InlineCode.GitHub.Vision /> from the camera sensors with the <TypographyLink href={GLOBALS.RPI_CAM_VID}><TypographyInlineCode>rpicam-vid</TypographyInlineCode></TypographyLink> command-line binary (built atop <TypographyLink href={GLOBALS.LIB_CAMERA}><TypographyInlineCode>libcamera</TypographyInlineCode></TypographyLink>) that is distributed as part of <TypographyLink href={GLOBALS.RASPBERRY_PI_OS}>Raspberry Pi OS</TypographyLink>.
+              <GLOBALS.InlineCode.GitHub.Vision /> then composites the two feeds together produce the final real-time video feed showing predicted component alignment as shown below.
+              This feed is then written to <TypographyLink href={GLOBALS.FFMPEG}><TypographyInlineCode>ffmpeg</TypographyInlineCode></TypographyLink>, which transcodes the video from its raw <TypographyLink href={GLOBALS.YUV_420}><TypographyInlineCode>YUV 4:2:0</TypographyInlineCode></TypographyLink> format into <TypographyLink href={GLOBALS.H_264}><TypographyInlineCode>H.264</TypographyInlineCode></TypographyLink> and streams the transcoded feed to MediaMTX via <TypographyLink href={GLOBALS.RTSP}>RTSP</TypographyLink>.
             </TypographyP>
+
+            <TypographyImage
+              image={STATIC_IMAGES.COMPOSITE.ALIGNING}
+              caption={'Real-time composite video feed showing the picked component and PCB pads'}
+            />
 
             <TypographyP>
               Once the <TypographyInlineCode>H.264</TypographyInlineCode> video is streamed into MediaMTX, it can then be read from the server via any of its supported protocols and variants.
@@ -859,29 +951,33 @@ function MachineArchitecture() {
           <AccordionTrigger><TypographyH4>Message Passing</TypographyH4></AccordionTrigger>
           <AccordionContent>
             <TypographyP>
-              As with any system that comprises of distinct components, our distinct components must communicate.
-            </TypographyP>
-
-            <TypographyP>
-              <TypographyLink href={GLOBALS.PROTOCOL_BUFFERS.HOME}>Protocol Buffers</TypographyLink> are used to serialise and format the data payloads exchanged between each component.
-              &lsquo;Protobufs&rsquo; are a language- and platform-agnostic binary serialisation mechanism for structured data, like JSON or XML, but <TypographyLink href={GLOBALS.PROTOCOL_BUFFERS.SMALLER_FASTER_SIMPLER}>&lsquo;smaller, faster, and simpler&rsquo;</TypographyLink>.
-            </TypographyP>
-
-            <TypographyP>
-              Our <TypographyInlineCode>.proto</TypographyInlineCode> language definition files are contained within the <GLOBALS.Links.GitHub.Proto /> repository, itself included as a <TypographyInlineCode>git</TypographyInlineCode> <TypographyLink href={GLOBALS.GIT_SUBMODULES}>submodule </TypographyLink>in our component repositories.
-              The <GLOBALS.InlineCode.GitHub.Proto /> repository also contains a shell script to recompile target language bindings when changes are made.
+              As with any system that comprises of distinct modules, our distinct modules must communicate.
             </TypographyP>
 
             <TypographyH5>Controller to Gantry</TypographyH5>
             {/* TODO: */}
-            <TypographyP id={FRAGMENT_IDS.GANTRY_OLD}>
-              <TypographyMuted>
-                This is yet to be properly implemented, but is likely to be a serial port exchanging messages serialised in a protocol buffer.
-                At present, this is a serial port at <TypographyInlineCode>115200</TypographyInlineCode> baud exchanging <TypographyLink href='https://en.wikipedia.org/wiki/G-code'>G-code</TypographyLink>.
-              </TypographyMuted>
+            <TypographyP>
+              The <GLOBALS.InlineCode.GitHub.Controller /> communicates with the <GLOBALS.InlineCode.GitHub.Gantry /> and vacuum head using the industry standard <TypographyLink href={GLOBALS.GCODE}>RS-274 G-code</TypographyLink> protocol, transmitted over a <TypographyInlineCode>115200</TypographyInlineCode>-baud USB serial port.
+              G-code is a numerical control programming language widely used for controlling automated machine tools, and provides a simple method of specifying movements and actions.
+            </TypographyP>
+
+            <TypographyP>
+              Initially, a complete re-implementation of the gantry firmware was considered to optimise for minimal message length and transmission time.
+              However, it was ultimately decided to leverage the existing <TypographyLink href={GLOBALS.GRBL}>Grbl</TypographyLink> open-source G-code interpreter for its maturity, robust feature set, and extensive documentation.
+              This decision allowed focus to be placed on higher-level aspects of the project, such as the development of the shared control scheme and the user interface.
             </TypographyP>
 
             <TypographyH5>Controller to Interface</TypographyH5>
+            <TypographyP>
+              <TypographyLink href={GLOBALS.PROTOCOL_BUFFERS.HOME}>Protocol Buffers</TypographyLink> are used to serialise and format the data payloads exchanged between each module.
+              &lsquo;Protobufs&rsquo; are a language- and platform-agnostic binary serialisation mechanism for structured data, like JSON or XML, but <TypographyLink href={GLOBALS.PROTOCOL_BUFFERS.SMALLER_FASTER_SIMPLER}>&lsquo;smaller, faster, and simpler&rsquo;</TypographyLink>.
+            </TypographyP>
+
+            <TypographyP>
+              Our <TypographyInlineCode>.proto</TypographyInlineCode> language definition files are contained within the <GLOBALS.Links.GitHub.Proto /> repository, itself included as a <TypographyInlineCode>git</TypographyInlineCode> <TypographyLink href={GLOBALS.GIT_SUBMODULES}>submodule </TypographyLink>in our module repositories.
+              The <GLOBALS.InlineCode.GitHub.Proto /> repository also contains a shell script to recompile target language bindings when changes are made.
+            </TypographyP>
+
             <TypographyP>
               A <TypographyLink href={GLOBALS.WEB_SOCKET}>WebSocket</TypographyLink> connection is established over TCP and HTTP between the <GLOBALS.InlineCode.GitHub.Controller /> and this <GLOBALS.InlineCode.GitHub.Interface /> web application.
               This provides a real-time, low-latency, full-duplex data channel, which is used to exchange information and instructions.
