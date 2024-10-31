@@ -14,6 +14,10 @@ import darkPlaceError from './static-images/darkPlaceError.png'
 import darkPlaceSocketOpened from './static-images/darkPlaceSocketOpened.png'
 import darkPlaceHud from './static-images/darkPlaceHud.png'
 
+import calibrationBottom from './static-images/calibrationBottom.png'
+import calibrationTop from './static-images/calibrationTop.png'
+import calibrationSchematic from './static-images/calibrationSchematic.png'
+
 import lightSettings from './static-images/lightSettings.png'
 import darkSettings from './static-images/darkSettings.png'
 
@@ -46,6 +50,12 @@ export const STATIC_IMAGES = {
     ERROR: { light: lightPlaceError, dark: darkPlaceError },
     SOCKET: { light: lightPlaceSocketOpened, dark: darkPlaceSocketOpened },
     HUD: { light: lightPlaceHud, dark: darkPlaceHud },
+  },
+
+  CALIBRATE: {
+    BOTTOM: { light: calibrationBottom, dark:calibrationBottom },
+    TOP: { light: calibrationTop, dark: calibrationTop },
+    SCHEMATIC: { light: calibrationSchematic, dark: calibrationSchematic },
   },
 
   SETTINGS: {

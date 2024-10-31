@@ -227,9 +227,7 @@ function ConstituentPages() {
         </PageAccordionItem>
 
         <PageAccordionItem page={GLOBALS.PAGES.CALIBRATE}>
-          <TypographyBlockquote>
-            <TypographyMuted>A work in progress!</TypographyMuted>
-          </TypographyBlockquote>
+          <ConstituentCalibratePage />
         </PageAccordionItem>
 
         <PageAccordionItem page={GLOBALS.PAGES.SETTINGS}>
@@ -311,6 +309,7 @@ function ConstituentHomePage() {
 }
 
 function ConstituentPlacePage() {
+  // TODO: update images
   return (
     <>
       <TypographyP>
@@ -560,6 +559,108 @@ function ConstituentPlacePage() {
         <TypographyListItem><TypographyKeyInput>⌘</TypographyKeyInput>+<TypographyKeyInput>[</TypographyKeyInput> on macOS, or <TypographyKeyInput>Alt</TypographyKeyInput>+<TypographyKeyInput>←</TypographyKeyInput> on Windows or Linux; or</TypographyListItem>
         <TypographyListItem>use the browser&apos;s &lsquo;Go back&rsquo; navigation button.</TypographyListItem>
       </TypographyList>
+    </>
+  )
+}
+
+function ConstituentCalibratePage() {
+  return (
+    <>
+      <TypographyP>
+        Note that this page is implemented as a <TypographyLink toFragmentId href={FRAGMENT_IDS.HIDDEN_PAGES}>hidden page</TypographyLink>.
+      </TypographyP>
+
+      <TypographyP>
+        The <GLOBALS.InlineCode.Pages.Calibrate /> page allows the operator to fine-tune the calibration factors used by the <GLOBALS.InlineCode.GitHub.Controller /> and improve placement accuracy.
+      </TypographyP>
+
+      <TypographyP>
+        The key principle of the prototype machine&apos;s calibration is that all conversions and corrections pertaining to the physical mechanics are performed by the <GLOBALS.InlineCode.GitHub.Controller />.
+        The Julia machine controller behaves as a translation layer, or adapter, between the operator inputs to this <GLOBALS.InlineCode.GitHub.Interface /> and the physical <GLOBALS.InlineCode.GitHub.Gantry /> or vacuum head.
+      </TypographyP>
+
+      <TypographyP>
+        The user interface is decoupled from any knowledge of the physical layer, and is only for responsible accepting user input in viewport coordinates then <TypographyLink toFragmentId href={FRAGMENT_IDS.DATA_NORMALISATION}>normalising</TypographyLink> this to the machine&apos;s standard coordinate space.
+        It is the machine controller that is responsible for translating the normalised numeric data from the user interface into the real-distance units for the gantry.
+      </TypographyP>
+
+      <TypographyP>
+          Calibration is performed using our <GLOBALS.Links.GitHub.TestBoard />, which features distinct and variably-spaced fiducial markings.
+          These fiducials are intentionally designed differently to standard PCB fiducials, as the standard circular pads do not clearly present a single defined point at which to click.
+      </TypographyP>
+
+      <ImageCarousel
+        images={[
+          { image: STATIC_IMAGES.CALIBRATE.TOP, caption: 'Top side of the test board with fiducial markings' },
+          { image: STATIC_IMAGES.CALIBRATE.BOTTOM, caption: 'Bottom side of te test board with fiducials and test circuit' },
+        ]}
+        className='mt-6'
+      />
+
+      <TypographyP>
+        Finally, these test boards implement an operational amplifier oscillator circuit that flashes an array of LEDs when excited by a 9 V battery.
+        This is a simple circuit that comprises of an SO-8 SMT integrated circuit, a number of 0805 passive SMT components, and some SMT LEDs, allowing for basic benchmarking of the developed prototype.
+      </TypographyP>
+
+      <TypographyImage
+        image={STATIC_IMAGES.CALIBRATE.SCHEMATIC}
+        caption={'Schematic for our test boards'}
+      />
+
+      <TypographyP>
+        The final implementation of the calibration routine is thus:
+      </TypographyP>
+
+      <TypographyList ordered>
+        <TypographyListItem>Place a calibration board onto the workbed. The board does not need to be aligned with the axes, nor does the nozzle need to be moved directly atop a fiducial.</TypographyListItem>
+        <TypographyListItem>Click on a diagonal calibration fiducial. The interface transmits a <TypographyInlineCode>TARGET_DELTAS</TypographyInlineCode> message to the controller.</TypographyListItem>
+        <TypographyListItem>The machine controller receives the <TypographyInlineCode>TARGET_DELTAS</TypographyInlineCode> message and translates the gantry by the specified number of deltas, based on its current <TypographyInlineMaths>x</TypographyInlineMaths> and <TypographyInlineMaths>y</TypographyInlineMaths> calibrations.</TypographyListItem>
+        <TypographyListItem>Click on the new viewport coordinate of the previously-clicked calibration fiducial, or hit space if it is exactly correct beneath the nozzle. The interface transmits a <TypographyInlineCode>CALIBRATE_DELTAS</TypographyInlineCode> message to the controller.</TypographyListItem>
+        <TypographyListItem>The machine controller uses the <TypographyInlineCode>CALIBRATE_DELTAS</TypographyInlineCode> payload to re-compute its scalar factors as per the equation below.</TypographyListItem>
+        <TypographyListItem>Repeat until satisfied with machine calibration.</TypographyListItem>
+      </TypographyList>
+
+      <TypographyP>
+        The <TypographyInlineCode>CALIBRATE_DELTAS</TypographyInlineCode> payload contains the previously-transmitted target deltas <TypographyInlineMaths>{String.raw`\Delta_\text{t}`}</TypographyInlineMaths>, in addition to the deltas <TypographyInlineMaths>{String.raw`\Delta_\text{r}`}</TypographyInlineMaths> of the point to which the fiducial actually travelled.
+        These two deltas are used by the machine controller to re-compute its conversion factors <TypographyInlineMaths>{String.raw`(c_\text{x}, c_\text{y})`}</TypographyInlineMaths> through the equation below.
+      </TypographyP>
+
+      <TypographyP>
+        The travelled deltas <TypographyInlineMaths>d</TypographyInlineMaths> is computed trivially as
+        <TypographyBlockMaths>{String.raw`
+          \begin{equation*}
+            d = \Delta_\text{t} - \Delta_\text{r}
+          \end{equation*}
+        `}</TypographyBlockMaths>
+        It is noticed that translation in the wrong direction produces a negative <TypographyInlineMaths>d</TypographyInlineMaths>.
+        This behaviour is desirable, as the calibration factor <TypographyInlineMaths>c</TypographyInlineMaths> is the scalar factor used to convert the <TypographyInlineCode>Int16</TypographyInlineCode> delta into the mm value given to the <GLOBALS.InlineCode.GitHub.Gantry /> where
+        <TypographyBlockMaths>{ String.raw`
+          \begin{equation*}
+            \text{gantry translation distance (\texttt{mm})} = c\times \Delta_\text{t}
+          \end{equation*}
+        `}</TypographyBlockMaths>
+        This behaviour produces a calibration routine that is capable of correcting incorrect translation direction.
+
+        Once the travelled deltas <TypographyInlineMaths>d</TypographyInlineMaths> is known, the machine controller can compute the amount by which its previous calibration factor must be scaled to correct any over- or undershoot.
+        This corrective factor is computed as
+        <TypographyBlockMaths>{String.raw`
+          \begin{align*}
+            \text{corrective factor} & = d / \Delta_\text{t}                                   \\
+                                     & = (\Delta_\text{t} - \Delta_\text{r}) / \Delta_\text{t} \\
+          \end{align*}
+        `}</TypographyBlockMaths>
+        such that the corrected calibration <TypographyInlineMaths>c&apos;</TypographyInlineMaths> is computed by
+        <TypographyBlockMaths>{String.raw`
+          \begin{equation*}
+            c' = c \times ((\Delta_\text{t} - \Delta_\text{r}) / \Delta_\text{t})
+          \end{equation*}
+        `}</TypographyBlockMaths>
+      </TypographyP>
+
+      <TypographyP>
+        This calibration routine allows the operator to accurately calibrate the machine controller to resolve any changes in physical mechanical machine parameters without requiring changes to machine source code, ensuring precise and repeatable component placement.
+      </TypographyP>
+
     </>
   )
 }

@@ -104,6 +104,10 @@ export const GITHUB = {
     NAME: 'p4p-83/protobufs',
     URL: 'https://github.com/p4p-83/protobufs',
   },
+  TEST_BOARD: {
+    NAME: 'p4p-83/test-board',
+    URL: 'https://github.com/p4p-83/test-board',
+  },
 } as const
 
 export const UNIVERSITY = {
@@ -180,6 +184,7 @@ export const InlineCode = {
     Controller: () => <TypographyInlineCode>{GITHUB.CONTROLLER.NAME}</TypographyInlineCode>,
     Interface: () => <TypographyInlineCode>{GITHUB.INTERFACE.NAME}</TypographyInlineCode>,
     Proto: () => <TypographyInlineCode>{GITHUB.PROTO.NAME}</TypographyInlineCode>,
+    TestBoard: () => <TypographyInlineCode>{GITHUB.TEST_BOARD.NAME}</TypographyInlineCode>,
   },
 } as const
 
@@ -193,5 +198,6 @@ export const Links = {
     Controller: () => <TypographyLink href={GITHUB.CONTROLLER.URL}><InlineCode.GitHub.Controller /></TypographyLink>,
     Interface: () => <TypographyLink href={GITHUB.INTERFACE.URL}><InlineCode.GitHub.Interface /></TypographyLink>,
     Proto: () => <TypographyLink href={GITHUB.PROTO.URL}><InlineCode.GitHub.Proto /></TypographyLink>,
+    TestBoard: () => <TypographyLink href={GITHUB.TEST_BOARD.URL}><InlineCode.GitHub.TestBoard /></TypographyLink>,
   },
 } as const
